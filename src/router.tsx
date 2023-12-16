@@ -14,105 +14,38 @@ const Loader = (Component) => (props) =>
     </Suspense>
   );
 
-// Pages
-
-const Overview = Loader(lazy(() => import('src/content/overview')));
-
-// Dashboards
-
-const Crypto = Loader(lazy(() => import('src/content/dashboards/Crypto')));
-
-// Applications
-
-const Messenger = Loader(
-  lazy(() => import('src/content/applications/Messenger'))
-);
-const Transactions = Loader(
-  lazy(() => import('src/content/applications/Transactions'))
-);
-const UserProfile = Loader(
-  lazy(() => import('src/content/applications/Users/profile'))
-);
-const UserSettings = Loader(
-  lazy(() => import('src/content/applications/Users/settings'))
-);
-
-// Components
-
-const Buttons = Loader(
-  lazy(() => import('src/content/pages/Components/Buttons'))
-);
-const Modals = Loader(
-  lazy(() => import('src/content/pages/Components/Modals'))
-);
-const Accordions = Loader(
-  lazy(() => import('src/content/pages/Components/Accordions'))
-);
-const Tabs = Loader(lazy(() => import('src/content/pages/Components/Tabs')));
-const Badges = Loader(
-  lazy(() => import('src/content/pages/Components/Badges'))
-);
-const Tooltips = Loader(
-  lazy(() => import('src/content/pages/Components/Tooltips'))
-);
-const Avatars = Loader(
-  lazy(() => import('src/content/pages/Components/Avatars'))
-);
-const Cards = Loader(lazy(() => import('src/content/pages/Components/Cards')));
-const Forms = Loader(lazy(() => import('src/content/pages/Components/Forms')));
-
+// Authen
+const AuthenticarionPage = Loader(lazy(() => import('src/content/authen')));
 // Status
-
 const Status404 = Loader(
   lazy(() => import('src/content/pages/Status/Status404'))
 );
-const Status500 = Loader(
-  lazy(() => import('src/content/pages/Status/Status500'))
+
+// page
+const DoctorPage = Loader(lazy(() => import('src/content/pages/doctors')));
+const ScheduleAppoimentPage = Loader(
+  lazy(() => import('src/content/pages/schedule_appoinment'))
 );
-const StatusComingSoon = Loader(
-  lazy(() => import('src/content/pages/Status/ComingSoon'))
+const AddNewScheduleAppoimentPage = Loader(
+  lazy(() => import('src/content/pages/add_new_schedule_appoinment'))
 );
-const StatusMaintenance = Loader(
-  lazy(() => import('src/content/pages/Status/Maintenance'))
-);
+const CustomerPage = Loader(lazy(() => import('src/content/pages/customers')));
+const CategoryPage = Loader(lazy(() => import('src/content/pages/category')));
+const BranchPage = Loader(lazy(() => import('src/content/pages/branch')));
+const PostPage = Loader(lazy(() => import('src/content/pages/post')));
 
 const routes: RouteObject[] = [
+  {
+    path: 'authen',
+    element: <AuthenticarionPage />
+  },
   {
     path: '',
     element: <BaseLayout />,
     children: [
       {
-        path: '/',
-        element: <Overview />
-      },
-      {
-        path: 'overview',
-        element: <Navigate to="/" replace />
-      },
-      {
-        path: 'status',
-        children: [
-          {
-            path: '',
-            element: <Navigate to="404" replace />
-          },
-          {
-            path: '404',
-            element: <Status404 />
-          },
-          {
-            path: '500',
-            element: <Status500 />
-          },
-          {
-            path: 'maintenance',
-            element: <StatusMaintenance />
-          },
-          {
-            path: 'coming-soon',
-            element: <StatusComingSoon />
-          }
-        ]
+        path: '',
+        element: <Navigate to="authen" replace />
       },
       {
         path: '*',
@@ -120,99 +53,40 @@ const routes: RouteObject[] = [
       }
     ]
   },
+
   {
     path: 'dashboards',
     element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: <Navigate to="crypto" replace />
+        element: <Navigate to="bac-si" replace />
       },
       {
-        path: 'crypto',
-        element: <Crypto />
+        path: 'bac-si',
+        element: <DoctorPage />
       },
       {
-        path: 'messenger',
-        element: <Messenger />
-      }
-    ]
-  },
-  {
-    path: 'management',
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: '',
-        element: <Navigate to="transactions" replace />
+        path: 'lich-kham',
+        element: <ScheduleAppoimentPage />
       },
       {
-        path: 'transactions',
-        element: <Transactions />
+        path: 'lich-kham/tao-lich',
+        element: <AddNewScheduleAppoimentPage />
       },
       {
-        path: 'profile',
-        children: [
-          {
-            path: '',
-            element: <Navigate to="details" replace />
-          },
-          {
-            path: 'details',
-            element: <UserProfile />
-          },
-          {
-            path: 'settings',
-            element: <UserSettings />
-          }
-        ]
-      }
-    ]
-  },
-  {
-    path: '/components',
-    element: <SidebarLayout />,
-    children: [
-      {
-        path: '',
-        element: <Navigate to="buttons" replace />
+        path: 'khach-hang',
+        element: <CustomerPage />
       },
       {
-        path: 'buttons',
-        element: <Buttons />
+        path: 'danh-muc',
+        element: <CategoryPage />
       },
       {
-        path: 'modals',
-        element: <Modals />
+        path: 'chi-nhanh',
+        element: <BranchPage />
       },
-      {
-        path: 'accordions',
-        element: <Accordions />
-      },
-      {
-        path: 'tabs',
-        element: <Tabs />
-      },
-      {
-        path: 'badges',
-        element: <Badges />
-      },
-      {
-        path: 'tooltips',
-        element: <Tooltips />
-      },
-      {
-        path: 'avatars',
-        element: <Avatars />
-      },
-      {
-        path: 'cards',
-        element: <Cards />
-      },
-      {
-        path: 'forms',
-        element: <Forms />
-      }
+      { path: 'bai-viet', element: <PostPage /> }
     ]
   }
 ];

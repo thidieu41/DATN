@@ -2,7 +2,7 @@ import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
 
 const themeColors = {
-  primary: '#5569ff',
+  primary: '#308a79',
   secondary: '#6E759F',
   success: '#57CA22',
   warning: '#FFA319',
@@ -437,14 +437,13 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
-            paddingRight: 6
+            paddingRight: 6,
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: colors.alpha.black[50]
+         
+          '&.Mui-focused.MuiOutlinedInput-notchedOutline': {
+            borderColor: colors.primary.main,
+            borderWidth: 'thin',
           },
-          '&.Mui-focused:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: colors.primary.main
-          }
         }
       }
     },
@@ -972,7 +971,6 @@ export const PureLightTheme = createTheme({
           fontSize: 14
         },
         head: {
-          textTransform: 'uppercase',
           fontSize: 13,
           fontWeight: 'bold',
           color: colors.alpha.black[70]

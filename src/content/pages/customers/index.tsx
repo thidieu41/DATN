@@ -1,0 +1,37 @@
+import { Helmet } from 'react-helmet-async';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import { Grid, Container, Card } from '@mui/material';
+import PageHeader from 'src/components/PageHeader';
+import { DoctorList } from 'src/content/applications/doctors/data';
+import CustomerTable from 'src/content/applications/customers/CustomersTable';
+
+
+function CustomerPage() {
+  return (
+    <>
+      <Helmet>
+        <title>Trang bác sĩ</title>
+      </Helmet>
+      <PageTitleWrapper>
+        <PageHeader title={'Khách hàng'} />
+      </PageTitleWrapper>
+      <Container maxWidth="lg">
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Grid item xs={12}>
+            <Card>
+              <CustomerTable customerList={[]} />
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
+  );
+}
+
+export default CustomerPage;

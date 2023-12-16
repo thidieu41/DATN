@@ -9,7 +9,8 @@ import {
   IconButton,
   Tooltip,
   styled,
-  useTheme
+  useTheme,
+  Typography
 } from '@mui/material';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { SidebarContext } from 'src/contexts/SidebarContext';
@@ -68,7 +69,6 @@ function Header() {
         alignItems="center"
         spacing={2}
       >
-        <HeaderMenu />
       </Stack>
       <Box display="flex" alignItems="center">
         <HeaderButtons />
