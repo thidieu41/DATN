@@ -2,20 +2,25 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import DoctorTable from 'src/content/applications/doctors/DoctorTable';
-import { DoctorList } from 'src/content/applications/doctors/data';
-import CategoryTable from 'src/content/applications/category/CategoryTable';
-import BranchTable from 'src/content/applications/brach/BranchTable';
-
+import BranchTable from 'src/content/applications/branch/BranchTable';
+import { useNavigate } from 'react-router-dom';
 
 function BranchPage() {
+  const navigate = useNavigate();
+  const onNavigateToCreateBranch = () => {
+    navigate('/dashboards/chi-nhanh/tao-chi-nhanh');
+  };
   return (
     <>
       <Helmet>
         <title>Trang danh sách chi tiết danh mục</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Chi tiết danh mục'} textButton={'Thêm danh sách'} />
+        <PageHeader
+          title={'Chi nhánh nha khoa'}
+          textButton={'Thêm chi nhánh'}
+          handleClick={onNavigateToCreateBranch}
+        />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid

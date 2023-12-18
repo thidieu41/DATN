@@ -8,23 +8,15 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { format } from 'date-fns';
-import { ChangeEvent } from 'react';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { ICategoryProps } from './interface';
 
 interface Props {
   data: ICategoryProps[];
-  selectedCryptoOrders: string[];
-  handleSelect: (event, id) => void;
 }
 
-const CategoryTableRow = ({
-  data = [],
-  selectedCryptoOrders = [],
-  handleSelect
-}: Props) => {
+const CategoryTableRow = ({ data = [] }: Props) => {
   const theme = useTheme();
 
   const onNavigationToDetails = (event, id: string) => {
@@ -34,12 +26,10 @@ const CategoryTableRow = ({
   return (
     <TableBody>
       {data.map((item) => {
-        const isCryptoOrderSelected = selectedCryptoOrders.includes(item.id);
         return (
           <TableRow
             hover
             key={item.id}
-            selected={isCryptoOrderSelected}
             onClick={(e) => onNavigationToDetails(e, item.id)}
             sx={{
               cursor: 'pointer'

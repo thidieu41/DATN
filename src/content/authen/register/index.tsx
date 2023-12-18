@@ -36,7 +36,13 @@ const RegisterForm = () => {
             control={control}
             name="email"
             render={({ field }) => (
-              <TextField {...field} fullWidth placeholder="Nhập email" />
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập email"
+                error={!!errors.email}
+                helperText={errors.email?.message || ''}
+              />
             )}
           />
         </Stack>
@@ -50,7 +56,13 @@ const RegisterForm = () => {
             control={control}
             name="password"
             render={({ field }) => (
-              <TextField {...field} fullWidth placeholder="Nhập mật khẩu" />
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập mật khẩu"
+                error={!!errors.password}
+                helperText={errors.password?.message || ''}
+              />
             )}
           />
         </Stack>
@@ -65,7 +77,13 @@ const RegisterForm = () => {
             control={control}
             name="confirm_password"
             render={({ field }) => (
-              <TextField {...field} fullWidth placeholder="Nhập lại mật khẩu" />
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập lại mật khẩu"
+                error={!!errors.confirm_password}
+                helperText={errors.confirm_password?.message || ''}
+              />
             )}
           />
         </Stack>
@@ -84,6 +102,8 @@ const RegisterForm = () => {
                 {...field}
                 fullWidth
                 placeholder="Nhập số điện thoại"
+                error={!!errors.phone_number}
+                helperText={errors.phone_number?.message || ''}
               />
             )}
           />
@@ -94,13 +114,7 @@ const RegisterForm = () => {
           fullWidth
           sx={{
             padding: '10px',
-            backgroundColor: '#D4EEFF',
-            color: 'black',
-            marginTop: '5px',
-            fontWeight: 600,
-            '&:hover': {
-              color: 'white'
-            }
+            marginTop: '5px'
           }}
         >
           Đăng Ký
@@ -118,7 +132,7 @@ const RegisterForm = () => {
             variant="contained"
             startIcon={<FacebookOutlinedIcon />}
             sx={{
-              backgroundColor: '#314D69',
+              backgroundColor: '#314D69'
             }}
           >
             Đăng ký bằng Facebook

@@ -16,15 +16,9 @@ import { IPostProps } from './interface';
 
 interface Props {
   data: IPostProps[];
-  selectedCryptoOrders: string[];
-  handleSelect: (event, id) => void;
 }
 
-const PostTableRow = ({
-  data = [],
-  selectedCryptoOrders = [],
-  handleSelect
-}: Props) => {
+const PostTableRow = ({ data = [] }: Props) => {
   const theme = useTheme();
 
   const onNavigationToDetails = (event, id: string) => {
@@ -34,12 +28,10 @@ const PostTableRow = ({
   return (
     <TableBody>
       {data.map((item) => {
-        const isCryptoOrderSelected = selectedCryptoOrders.includes(item.id);
         return (
           <TableRow
             hover
             key={item.id}
-            selected={isCryptoOrderSelected}
             onClick={(e) => onNavigationToDetails(e, item.id)}
             sx={{
               cursor: 'pointer'

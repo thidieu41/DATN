@@ -34,7 +34,13 @@ const LoginForm = () => {
             control={control}
             name="email"
             render={({ field }) => (
-              <TextField {...field} fullWidth placeholder="Nhập email" />
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập email"
+                error={!!errors.email}
+                helperText={errors.email?.message || ''}
+              />
             )}
           />
         </Stack>
@@ -48,7 +54,13 @@ const LoginForm = () => {
             control={control}
             name="password"
             render={({ field }) => (
-              <TextField {...field} fullWidth placeholder="Nhập mật khẩu" />
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập mật khẩu"
+                error={!!errors.password}
+                helperText={errors.password?.message || ''}
+              />
             )}
           />
         </Stack>
@@ -59,13 +71,7 @@ const LoginForm = () => {
           fullWidth
           sx={{
             padding: '10px',
-            backgroundColor: '#D4EEFF',
-            color: 'black',
-            marginTop: '5px',
-            fontWeight: 600,
-            '&:hover': {
-              color: 'white'
-            }
+            marginTop: '5px'
           }}
         >
           Đăng Nhập

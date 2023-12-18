@@ -50,10 +50,6 @@ const applyPagination = (
 };
 
 const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -92,32 +88,6 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
     }));
   };
 
-  const handleSelectAllCryptoOrders = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedCryptoOrders(
-      event.target.checked
-        ? doctorList.map((cryptoOrder) => cryptoOrder.id)
-        : []
-    );
-  };
-
-  const handleSelectOneCryptoOrder = (
-    event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [
-        ...prevSelected,
-        cryptoOrderId
-      ]);
-    } else {
-      setSelectedCryptoOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== cryptoOrderId)
-      );
-    }
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -132,36 +102,31 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
     page,
     limit
   );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < doctorList.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === doctorList.length;
 
   return (
     <Card>
-        <CardHeader
-          action={
-            <Box width={150}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filters.status || 'all'}
-                  onChange={handleStatusChange}
-                  label="Status"
-                  autoWidth
-                >
-                  {statusOptions.map((statusOption) => (
-                    <MenuItem key={statusOption.id} value={statusOption.id}>
-                      {statusOption.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          }
-          title="Danh sách Bác sĩ"
-        />
+      <CardHeader
+        action={
+          <Box width={150}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={filters.status || 'all'}
+                onChange={handleStatusChange}
+                label="Status"
+                autoWidth
+              >
+                {statusOptions.map((statusOption) => (
+                  <MenuItem key={statusOption.id} value={statusOption.id}>
+                    {statusOption.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        }
+        title="Danh sách Bác sĩ"
+      />
       <Divider />
       <TableContainer>
         <Table>
@@ -175,11 +140,7 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
-          <DoctorTableRow
-            data={paginatedCryptoOrders}
-            selectedCryptoOrders={selectedCryptoOrders}
-            handleSelect={handleSelectOneCryptoOrder}
-          />
+          <DoctorTableRow data={paginatedCryptoOrders} />
         </Table>
       </TableContainer>
       <Box p={2}>

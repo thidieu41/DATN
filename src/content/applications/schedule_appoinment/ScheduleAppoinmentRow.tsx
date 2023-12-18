@@ -14,15 +14,9 @@ import { IScheduleAppoinment } from './interface';
 
 interface Props {
   data: IScheduleAppoinment[];
-  selectedCryptoOrders: string[];
-  handleSelect: (event, id) => void;
 }
 
-const ScheduleAppoinmentRow = ({
-  data = [],
-  selectedCryptoOrders = [],
-  handleSelect
-}: Props) => {
+const ScheduleAppoinmentRow = ({ data = [] }: Props) => {
   const theme = useTheme();
 
   const onNavigationToDetails = (event, id: string) => {
@@ -32,12 +26,10 @@ const ScheduleAppoinmentRow = ({
   return (
     <TableBody>
       {data.map((item) => {
-        const isCryptoOrderSelected = selectedCryptoOrders.includes(item.id);
         return (
           <TableRow
             hover
             key={item.id}
-            selected={isCryptoOrderSelected}
             onClick={(e) => onNavigationToDetails(e, item.id)}
             sx={{
               cursor: 'pointer'

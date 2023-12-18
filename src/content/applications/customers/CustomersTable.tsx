@@ -52,10 +52,6 @@ const applyPagination = (
 };
 
 const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -94,32 +90,6 @@ const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
     }));
   };
 
-  const handleSelectAllCryptoOrders = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedCryptoOrders(
-      event.target.checked
-        ? customerList.map((cryptoOrder) => cryptoOrder.id)
-        : []
-    );
-  };
-
-  const handleSelectOneCryptoOrder = (
-    event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [
-        ...prevSelected,
-        cryptoOrderId
-      ]);
-    } else {
-      setSelectedCryptoOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== cryptoOrderId)
-      );
-    }
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -134,11 +104,6 @@ const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
     page,
     limit
   );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < customerList.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === customerList.length;
 
   return (
     <Card>
@@ -180,11 +145,7 @@ const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
-          <CustomerTableRow
-            data={paginatedCryptoOrders}
-            selectedCryptoOrders={selectedCryptoOrders}
-            handleSelect={handleSelectOneCryptoOrder}
-          />
+          <CustomerTableRow data={paginatedCryptoOrders} />
         </Table>
       </TableContainer>
       <Box p={2}>
