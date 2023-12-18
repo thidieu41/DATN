@@ -54,10 +54,6 @@ const applyPagination = (
 const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
   doctorList
 }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -96,32 +92,6 @@ const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
     }));
   };
 
-  const handleSelectAllCryptoOrders = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedCryptoOrders(
-      event.target.checked
-        ? doctorList.map((cryptoOrder) => cryptoOrder.id)
-        : []
-    );
-  };
-
-  const handleSelectOneCryptoOrder = (
-    event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [
-        ...prevSelected,
-        cryptoOrderId
-      ]);
-    } else {
-      setSelectedCryptoOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== cryptoOrderId)
-      );
-    }
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -136,36 +106,31 @@ const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
     page,
     limit
   );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < doctorList.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === doctorList.length;
 
   return (
     <Card>
-        <CardHeader
-          action={
-            <Box width={150}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filters.status || 'all'}
-                  onChange={handleStatusChange}
-                  label="Status"
-                  autoWidth
-                >
-                  {statusOptions.map((statusOption) => (
-                    <MenuItem key={statusOption.id} value={statusOption.id}>
-                      {statusOption.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          }
-          title="Danh sách đặt lịch khám"
-        />
+      <CardHeader
+        action={
+          <Box width={150}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={filters.status || 'all'}
+                onChange={handleStatusChange}
+                label="Status"
+                autoWidth
+              >
+                {statusOptions.map((statusOption) => (
+                  <MenuItem key={statusOption.id} value={statusOption.id}>
+                    {statusOption.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        }
+        title="Danh sách đặt lịch khám"
+      />
       <Divider />
       <TableContainer>
         <Table>
@@ -182,11 +147,7 @@ const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <ScheduleAppoinmentRow
-            data={paginatedCryptoOrders}
-            selectedCryptoOrders={selectedCryptoOrders}
-            handleSelect={handleSelectOneCryptoOrder}
-          />
+          <ScheduleAppoinmentRow data={[]} />
         </Table>
       </TableContainer>
       <Box p={2}>

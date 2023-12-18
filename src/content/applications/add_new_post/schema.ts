@@ -15,16 +15,14 @@ export const registerSchema = Yup.object().shape({
 
 export const defaultValues = {
   name: '',
-  date: '',
-  number: '',
-  phone_number: '',
-  reason: ''
+  type: '',
+  content: '',
+  title: ''
 };
 
 export interface IFormValue {
   name: string;
-  date: string;
-  number: string;
-  phone_number: string;
-  reason: string;
+  type: string;
+  content: string;
+  title: string;
 }

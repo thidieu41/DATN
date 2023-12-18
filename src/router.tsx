@@ -33,6 +33,19 @@ const CustomerPage = Loader(lazy(() => import('src/content/pages/customers')));
 const CategoryPage = Loader(lazy(() => import('src/content/pages/category')));
 const BranchPage = Loader(lazy(() => import('src/content/pages/branch')));
 const PostPage = Loader(lazy(() => import('src/content/pages/post')));
+const AddNewBranchPage = Loader(
+  lazy(() => import('src/content/pages/add_new_branch'))
+);
+const AddNewCategoryPage = Loader(
+  lazy(() => import('src/content/pages/add_new_category'))
+);
+const AddNewPostPage = Loader(
+  lazy(() => import('src/content/pages/add_new_post'))
+);
+const ProfilePage = Loader(lazy(() => import('src/content/pages/profile')));
+const UpdateDoctorPage = Loader(
+  lazy(() => import('src/content/pages/update_doctor'))
+);
 
 const routes: RouteObject[] = [
   {
@@ -53,7 +66,6 @@ const routes: RouteObject[] = [
       }
     ]
   },
-
   {
     path: 'dashboards',
     element: <SidebarLayout />,
@@ -65,6 +77,10 @@ const routes: RouteObject[] = [
       {
         path: 'bac-si',
         element: <DoctorPage />
+      },
+      {
+        path: 'bac-si/cap-nhat/:id',
+        element: <UpdateDoctorPage />
       },
       {
         path: 'lich-kham',
@@ -83,10 +99,35 @@ const routes: RouteObject[] = [
         element: <CategoryPage />
       },
       {
+        path: 'danh-muc/tao-danh-muc',
+        element: <AddNewCategoryPage />
+      },
+      {
         path: 'chi-nhanh',
         element: <BranchPage />
       },
-      { path: 'bai-viet', element: <PostPage /> }
+      {
+        path: 'chi-nhanh/tao-chi-nhanh',
+        element: <AddNewBranchPage />
+      },
+      {
+        path: 'bai-viet',
+        element: <PostPage />
+      },
+      {
+        path: 'bai-viet/tao-bai-viet',
+        element: <AddNewPostPage />
+      }
+    ]
+  },
+  {
+    path: '',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: 'thong-tin-ca-nhan',
+        element: <ProfilePage />
+      }
     ]
   }
 ];

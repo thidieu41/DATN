@@ -17,12 +17,12 @@ import {
   CardHeader
 } from '@mui/material';
 
-import CategoryTableRow from './CategoryTableRow';
-import { ICategoryProps } from './interface';
+import CategoryTableRow from './BranchTableRow';
+import { IBrachProps } from './interface';
 
 interface RecentOrdersTableProps {
   className?: string;
-  categoryList: ICategoryProps[];
+  branchList: IBrachProps[];
 }
 
 interface Filters {
@@ -30,10 +30,10 @@ interface Filters {
 }
 
 const applyFilters = (
-  categoryList: ICategoryProps[],
+  branchList: IBrachProps[],
   filters: Filters
-): ICategoryProps[] => {
-  return categoryList.filter((cryptoOrder) => {
+): IBrachProps[] => {
+  return branchList.filter((cryptoOrder) => {
     let matches = true;
 
     // if (filters.status && cryptoOrder.status !== filters.status) {
@@ -45,14 +45,14 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  categoryList: ICategoryProps[],
+  branchList: IBrachProps[],
   page: number,
   limit: number
-): ICategoryProps[] => {
-  return categoryList.slice(page * limit, page * limit + limit);
+): IBrachProps[] => {
+  return branchList.slice(page * limit, page * limit + limit);
 };
 
-const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
+const BranchTable: FC<RecentOrdersTableProps> = ({ branchList }) => {
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -99,7 +99,7 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCryptoOrders = applyFilters(categoryList, filters);
+  const filteredCryptoOrders = applyFilters(branchList, filters);
   const paginatedCryptoOrders = applyPagination(
     filteredCryptoOrders,
     page,
@@ -128,7 +128,7 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
             </FormControl>
           </Box>
         }
-        title="Danh sách chi tiết danh mục"
+        title="Danh sách chi nhánh nha khoa"
       />
       <Divider />
       <TableContainer>
@@ -164,12 +164,12 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
   );
 };
 
-CategoryTable.propTypes = {
-  categoryList: PropTypes.array.isRequired
+BranchTable.propTypes = {
+  branchList: PropTypes.array.isRequired
 };
 
-CategoryTable.defaultProps = {
-  categoryList: []
+BranchTable.defaultProps = {
+  branchList: []
 };
 
-export default CategoryTable;
+export default BranchTable;

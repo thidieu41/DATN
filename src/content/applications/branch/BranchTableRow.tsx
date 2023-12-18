@@ -1,3 +1,4 @@
+import { Label } from '@mui/icons-material';
 import {
   IconButton,
   TableBody,
@@ -7,16 +8,15 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { ChangeEvent } from 'react';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { ICustomerProps } from './constant';
+import { IBrachProps } from './interface';
 
 interface Props {
-  data: ICustomerProps[];
+  data: IBrachProps[];
 }
 
-const CustomerTableRow = ({ data = [] }: Props) => {
+const BranchTableRow = ({ data = [] }: Props) => {
   const theme = useTheme();
 
   const onNavigationToDetails = (event, id: string) => {
@@ -37,6 +37,11 @@ const CustomerTableRow = ({ data = [] }: Props) => {
           >
             <TableCell>
               <Typography gutterBottom noWrap>
+                {item.id}
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography gutterBottom noWrap>
                 {item.name}
               </Typography>
             </TableCell>
@@ -49,7 +54,7 @@ const CustomerTableRow = ({ data = [] }: Props) => {
                 noWrap
               >
                 <Typography variant="body2" noWrap>
-                  {/* {format(item.date, 'MMMM dd yyyy')} */}
+                  {item.address}
                 </Typography>
               </Typography>
             </TableCell>
@@ -58,12 +63,6 @@ const CustomerTableRow = ({ data = [] }: Props) => {
                 {item.phone_number}
               </Typography>
             </TableCell>
-            <TableCell align="right">
-              <Typography gutterBottom noWrap>
-                {/* {item.role} */}
-              </Typography>
-            </TableCell>
-            <TableCell align="right">{/* {item.degree} */}</TableCell>
             <TableCell align="right">
               <Tooltip title="Edit Order" arrow>
                 <IconButton
@@ -99,4 +98,4 @@ const CustomerTableRow = ({ data = [] }: Props) => {
   );
 };
 
-export default CustomerTableRow;
+export default BranchTableRow;

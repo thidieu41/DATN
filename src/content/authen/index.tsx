@@ -1,12 +1,6 @@
 import { styled } from '@mui/material/styles';
 
-import {
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  Divider
-} from '@mui/material';
+import { Container, Grid, Card, CardContent, Divider } from '@mui/material';
 import { useState, SyntheticEvent } from 'react';
 
 import Tabs from '@mui/material/Tabs';
@@ -74,35 +68,38 @@ function AuthenticarionPage() {
                 padding: '0px'
               }}
             >
-              <CardContent sx={{
-                padding:0
-              }}>
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    centered
-                    TabIndicatorProps={{
-                      style: {
-                        // backgroundColor: '#D4EEFF',
-                        left:value === 0 ? 0 : '50%',
-                        width: '50%',
-                        padding:'10px',
-                        borderRadius: value === 0 ? '18px 0px 0px 0px' :'0px 18px 0px 0px',
-                        border:0,
-                        color:'black'
-                      }
-                    }}    
-                  >
-                    <TabCustom label="Đăng Nhập" />
-                    <TabCustom label="Đăng Ký" />
-                  </Tabs>
-                  <Divider />
-                  <TabPanel value={value} index={0}>
-                    <LoginForm/>
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
-                   <RegisterForm/>
-                  </TabPanel>
+              <CardContent
+                sx={{
+                  padding: 0
+                }}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  centered
+                  TabIndicatorProps={{
+                    style: {
+                      //
+                      left: value === 0 ? 0 : '50%',
+                      width: '50%',
+                      padding: '10px',
+                      borderRadius:
+                        value === 0 ? '18px 0px 0px 0px' : '0px 18px 0px 0px',
+                      border: 0,
+                      color: 'black'
+                    }
+                  }}
+                >
+                  <TabCustom label="Đăng Nhập" />
+                  <TabCustom label="Đăng Ký" />
+                </Tabs>
+                <Divider />
+                <TabPanel value={value} index={0}>
+                  <LoginForm />
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <RegisterForm />
+                </TabPanel>
               </CardContent>
             </Card>
           </Grid>

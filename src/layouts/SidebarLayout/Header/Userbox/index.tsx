@@ -116,16 +116,21 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/management/profile/details" component={NavLink}>
+          <ListItem
+            button
+            to="/thong-tin-ca-nhan"
+            component={NavLink}
+            onClick={handleClose}
+          >
             <AccountBoxTwoToneIcon fontSize="small" />
-            <ListItemText primary="My Profile" />
+            <ListItemText primary="Thông tin cá nhân" />
           </ListItem>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            Đăng xuất
           </Button>
         </Box>
       </Popover>

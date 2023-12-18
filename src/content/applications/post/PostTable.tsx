@@ -29,7 +29,10 @@ interface Filters {
   status?: any;
 }
 
-const applyFilters = (postLish: IPostProps[], filters: Filters): IPostProps[] => {
+const applyFilters = (
+  postLish: IPostProps[],
+  filters: Filters
+): IPostProps[] => {
   return postLish.filter((cryptoOrder) => {
     let matches = true;
 
@@ -50,10 +53,6 @@ const applyPagination = (
 };
 
 const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
-  const [selectedCryptoOrders, setSelectedCryptoOrders] = useState<string[]>(
-    []
-  );
-  const selectedBulkActions = selectedCryptoOrders.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -92,32 +91,6 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
     }));
   };
 
-  const handleSelectAllCryptoOrders = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedCryptoOrders(
-      event.target.checked
-        ? postLish.map((cryptoOrder) => cryptoOrder.id)
-        : []
-    );
-  };
-
-  const handleSelectOneCryptoOrder = (
-    event: ChangeEvent<HTMLInputElement>,
-    cryptoOrderId: string
-  ): void => {
-    if (!selectedCryptoOrders.includes(cryptoOrderId)) {
-      setSelectedCryptoOrders((prevSelected) => [
-        ...prevSelected,
-        cryptoOrderId
-      ]);
-    } else {
-      setSelectedCryptoOrders((prevSelected) =>
-        prevSelected.filter((id) => id !== cryptoOrderId)
-      );
-    }
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -132,36 +105,31 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
     page,
     limit
   );
-  const selectedSomeCryptoOrders =
-    selectedCryptoOrders.length > 0 &&
-    selectedCryptoOrders.length < postLish.length;
-  const selectedAllCryptoOrders =
-    selectedCryptoOrders.length === postLish.length;
 
   return (
     <Card>
-        <CardHeader
-          action={
-            <Box width={150}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filters.status || 'all'}
-                  onChange={handleStatusChange}
-                  label="Status"
-                  autoWidth
-                >
-                  {statusOptions.map((statusOption) => (
-                    <MenuItem key={statusOption.id} value={statusOption.id}>
-                      {statusOption.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          }
-          title="Danh sách chi tiết danh mục"
-        />
+      <CardHeader
+        action={
+          <Box width={150}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={filters.status || 'all'}
+                onChange={handleStatusChange}
+                label="Status"
+                autoWidth
+              >
+                {statusOptions.map((statusOption) => (
+                  <MenuItem key={statusOption.id} value={statusOption.id}>
+                    {statusOption.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        }
+        title="Danh sách bài viết"
+      />
       <Divider />
       <TableContainer>
         <Table>
@@ -178,11 +146,7 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <PostTableRow
-            data={paginatedCryptoOrders}
-            selectedCryptoOrders={selectedCryptoOrders}
-            handleSelect={handleSelectOneCryptoOrder}
-          />
+          <PostTableRow data={paginatedCryptoOrders} />
         </Table>
       </TableContainer>
       <Box p={2}>

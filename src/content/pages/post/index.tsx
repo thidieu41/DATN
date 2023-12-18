@@ -2,20 +2,27 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import DoctorTable from 'src/content/applications/doctors/DoctorTable';
-import { DoctorList } from 'src/content/applications/doctors/data';
-import CategoryTable from 'src/content/applications/category/CategoryTable';
 import PostTable from 'src/content/applications/post/PostTable';
-
+import { useNavigate } from 'react-router-dom';
 
 function PostPage() {
+  const navigate = useNavigate();
+
+  const onNavigateToCreateBranch = () => {
+    navigate('/dashboards/bai-viet/tao-bai-viet');
+  };
+
   return (
     <>
       <Helmet>
-        <title>Trang danh sách chi tiết danh mục</title>
+        <title>Trang danh sách bài viết</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Chi tiết danh mục'} textButton={'Thêm danh sách'} />
+        <PageHeader
+          title={'Bài viết'}
+          textButton={'Thêm bài viết'}
+          handleClick={onNavigateToCreateBranch}
+        />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid

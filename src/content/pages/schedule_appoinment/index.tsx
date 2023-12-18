@@ -10,7 +10,6 @@ function ScheduleAppoinmentPage() {
   const navigate = useNavigate();
 
   const onNavigateToAddNewAppoinment = () =>{
-    console.log('hhhh')
     navigate("/dashboards/lich-kham/tao-lich");
   }
 

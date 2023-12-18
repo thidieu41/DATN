@@ -437,13 +437,13 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
-            paddingRight: 6,
+            paddingRight: 6
           },
-         
+
           '&.Mui-focused.MuiOutlinedInput-notchedOutline': {
             borderColor: colors.primary.main,
-            borderWidth: 'thin',
-          },
+            borderWidth: 'thin'
+          }
         }
       }
     },
