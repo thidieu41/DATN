@@ -46,7 +46,9 @@ const ProfilePage = Loader(lazy(() => import('src/content/pages/profile')));
 const UpdateDoctorPage = Loader(
   lazy(() => import('src/content/pages/update_doctor'))
 );
-
+const LandingPage = Loader(
+  lazy(() => import('src/content/pages/landing_page'))
+);
 const routes: RouteObject[] = [
   {
     path: 'authen',
@@ -54,12 +56,12 @@ const routes: RouteObject[] = [
   },
   {
     path: '',
+    element: <LandingPage />
+  },
+  {
+    path: '',
     element: <BaseLayout />,
     children: [
-      {
-        path: '',
-        element: <Navigate to="authen" replace />
-      },
       {
         path: '*',
         element: <Status404 />
