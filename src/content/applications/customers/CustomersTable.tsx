@@ -142,7 +142,7 @@ const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
               <TableCell>Email</TableCell>
               <TableCell>Giới tính</TableCell>
               <TableCell>Địa chỉ</TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <CustomerTableRow data={paginatedCryptoOrders} />

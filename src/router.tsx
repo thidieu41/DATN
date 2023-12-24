@@ -1,10 +1,8 @@
 import { Suspense, lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import { RouteObject } from 'react-router';
-
 import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
-
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
 const Loader = (Component) => (props) =>
@@ -49,6 +47,13 @@ const UpdateDoctorPage = Loader(
 const LandingPage = Loader(
   lazy(() => import('src/content/pages/landing_page'))
 );
+const NewUserScheduleAppoimentPage = Loader(
+  lazy(() => import('src/content/pages/new_user_schedule_appoinment'))
+);
+const ServiceDetailsPage = Loader(
+  lazy(() => import('src/content/pages/service_details'))
+);
+
 const routes: RouteObject[] = [
   {
     path: 'authen',
@@ -57,6 +62,14 @@ const routes: RouteObject[] = [
   {
     path: '',
     element: <LandingPage />
+  },
+  {
+    path: 'dat-lich-kham',
+    element: <NewUserScheduleAppoimentPage />
+  },
+  {
+    path: 'dich-vu/:id',
+    element: <ServiceDetailsPage />
   },
   {
     path: '',

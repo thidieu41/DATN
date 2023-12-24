@@ -1,4 +1,3 @@
-import { Label } from '@mui/icons-material';
 import {
   IconButton,
   TableBody,
@@ -9,7 +8,6 @@ import {
   useTheme
 } from '@mui/material';
 import { format } from 'date-fns';
-import { ChangeEvent } from 'react';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { IDoctor } from './data';
@@ -61,14 +59,14 @@ const DoctorTableRow = ({ data = [] }: Props) => {
                 {item.phone_number}
               </Typography>
             </TableCell>
-            <TableCell align="right">
+            <TableCell>
               <Typography gutterBottom noWrap>
                 {item.role}
               </Typography>
             </TableCell>
-            <TableCell align="right">{item.degree}</TableCell>
+            <TableCell>{item.degree}</TableCell>
             <TableCell align="right">
-              <Tooltip title="Cập nhật bác sĩ" arrow>
+              <Tooltip title="Sửa" arrow>
                 <IconButton
                   sx={{
                     '&:hover': {
@@ -83,7 +81,7 @@ const DoctorTableRow = ({ data = [] }: Props) => {
                   <EditTwoToneIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Delete Order" arrow>
+              <Tooltip title="Xoá" arrow>
                 <IconButton
                   sx={{
                     '&:hover': { background: theme.colors.error.lighter },

@@ -133,6 +133,7 @@ export default function ServicesInformation() {
                 padding: 1.5
               }}
               fullWidth
+              href="/dat-lich-kham"
             >
               Đặt Lịch
             </Button>

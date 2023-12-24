@@ -3,7 +3,12 @@ import Button from '@mui/material/Button';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IFormValue, defaultValues, categorySchema } from './schema';
+import {
+  IFormValue,
+  defaultValues,
+  categorySchema,
+  CategoryData
+} from './schema';
 import { Grid, MenuItem, Typography, styled } from '@mui/material';
 
 const LableInput = styled(Typography)(
@@ -12,35 +17,20 @@ const LableInput = styled(Typography)(
 `
 );
 
-const currencies = [
-  {
-    value: 'USD',
-    label: '$'
-  },
-  {
-    value: 'EUR',
-    label: '€'
-  },
-  {
-    value: 'BTC',
-    label: '฿'
-  },
-  {
-    value: 'JPY',
-    label: '¥'
-  }
-];
-
 const CreateNewCategory = () => {
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors }
   } = useForm<IFormValue, IFormValue>({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(categorySchema) as any
   });
+
+  const categoryName = watch('name');
 
   const handleSubmission = (data: IFormValue) => {
     console.log('data', data);
@@ -61,7 +51,20 @@ const CreateNewCategory = () => {
                 placeholder="Nhập tên danh mục"
                 error={!!errors.name}
                 helperText={errors.name?.message || ''}
-              />
+                select
+              >
+                {Object.keys(CategoryData).map((option, key) => (
+                  <MenuItem
+                    key={key}
+                    value={option}
+                    onClick={() => {
+                      setValue('type', CategoryData[option]?.listType[0].name);
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             )}
           />
         </Grid>
@@ -79,11 +82,13 @@ const CreateNewCategory = () => {
                 error={!!errors.type}
                 helperText={errors.type?.message || ''}
               >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
+                {(CategoryData[categoryName]?.listType || []).map(
+                  (option, key) => (
+                    <MenuItem key={key} value={option.name}>
+                      {option.name}
+                    </MenuItem>
+                  )
+                )}
               </TextField>
             )}
           />

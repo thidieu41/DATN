@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-scroll';
 import { Stack } from '@mui/material';
+import HeaderUserbox from 'src/layouts/SidebarLayout/Header/Userbox';
+import { useLocation } from 'react-router-dom';
 
 const pages = [
   { title: 'Giới thiệu', to: 'trang-chu' },
@@ -20,25 +22,29 @@ const pages = [
   { title: 'Dịch Vụ', to: 'dich-vu' },
   { title: 'Bài Viết', to: 'bai-viet' }
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [navActive, setNavActive] = React.useState('');
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleSetActive = (to: string) => {
+    setNavActive(to);
+  };
+
+  const handleNavigation = (to: string) => {
+    const [_, url] = window.location.pathname.split('/');
+    if (url.length > 0) {
+      window.open(window.location.origin, '_self');
+    }
+    setNavActive(to);
   };
 
   return (
@@ -69,7 +75,7 @@ function ResponsiveAppBar() {
               variant="h4"
               noWrap
               component="a"
-              href="#trang-chu"
+              href="/"
               sx={{
                 mr: 3,
                 ml: 1,
@@ -115,11 +121,15 @@ function ResponsiveAppBar() {
                 <MenuItem key={page.to}>
                   <Link
                     activeClass="active"
-                    style={{ padding: '10px 15px' }}
+                    style={{
+                      padding: '10px 15px'
+                    }}
                     to={page.to}
                     spy={true}
                     smooth={true}
                     offset={-80}
+                    onSetActive={handleSetActive}
+                    onClick={handleNavigation}
                   >
                     <Typography>{page.title}</Typography>
                   </Link>
@@ -145,7 +155,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#trang-chu"
+            href="/"
             sx={{
               mr: 2,
               ml: 1,
@@ -172,17 +182,22 @@ function ResponsiveAppBar() {
                 sx={{
                   cursor: 'pointer',
                   fontWeight: 600,
-                  '&:hover': { color: '#308a79' }
+                  '&:hover': { color: '#308a79' },
+                  color: navActive == page.to ? '#308a79' : 'black'
                 }}
                 variant="h6"
               >
                 <Link
                   activeClass="active"
-                  style={{ padding: '10px 15px' }}
+                  style={{
+                    padding: '10px 15px'
+                  }}
                   to={page.to}
                   spy={true}
                   smooth={true}
                   offset={-80}
+                  onSetActive={handleSetActive}
+                  onClick={handleNavigation}
                 >
                   {page.title}
                 </Link>
@@ -194,33 +209,8 @@ function ResponsiveAppBar() {
             <Button variant="outlined" href="/authen">
               Login
             </Button>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right'
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+
+            <HeaderUserbox />
           </Stack>
         </Toolbar>
       </Container>

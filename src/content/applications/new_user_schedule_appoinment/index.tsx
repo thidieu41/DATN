@@ -16,7 +16,7 @@ const LableInput = styled(Typography)(
 `
 );
 
-const CreateNewSchedule = () => {
+const NewUserScheduleAppoinment = () => {
   const {
     control,
     handleSubmit,
@@ -28,29 +28,12 @@ const CreateNewSchedule = () => {
   });
 
   const handleSubmission = (data: IFormValue) => {
-    console.log('test', errors);
+    console.log('data', data);
   };
 
-  console.log(errors);
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <LableInput>Họ Và Tên</LableInput>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                placeholder="Nhập tên"
-                error={!!errors.name}
-                helperText={errors.name?.message || ''}
-              />
-            )}
-          />
-        </Grid>
         <Grid
           sx={{
             gap: '10px'
@@ -109,29 +92,6 @@ const CreateNewSchedule = () => {
 
         <Grid
           item
-          xs={6}
-          sx={{
-            gap: '10px'
-          }}
-        >
-          <LableInput>Số điện thoại</LableInput>
-          <Controller
-            control={control}
-            name="phone_number"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                placeholder="Nhập số điện thoại"
-                error={!!errors.phone_number}
-                helperText={errors.phone_number?.message || ''}
-              />
-            )}
-          />
-        </Grid>
-
-        <Grid
-          item
           xs={12}
           sx={{
             gap: '10px'
@@ -171,4 +131,4 @@ const CreateNewSchedule = () => {
   );
 };
 
-export default CreateNewSchedule;
+export default NewUserScheduleAppoinment;

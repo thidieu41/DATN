@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IFormValue, defaultValues, loginSchema } from './LoginSchema';
 import { Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+  const navigation = useNavigate();
   const {
     control,
     handleSubmit,
@@ -18,7 +20,7 @@ const LoginForm = () => {
   });
 
   const handleSubmission = (data: IFormValue) => {
-    console.log(data);
+    navigation('/dashboards/bac-si');
   };
 
   return (

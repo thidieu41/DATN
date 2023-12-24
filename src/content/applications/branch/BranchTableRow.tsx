@@ -1,4 +1,3 @@
-import { Label } from '@mui/icons-material';
 import {
   IconButton,
   TableBody,
@@ -64,7 +63,7 @@ const BranchTableRow = ({ data = [] }: Props) => {
               </Typography>
             </TableCell>
             <TableCell align="right">
-              <Tooltip title="Edit Order" arrow>
+              <Tooltip title="Sửa" arrow>
                 <IconButton
                   sx={{
                     '&:hover': {
@@ -78,7 +77,7 @@ const BranchTableRow = ({ data = [] }: Props) => {
                   <EditTwoToneIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Delete Order" arrow>
+              <Tooltip title="Xoá" arrow>
                 <IconButton
                   sx={{
                     '&:hover': { background: theme.colors.error.lighter },

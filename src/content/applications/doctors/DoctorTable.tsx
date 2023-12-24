@@ -135,9 +135,9 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
               <TableCell>Họ Và Tên</TableCell>
               <TableCell>Ngày Sinh</TableCell>
               <TableCell>Số điện thoại</TableCell>
-              <TableCell align="right">Chức vụ</TableCell>
-              <TableCell align="right">Bằng Cấp</TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell>Chức vụ</TableCell>
+              <TableCell>Bằng Cấp</TableCell>
+              <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <DoctorTableRow data={paginatedCryptoOrders} />

@@ -45,11 +45,6 @@ export default function RecipeReviewCard() {
             R
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />

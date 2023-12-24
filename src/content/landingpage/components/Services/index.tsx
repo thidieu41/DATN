@@ -1,46 +1,35 @@
 import { Box, Container, Grid, Stack, Typography } from '@mui/material';
-
-const servicesList = [
-  {
-    urlImg: '/static/images/services/cay-ghep-implant-1.jpg',
-    title: 'Cấy ghép Implant'
-  },
-  {
-    urlImg: '/static/images/services/boc-rang-su-tham-my-1.jpg',
-    title: 'Bọc răng sứ thẩm mỹ'
-  },
-  {
-    urlImg: '/static/images/services/danh-bong-rang.jpg',
-    title: 'Đánh bóng, cạp vôi răng'
-  },
-  {
-    urlImg: '/static/images/services/taytrang.webp',
-    title: 'Tẩy trắng răng nhanh'
-  },
-  {
-    urlImg: '/static/images/services/nieng-rang.webp',
-    title: 'Niềng răng chỉnh nha'
-  },
-  {
-    urlImg: '/static/images/services/dan-su.jpeg',
-    title: 'Mặt dán Venner'
-  },
-
-  {
-    urlImg: '/static/images/services/nho-rang-khon-nieng-rang-1-1.jpg',
-    title: 'Nhổ răng khôn công nghệ'
-  },
-  {
-    urlImg: '/static/images/services/tram-rang.jpeg',
-    title: 'Trám răng thẩm mỹ'
-  },
-  {
-    urlImg: '/static/images/services/dieu-tri-tuy.jpg',
-    title: 'Điều trị nội nha, chữa tuỷ răng'
-  }
-];
+import { servicesList } from './data';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { createClient } from 'src/utils/axios';
 
 export const ServicesComponent = () => {
+  const navitaion = useNavigate();
+  const axios = createClient();
+
+  const handleMavigatoDetails = (id: string | number) => {
+    navitaion(`/dich-vu/${id}`);
+  };
+
+  const handleAxios = async () => {
+    console.log('data');
+    await axios
+      .get(`post/categories/`)
+      .then((res) => {
+        console.log('data', res);
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log(error?.message);
+      });
+  };
+
+  useEffect(() => {
+    handleAxios();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -76,8 +65,10 @@ export const ServicesComponent = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                alignItems: 'center'
+                alignItems: 'center',
+                cursor: 'pointer'
               }}
+              onClick={() => handleMavigatoDetails(item.id)}
             >
               <Stack
                 sx={{

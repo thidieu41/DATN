@@ -1,19 +1,23 @@
 import { Helmet } from 'react-helmet-async';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
-import PageHeader from 'src/components/PageHeader';
-import UpdateDoctorComponent from 'src/content/applications/update_doctor';
+import ResponsiveAppBar from 'src/content/landingpage/Nav';
+import Footer from 'src/content/landingpage/components/Footer';
+import ServicesDetailsCom from 'src/content/landingpage/components/Services/ServicesDetails';
 
-function UpdateDoctorPage() {
+function ServiceDetailsPage() {
   return (
     <>
       <Helmet>
-        <title>Thông tin nha sĩ</title>
+        <title>Trang chi tiết dịch vụ</title>
       </Helmet>
-      <PageTitleWrapper>
-        <PageHeader title={'Thông tin nha sĩ'} />
-      </PageTitleWrapper>
-      <Container maxWidth="lg">
+      <ResponsiveAppBar />
+      <Container
+        maxWidth="lg"
+        sx={{
+          marginTop: 15,
+          marginBottom: 10
+        }}
+      >
         <Grid
           container
           direction="row"
@@ -28,14 +32,15 @@ function UpdateDoctorPage() {
                   padding: 3
                 }}
               >
-                <UpdateDoctorComponent />
+                <ServicesDetailsCom />
               </Stack>
             </Card>
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 }
 
-export default UpdateDoctorPage;
+export default ServiceDetailsPage;
