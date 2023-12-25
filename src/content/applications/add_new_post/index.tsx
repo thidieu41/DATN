@@ -130,7 +130,7 @@ const CreateNewPost = () => {
 
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={7}>
           <Stack>
             <LableInput>Tiêu đề</LableInput>
