@@ -103,6 +103,7 @@ const NewUserScheduleAppoinment = () => {
             name="reason"
             render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 placeholder="Nhập lý do đến khám"
                 multiline

@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, ChangeEvent, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Divider,
@@ -16,13 +16,12 @@ import {
   MenuItem,
   CardHeader
 } from '@mui/material';
-
-import { IPostProps } from './interface';
 import PostTableRow from './PostTableRow';
+import { ICategoryProps, IPostProps } from 'src/utils/schema';
+import { createClient } from 'src/utils/axios';
 
 interface RecentOrdersTableProps {
   className?: string;
-  postLish: IPostProps[];
 }
 
 interface Filters {
@@ -30,10 +29,10 @@ interface Filters {
 }
 
 const applyFilters = (
-  postLish: IPostProps[],
+  postList: IPostProps[],
   filters: Filters
 ): IPostProps[] => {
-  return postLish.filter((cryptoOrder) => {
+  return (postList || []).filter((cryptoOrder) => {
     let matches = true;
 
     // if (filters.status && cryptoOrder.status !== filters.status) {
@@ -45,19 +44,25 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  postLish: IPostProps[],
+  postList: IPostProps[],
   page: number,
   limit: number
 ): IPostProps[] => {
-  return postLish.slice(page * limit, page * limit + limit);
+  return postList.slice(page * limit, page * limit + limit);
 };
 
-const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
+const PostTable: FC<RecentOrdersTableProps> = () => {
+  const axios = createClient();
+
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
+  const [postList, setPostList] = useState<IPostProps[]>([]);
+  const [categoryList, setCategory] = useState<{
+    [key: number]: ICategoryProps;
+  }>({});
 
   const statusOptions = [
     {
@@ -99,35 +104,63 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredCryptoOrders = applyFilters(postLish, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
+  const handleCategoryList = (data: ICategoryProps[]) => {
+    const list = data.reduce((obj, item: ICategoryProps) => {
+      obj = {
+        ...obj,
+        [item.id]: item
+      };
+      return obj;
+    }, {});
+    setCategory(list);
+  };
+
+  const handleGetPostListData = async (isPost) => {
+    await axios
+      .get(isPost ? `post/posts/` : 'post/categories/')
+      .then((res: any) => {
+        if (isPost) {
+          console.log(res);
+          setPostList(res.data.results);
+        } else {
+          handleCategoryList(res.data.results);
+        }
+      })
+      .catch((error) => {
+        console.log(error?.message);
+      });
+  };
+
+  useEffect(() => {
+    handleGetPostListData(true);
+    handleGetPostListData(false);
+  }, []);
+
+  const filterPostList = applyFilters(postList, filters);
+  const panigatedPostList = applyPagination(filterPostList, page, limit);
 
   return (
     <Card>
       <CardHeader
-        action={
-          <Box width={150}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={filters.status || 'all'}
-                onChange={handleStatusChange}
-                label="Status"
-                autoWidth
-              >
-                {statusOptions.map((statusOption) => (
-                  <MenuItem key={statusOption.id} value={statusOption.id}>
-                    {statusOption.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        }
+        // action={
+        //   <Box width={150}>
+        //     <FormControl fullWidth variant="outlined">
+        //       <InputLabel>Status</InputLabel>
+        //       <Select
+        //         value={filters.status || 'all'}
+        //         onChange={handleStatusChange}
+        //         label="Status"
+        //         autoWidth
+        //       >
+        //         {statusOptions.map((statusOption) => (
+        //           <MenuItem key={statusOption.id} value={statusOption.id}>
+        //             {statusOption.name}
+        //           </MenuItem>
+        //         ))}
+        //       </Select>
+        //     </FormControl>
+        //   </Box>
+        // }
         title="Danh sách bài viết"
       />
       <Divider />
@@ -136,23 +169,24 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Tên danh mục</TableCell>
-              <TableCell>Thể loại</TableCell>
-              <TableCell align="right">Thời gian</TableCell>
-              <TableCell align="right">Chi nhánh</TableCell>
-              <TableCell align="right">Tên danh sách</TableCell>
-              <TableCell align="right">Giá</TableCell>
-              <TableCell align="right">Giá khuyến mãi</TableCell>
+              <TableCell>Tiêu đề</TableCell>
+              <TableCell>Danh mục</TableCell>
+              <TableCell>Nội dung</TableCell>
+              <TableCell>Thời gian xuất bản</TableCell>
+              <TableCell>Hình ảnh</TableCell>
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <PostTableRow data={paginatedCryptoOrders} />
+          <PostTableRow
+            data={panigatedPostList}
+            dataCategory={categoryList || {}}
+          />
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={panigatedPostList.length}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleLimitChange}
           page={page}
@@ -162,14 +196,6 @@ const PostTable: FC<RecentOrdersTableProps> = ({ postLish }) => {
       </Box>
     </Card>
   );
-};
-
-PostTable.propTypes = {
-  postLish: PropTypes.array.isRequired
-};
-
-PostTable.defaultProps = {
-  postLish: []
 };
 
 export default PostTable;

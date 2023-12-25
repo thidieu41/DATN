@@ -110,25 +110,25 @@ const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
   return (
     <Card>
       <CardHeader
-        action={
-          <Box width={150}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Status</InputLabel>
-              <Select
-                value={filters.status || 'all'}
-                onChange={handleStatusChange}
-                label="Status"
-                autoWidth
-              >
-                {statusOptions.map((statusOption) => (
-                  <MenuItem key={statusOption.id} value={statusOption.id}>
-                    {statusOption.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        }
+        // action={
+        //   <Box width={150}>
+        //     <FormControl fullWidth variant="outlined">
+        //       <InputLabel>Status</InputLabel>
+        //       <Select
+        //         value={filters.status || 'all'}
+        //         onChange={handleStatusChange}
+        //         label="Status"
+        //         autoWidth
+        //       >
+        //         {statusOptions.map((statusOption) => (
+        //           <MenuItem key={statusOption.id} value={statusOption.id}>
+        //             {statusOption.name}
+        //           </MenuItem>
+        //         ))}
+        //       </Select>
+        //     </FormControl>
+        //   </Box>
+        // }
         title="Danh sách đặt lịch khám"
       />
       <Divider />

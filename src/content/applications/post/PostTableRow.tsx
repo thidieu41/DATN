@@ -8,23 +8,25 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { format } from 'date-fns';
-import { ChangeEvent } from 'react';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { IPostProps } from './interface';
+import { ICategoryProps, IPostProps } from 'src/utils/schema';
+import dayjs from 'dayjs';
 
 interface Props {
   data: IPostProps[];
+  dataCategory: {
+    [key: number]: ICategoryProps;
+  };
 }
 
-const PostTableRow = ({ data = [] }: Props) => {
+const PostTableRow = ({ data = [], dataCategory = {} }: Props) => {
   const theme = useTheme();
-
-  const onNavigationToDetails = (event, id: string) => {
+  const onNavigationToDetails = (event, id: number) => {
     event.stopPropagation();
     console.log(id);
   };
+
   return (
     <TableBody>
       {data.map((item) => {
@@ -56,23 +58,45 @@ const PostTableRow = ({ data = [] }: Props) => {
                 noWrap
               >
                 <Typography variant="body2" noWrap>
-                  {item.type}
+                  {dataCategory[item.category]?.name || ''}
+                </Typography>
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                fontWeight="bold"
+                color="text.primary"
+                gutterBottom
+                noWrap
+              >
+                <Typography variant="body2" noWrap>
+                  {item.content}
+                </Typography>
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                fontWeight="bold"
+                color="text.primary"
+                gutterBottom
+                noWrap
+              >
+                <Typography variant="body2" noWrap>
+                  {dayjs(item.created_at).format('DD/MM/YYYY')}
                 </Typography>
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                {item.content}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.publish_time}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.image}
+                <img
+                  src={item.image}
+                  style={{
+                    height: 50,
+                    width: 50
+                  }}
+                />
               </Typography>
             </TableCell>
             <TableCell align="right">

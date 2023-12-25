@@ -34,7 +34,7 @@ function PostPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <PostTable postLish={[]} />
+              <PostTable />
             </Card>
           </Grid>
         </Grid>
