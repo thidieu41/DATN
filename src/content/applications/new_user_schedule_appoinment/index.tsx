@@ -9,6 +9,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
+import { Schedule } from 'src/api/schedule';
+import { setClientToken } from 'src/utils/axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router';
 
 const LableInput = styled(Typography)(
   () => `
@@ -17,18 +22,34 @@ const LableInput = styled(Typography)(
 );
 
 const NewUserScheduleAppoinment = () => {
+  const navigation = useNavigate();
+  const token = localStorage.getItem("token")
+  setClientToken(token)
   const {
     control,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset,
   } = useForm<IFormValue, IFormValue>({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(registerSchema) as any
   });
-
+  const Booking = async (date, quantity, reason) => {
+    try{
+      const res = await Schedule.Add(
+        date, quantity, reason
+      )
+      if (res.status === 201){
+        reset(defaultValues)
+        toast.success("Booking succesed!")
+      }
+    } catch (error){
+      toast.error("Booking failed!")
+    }
+  }
   const handleSubmission = (data: IFormValue) => {
-    console.log('data', data);
+    Booking(data.date, data.number, data.reason)
   };
 
   return (
@@ -103,6 +124,7 @@ const NewUserScheduleAppoinment = () => {
             name="reason"
             render={({ field }) => (
               <TextField
+                {...field}
                 fullWidth
                 placeholder="Nhập lý do đến khám"
                 multiline
@@ -126,6 +148,7 @@ const NewUserScheduleAppoinment = () => {
         >
           Đặt lịch
         </Button>
+        <ToastContainer />
       </Grid>
     </form>
   );
