@@ -6,7 +6,7 @@ export const getClientToken = () => {
 
 export const setClientToken = (token) => {
     if (token) {
-        axios.defaults.headers.common.Authorization = (token);
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     } else {
         delete axios.defaults.headers.common.Authorization;
     }
@@ -14,7 +14,9 @@ export const setClientToken = (token) => {
 
 
 export const createClient = () => {
-  const baseURL = "https://tender-llamas-watch.loca.lt/api/"
+
+	const baseURL = "http://localhost:8000/api/"
+  // const baseURL = "https://tender-llamas-watch.loca.lt/api/"
 
     const instance = axios.create({
         baseURL,
