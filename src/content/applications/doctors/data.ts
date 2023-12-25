@@ -1,83 +1,50 @@
-
- export interface IDoctor {
-    id: string,
-    name: string,
-    date: Date| number,
-    phone_number: string,
-    role: string,
-    degree: string
- }
+export interface IDoctor {
+  id: string;
+  name: string;
+  date: Date | number;
+  phone_number: string;
+  role: string;
+  degree: string;
+}
 export const DoctorList: IDoctor[] = [
   {
     id: '1',
-    name: 'Nguyễn Văn A',
+    name: 'Nguyễn Văn Minh',
     date: new Date().getTime(),
     phone_number: '056328473',
     role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
+    degree: 'Bác sĩ chính'
   },
   {
     id: '1',
-    name: 'Nguyễn Văn A',
+    name: 'Lê Thị Hạnh',
     date: new Date().getTime(),
     phone_number: '056328473',
     role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
+    degree: 'Bác sĩ chính'
   },
   {
     id: '1',
-    name: 'Nguyễn Văn A',
+    name: 'Nguyễn Thị Thanh An',
     date: new Date().getTime(),
     phone_number: '056328473',
     role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
+    degree: 'Bác sĩ chính'
   },
   {
     id: '1',
-    name: 'Nguyễn Văn A',
+    name: 'Trần Quốc Bảo',
     date: new Date().getTime(),
     phone_number: '056328473',
     role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
+    degree: 'Bác sĩ chính'
   },
   {
     id: '1',
-    name: 'Nguyễn Văn A',
+    name: 'Trần Ngọc Diệp',
     date: new Date().getTime(),
     phone_number: '056328473',
     role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
-  },
-  {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    date: new Date().getTime(),
-    phone_number: '056328473',
-    role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
-  },
-  {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    date: new Date().getTime(),
-    phone_number: '056328473',
-    role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
-  },
-  {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    date: new Date().getTime(),
-    phone_number: '056328473',
-    role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
-  },
-  {
-    id: '1',
-    name: 'Nguyễn Văn A',
-    date: new Date().getTime(),
-    phone_number: '056328473',
-    role: 'Bác sĩ',
-    degree: 'Thạc Sĩ'
+    degree: 'Bác sĩ chính'
   }
 ];

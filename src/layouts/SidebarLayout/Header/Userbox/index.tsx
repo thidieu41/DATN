@@ -61,7 +61,8 @@ const UserBoxDescription = styled(Typography)(
 function HeaderUserbox() {
   const user = {
     name: 'Nguyễn Thị Thanh Hưng',
-    avatar: '/static/images/avatars/1.jpg',
+    avatar:
+      'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg',
     jobtitle: 'Người dùng'
   };
 
