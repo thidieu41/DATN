@@ -1,34 +1,13 @@
-import { Box, Container, Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import { servicesList } from './data';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { createClient } from 'src/utils/axios';
 
 export const ServicesComponent = () => {
   const navitaion = useNavigate();
-  const axios = createClient();
 
   const handleMavigatoDetails = (id: string | number) => {
     navitaion(`/dich-vu/${id}`);
   };
-
-  const handleAxios = async () => {
-    console.log('data');
-    await axios
-      .get(`post/categories/`)
-      .then((res) => {
-        console.log('data', res);
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log(error?.message);
-      });
-  };
-
-  useEffect(() => {
-    handleAxios();
-  }, []);
 
   return (
     <Box

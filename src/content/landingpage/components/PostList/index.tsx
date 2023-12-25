@@ -7,9 +7,13 @@ import {
   Typography,
   styled
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import RecipeReviewCard from 'src/components/CardPost';
+import { createClient } from 'src/utils/axios';
+import { ICategoryProps, IPostProps } from 'src/utils/schema';
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -53,6 +57,43 @@ const Listdata = [
   }
 ];
 const PostListComponent = () => {
+  const [postList, setPostList] = useState<IPostProps[]>([]);
+  const [categoryList, setCategory] = useState<{
+    [key: number]: ICategoryProps;
+  }>({});
+
+  const axios = createClient();
+
+  const handleCategoryList = (data: ICategoryProps[]) => {
+    const list = data.reduce((obj, item: ICategoryProps) => {
+      obj = {
+        ...obj,
+        [item.id]: item
+      };
+      return obj;
+    }, {});
+    setCategory(list);
+  };
+
+  const handleGetPostListData = async (isPost) => {
+    await axios
+      .get(isPost ? `post/posts/` : 'post/categories/')
+      .then((res) => {
+        if (isPost) {
+          setPostList(res.data.results);
+        } else {
+          handleCategoryList(res.data.results);
+        }
+      })
+      .catch((error) => {
+        console.log(error?.message);
+      });
+  };
+
+  useEffect(() => {
+    handleGetPostListData(true);
+    handleGetPostListData(false);
+  }, []);
   return (
     <Box
       sx={{
@@ -73,7 +114,7 @@ const PostListComponent = () => {
       </Stack>
 
       <Carousel responsive={responsive}>
-        {Listdata.map((item, key) => (
+        {postList.map((item: IPostProps, key) => (
           <Stack
             key={key}
             sx={{
@@ -83,7 +124,10 @@ const PostListComponent = () => {
               marginBottom: 2
             }}
           >
-            <RecipeReviewCard />
+            <RecipeReviewCard
+              data={item}
+              categoryName={categoryList[item?.category]?.name || ''}
+            />
           </Stack>
         ))}
       </Carousel>

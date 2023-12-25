@@ -108,7 +108,7 @@ const UpdateDoctorComponent = () => {
                     backgroundColor: 'white',
                     height: 35,
                     borderRadius: 8,
-                    cursor:'pointer'
+                    cursor: 'pointer'
                   }}
                 >
                   <RemoveCircleIcon

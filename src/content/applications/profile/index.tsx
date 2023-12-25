@@ -44,7 +44,6 @@ const EditProfile = () => {
     console.log('test', errors);
   };
 
-  console.log(errors);
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Grid container spacing={2}>
