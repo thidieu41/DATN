@@ -60,7 +60,7 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const user = {
-    name: 'Nguyễn Kiêm Lực',
+    name: 'Nguyễn Thị Thanh Hưng',
     avatar: '/static/images/avatars/1.jpg',
     jobtitle: 'Người dùng'
   };

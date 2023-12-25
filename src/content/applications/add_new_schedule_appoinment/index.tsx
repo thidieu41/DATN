@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
+import { Schedule } from 'src/api/schedule';
 
 const LableInput = styled(Typography)(
   () => `
@@ -26,9 +27,15 @@ const CreateNewSchedule = () => {
     defaultValues,
     resolver: yupResolver(registerSchema) as any
   });
+  const Booking = async (date, quantity, reason) => {
+    const res = await Schedule.Add(
+      date, quantity, reason
+    )
+    console.log(res)
 
+  }
   const handleSubmission = (data: IFormValue) => {
-    console.log('test', errors);
+    Booking(data.date, data.number, data.reason)
   };
 
   return (
