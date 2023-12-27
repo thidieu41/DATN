@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function BranchPage() {
   const navigate = useNavigate();
   const onNavigateToCreateBranch = () => {
-    navigate('/dashboards/chi-nhanh/tao-chi-nhanh');
+    navigate('/admin/chi-nhanh/tao-chi-nhanh');
   };
   return (
     <>

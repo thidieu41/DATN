@@ -2,16 +2,16 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CreateNewPost from 'src/content/applications/post/add_new_post';
+import CreateNewDetailsCategories from 'src/content/applications/detail_categories_table/new_details_categories';
 
-function AddNewPostPage() {
+function AddNewDetailsCategoryPage() {
   return (
     <>
       <Helmet>
-        <title>Trang tạo bài viết</title>
+        <title>Trang tạo danh mục</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Tạo bài viết'} />
+        <PageHeader title={'Tạo chi tiết danh mục'} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
@@ -28,7 +28,7 @@ function AddNewPostPage() {
                   padding: 3
                 }}
               >
-                <CreateNewPost />
+                <CreateNewDetailsCategories />
               </Stack>
             </Card>
           </Grid>
@@ -38,4 +38,4 @@ function AddNewPostPage() {
   );
 }
 
-export default AddNewPostPage;
+export default AddNewDetailsCategoryPage;

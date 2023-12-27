@@ -119,7 +119,7 @@ function HeaderUserbox() {
         <List sx={{ p: 1 }} component="nav">
           <ListItem
             button
-            to="/thong-tin-ca-nhan"
+            to="admin/thong-tin-ca-nhan"
             component={NavLink}
             onClick={handleClose}
           >

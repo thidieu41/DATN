@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CreateNewCategory from 'src/content/applications/add_new_category';
+import CreateNewCategory from 'src/content/applications/category/add_new_category';
 
 function AddNewCategoryPage() {
   return (
@@ -21,10 +21,7 @@ function AddNewCategoryPage() {
           alignItems="stretch"
           spacing={3}
         >
-          <Grid
-            item
-            xs={12}
-          >
+          <Grid item xs={12}>
             <Card>
               <Stack
                 sx={{

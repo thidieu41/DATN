@@ -9,7 +9,7 @@ function PostPage() {
   const navigate = useNavigate();
 
   const onNavigateToCreateBranch = () => {
-    navigate('/dashboards/bai-viet/tao-bai-viet');
+    navigate('/admin/bai-viet/tao-bai-viet');
   };
 
   return (

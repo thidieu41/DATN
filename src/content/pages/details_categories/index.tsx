@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Grid, Container, Card, Stack, Button } from '@mui/material';
+import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CategoryTable from 'src/content/applications/category/CategoryTable';
 import { useNavigate } from 'react-router-dom';
+import DetailsCategoriesTable from 'src/content/applications/detail_categories_table/DetailsCategoryTable';
 
-function CategoryPage() {
+function DetailsCategoriesPage() {
   const navigate = useNavigate();
   const onNavigateToCreateBranch = () => {
     navigate('/admin/danh-muc/tao-danh-muc');
@@ -14,12 +14,12 @@ function CategoryPage() {
   return (
     <>
       <Helmet>
-        <title>Trang danh sách danh mục</title>
+        <title>Trang chi tiết danh mục</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader
-          title={'Danh mục'}
-          textButton={'Thêm danh mục'}
+          title={'Chi tiết danh mục'}
+          textButton={'Thêm danh sách'}
           handleClick={onNavigateToCreateBranch}
         />
       </PageTitleWrapper>
@@ -33,7 +33,7 @@ function CategoryPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <CategoryTable categoryList={[]} />
+              <DetailsCategoriesTable categoryList={[]} />
             </Card>
           </Grid>
         </Grid>
@@ -42,4 +42,4 @@ function CategoryPage() {
   );
 }
 
-export default CategoryPage;
+export default DetailsCategoriesPage;

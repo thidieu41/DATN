@@ -9,13 +9,13 @@ import {
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { ICategoryProps } from './interface';
+import { ICategoryProps } from '../category/interface';
 
 interface Props {
   data: ICategoryProps[];
 }
 
-const CategoryTableRow = ({ data = [] }: Props) => {
+const DetailsCategoriesTableRow = ({ data = [] }: Props) => {
   const theme = useTheme();
 
   const onNavigationToDetails = (event, id: string) => {
@@ -77,11 +77,6 @@ const CategoryTableRow = ({ data = [] }: Props) => {
                   }}
                   color="inherit"
                   size="small"
-                  onClick={() => {
-                    window.open(
-                      'http://localhost:3000/admin/danh-muc/chi-tiet-danh-muc/nieng-rang/tao-moi'
-                    );
-                  }}
                 >
                   <EditTwoToneIcon fontSize="small" />
                 </IconButton>
@@ -106,4 +101,4 @@ const CategoryTableRow = ({ data = [] }: Props) => {
   );
 };
 
-export default CategoryTableRow;
+export default DetailsCategoriesTableRow;

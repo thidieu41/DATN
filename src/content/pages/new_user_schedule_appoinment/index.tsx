@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import ResponsiveAppBar from 'src/content/landingpage/Nav';
 import Footer from 'src/content/landingpage/components/Footer';
-import NewUserScheduleAppoinment from 'src/content/applications/new_user_schedule_appoinment';
+import NewUserScheduleAppoinment from 'src/content/applications/schedule_appoinment/new_user_schedule_appoinment';
 
 function NewUserScheduleAppoimentPage() {
   return (

@@ -42,7 +42,7 @@ function Logo() {
 
   return (
     <TooltipWrapper title="Nha Khoa Thanh Sơn" arrow>
-      <LogoWrapper to="/dashboards/bac-si">
+      <LogoWrapper to="/admin/bac-si">
         <img
           src="/static/images/logo/logo_dentis.svg"
           style={{

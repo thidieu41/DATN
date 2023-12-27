@@ -22,7 +22,7 @@ const DoctorTableRow = ({ data = [] }: Props) => {
   const navigate = useNavigate();
   const onNavigationToDetails = (event, id: string) => {
     event.stopPropagation();
-    navigate(`/dashboards/bac-si/cap-nhat/${id}`);
+    navigate(`/admin/bac-si/cap-nhat/${id}`);
   };
   return (
     <TableBody>

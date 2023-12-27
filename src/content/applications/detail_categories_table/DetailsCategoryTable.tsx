@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {
   Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
   Table,
   TableCell,
@@ -12,13 +10,11 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  Select,
-  MenuItem,
   CardHeader
 } from '@mui/material';
 
-import CategoryTableRow from './CategoryTableRow';
-import { ICategoryProps } from './interface';
+import { ICategoryProps } from '../category/interface';
+import DetailsCategoriesTableRow from './DetailsCategoriesTableRow';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -52,7 +48,9 @@ const applyPagination = (
   return categoryList.slice(page * limit, page * limit + limit);
 };
 
-const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
+const DetailsCategoriesTable: FC<RecentOrdersTableProps> = ({
+  categoryList
+}) => {
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -128,7 +126,7 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
         //     </FormControl>
         //   </Box>
         // }
-        title="Danh sách danh mục"
+        title="Danh sách chi tiết danh mục"
       />
       <Divider />
       <TableContainer>
@@ -142,7 +140,7 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <CategoryTableRow data={paginatedCryptoOrders} />
+          <DetailsCategoriesTableRow data={paginatedCryptoOrders} />
         </Table>
       </TableContainer>
       <Box p={2}>
@@ -160,12 +158,12 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
   );
 };
 
-CategoryTable.propTypes = {
+DetailsCategoriesTable.propTypes = {
   categoryList: PropTypes.array.isRequired
 };
 
-CategoryTable.defaultProps = {
+DetailsCategoriesTable.defaultProps = {
   categoryList: []
 };
 
-export default CategoryTable;
+export default DetailsCategoriesTable;

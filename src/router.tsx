@@ -53,6 +53,15 @@ const NewUserScheduleAppoimentPage = Loader(
 const ServiceDetailsPage = Loader(
   lazy(() => import('src/content/pages/service_details'))
 );
+const PostCategoriesPage = Loader(
+  lazy(() => import('src/content/pages/post_categories'))
+);
+const DetailsCategoriesPage = Loader(
+  lazy(() => import('src/content/pages/details_categories'))
+);
+const AddNewDetailsCategoryPage = Loader(
+  lazy(() => import('src/content/pages/add_new_details_categories'))
+);
 
 const routes: RouteObject[] = [
   {
@@ -82,7 +91,7 @@ const routes: RouteObject[] = [
     ]
   },
   {
-    path: 'dashboards',
+    path: 'admin',
     element: <SidebarLayout />,
     children: [
       {
@@ -114,6 +123,14 @@ const routes: RouteObject[] = [
         element: <CategoryPage />
       },
       {
+        path: 'danh-muc/chi-tiet-danh-muc/:name',
+        element: <DetailsCategoriesPage />
+      },
+      {
+        path: 'danh-muc/chi-tiet-danh-muc/:name/tao-moi',
+        element: <AddNewDetailsCategoryPage />
+      },
+      {
         path: 'danh-muc/tao-danh-muc',
         element: <AddNewCategoryPage />
       },
@@ -126,19 +143,17 @@ const routes: RouteObject[] = [
         element: <AddNewBranchPage />
       },
       {
+        path: 'danh-muc-bai-dang',
+        element: <PostCategoriesPage />
+      },
+      {
         path: 'bai-viet',
         element: <PostPage />
       },
       {
         path: 'bai-viet/tao-bai-viet',
         element: <AddNewPostPage />
-      }
-    ]
-  },
-  {
-    path: '',
-    element: <SidebarLayout />,
-    children: [
+      },
       {
         path: 'thong-tin-ca-nhan',
         element: <ProfilePage />

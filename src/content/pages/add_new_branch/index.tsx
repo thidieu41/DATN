@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CreateNewBranch from 'src/content/applications/add_new_branch';
+import CreateNewBranch from 'src/content/applications/branch/add_new_branch';
 
 function AddNewBranchPage() {
   return (

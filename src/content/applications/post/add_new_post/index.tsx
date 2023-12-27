@@ -115,7 +115,7 @@ const CreateNewPost = () => {
         })
         .then((res) => {
           setLoading('');
-          navigation('/dashboards/bai-viet');
+          navigation('/admin/bai-viet');
         })
         .catch((error) => {
           setLoading('');

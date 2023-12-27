@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import UpdateDoctorComponent from 'src/content/applications/update_doctor';
+import UpdateDoctorComponent from 'src/content/applications/doctors/update_doctor';
 
 function UpdateDoctorPage() {
   return (

@@ -4,14 +4,14 @@ import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import ScheduleAppoinmentTable from 'src/content/applications/schedule_appoinment/ScheduleAppoinmentTable';
 import { DoctorList } from 'src/content/applications/doctors/data';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 function ScheduleAppoinmentPage() {
   const navigate = useNavigate();
 
-  const onNavigateToAddNewAppoinment = () =>{
-    navigate("/dashboards/lich-kham/tao-lich");
-  }
+  const onNavigateToAddNewAppoinment = () => {
+    navigate('/admin/lich-kham/tao-lich');
+  };
 
   return (
     <>
@@ -19,7 +19,11 @@ function ScheduleAppoinmentPage() {
         <title>Danh sách lịch khám</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Lịch Khám'} textButton={'Đặt lịch khám'} handleClick={onNavigateToAddNewAppoinment} />
+        <PageHeader
+          title={'Lịch Khám'}
+          textButton={'Đặt lịch khám'}
+          handleClick={onNavigateToAddNewAppoinment}
+        />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
