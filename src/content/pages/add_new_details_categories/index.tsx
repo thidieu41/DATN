@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CreateNewDetailsCategories from 'src/content/applications/detail_categories_table/new_details_categories';
+import CreateNewDetailsCategories from 'src/content/applications/detail_categories/new_details_categories';
 
 function AddNewDetailsCategoryPage() {
   return (

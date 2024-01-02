@@ -3,7 +3,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import { useNavigate } from 'react-router-dom';
-import DetailsCategoriesTable from 'src/content/applications/detail_categories_table/DetailsCategoryTable';
+import DetailsCategoriesTable from 'src/content/applications/detail_categories/DetailsCategoryTable';
 
 function DetailsCategoriesPage() {
   const navigate = useNavigate();
