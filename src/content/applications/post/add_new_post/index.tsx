@@ -49,8 +49,8 @@ const CreateNewPost = () => {
     await axios
       .get('post/categories/')
       .then((res) => {
-        setCategory(res.data.results);
-        setValue('category', res.data.results[0]?.id);
+        setCategory(res.data);
+        setValue('category', res.data[0]?.id);
       })
       .catch((error) => {
         console.log(error?.message);

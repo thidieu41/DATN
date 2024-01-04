@@ -117,13 +117,13 @@ const PostTable: FC<RecentOrdersTableProps> = () => {
 
   const handleGetPostListData = async (isPost) => {
     await axios
-      .get(isPost ? `post/posts/` : 'post/categories/')
+      .get(isPost ? `post/posts` : 'post/categories')
       .then((res: any) => {
         if (isPost) {
           console.log(res);
-          setPostList(res.data.results);
+          setPostList(res.data);
         } else {
-          handleCategoryList(res.data.results);
+          handleCategoryList(res.data);
         }
       })
       .catch((error) => {
