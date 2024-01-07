@@ -1,10 +1,7 @@
-import { FC, ChangeEvent, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import {
   Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
   Table,
   TableCell,
@@ -12,164 +9,94 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  Select,
-  MenuItem,
   CardHeader
 } from '@mui/material';
-
 import CategoryTableRow from './BranchTableRow';
-import { IBrachProps } from './interface';
+import { BranchAPI } from 'src/api/branch';
+import { IPanigationProps } from 'src/utils/interface';
+import { toast } from 'react-toastify';
+import { IBrachProps } from 'src/interface/branchs';
+import BackDropComponent from 'src/components/BackDrop';
 
-interface RecentOrdersTableProps {
-  className?: string;
-  branchList: IBrachProps[];
-}
-
-interface Filters {
-  status?: any;
-}
-
-const applyFilters = (
-  branchList: IBrachProps[],
-  filters: Filters
-): IBrachProps[] => {
-  return branchList.filter((cryptoOrder) => {
-    let matches = true;
-
-    // if (filters.status && cryptoOrder.status !== filters.status) {
-    //   matches = false;
-    // }
-
-    return matches;
-  });
-};
-
-const applyPagination = (
-  branchList: IBrachProps[],
-  page: number,
-  limit: number
-): IBrachProps[] => {
-  return branchList.slice(page * limit, page * limit + limit);
-};
-
-const BranchTable: FC<RecentOrdersTableProps> = ({ branchList }) => {
+const BranchTable = () => {
   const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
-    }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
-  };
+  const [pagination, setPagination] = useState<IPanigationProps>();
+  const [branchList, setBranchlist] = useState<IBrachProps[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePageChange = (event: any, newPage: number): void => {
+    if (newPage > page) {
+      onGetAllBranchs(pagination.next);
+    } else {
+      onGetAllBranchs(pagination.previous);
+    }
     setPage(newPage);
   };
 
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
+  const handleRemoveBranch = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await BranchAPI.delete(id);
+      const list = branchList.filter((item) => item.id !== id);
+      setBranchlist(list);
+      toast.success('Xoá chi nhánh thành công');
+    } catch (error) {
+      toast.error('Lỗi xoá chi nhánh');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const filteredCryptoOrders = applyFilters(branchList, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
+  const onGetAllBranchs = async (url: string) => {
+    setIsLoading(true);
+    try {
+      const res = await BranchAPI.getAll(url);
+      setBranchlist(res.data.results);
+      setPagination(res.data);
+    } catch (error) {
+      toast.error('Lỗi lấy danh sách chi nhánh!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    onGetAllBranchs('/dental/branches');
+  }, []);
 
   return (
     <Card>
-      <CardHeader
-        // action={
-        //   <Box width={150}>
-        //     <FormControl fullWidth variant="outlined">
-        //       <InputLabel>Status</InputLabel>
-        //       <Select
-        //         value={filters.status || 'all'}
-        //         onChange={handleStatusChange}
-        //         label="Status"
-        //         autoWidth
-        //       >
-        //         {statusOptions.map((statusOption) => (
-        //           <MenuItem key={statusOption.id} value={statusOption.id}>
-        //             {statusOption.name}
-        //           </MenuItem>
-        //         ))}
-        //       </Select>
-        //     </FormControl>
-        //   </Box>
-        // }
-        title="Danh sách chi nhánh nha khoa"
-      />
+      <CardHeader title="Danh sách chi nhánh nha khoa" />
       <Divider />
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Tên danh mục</TableCell>
-              <TableCell>Thể loại</TableCell>
-              <TableCell align="right">Thời gian</TableCell>
-              <TableCell align="right">Chi nhánh</TableCell>
-              <TableCell align="right">Tên danh sách</TableCell>
-              <TableCell align="right">Giá</TableCell>
-              <TableCell align="right">Giá khuyến mãi</TableCell>
+              <TableCell>Tên chi nhánh</TableCell>
+              <TableCell>Số điện thoại</TableCell>
+              <TableCell>Địa chỉ</TableCell>
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <CategoryTableRow data={paginatedCryptoOrders} />
+          <CategoryTableRow
+            data={branchList || []}
+            handleRemoveBranch={handleRemoveBranch}
+          />
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={pagination?.count || 0}
           onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
           page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          rowsPerPage={10}
         />
       </Box>
+      <BackDropComponent open={isLoading} />
     </Card>
   );
-};
-
-BranchTable.propTypes = {
-  branchList: PropTypes.array.isRequired
-};
-
-BranchTable.defaultProps = {
-  branchList: []
 };
 
 export default BranchTable;

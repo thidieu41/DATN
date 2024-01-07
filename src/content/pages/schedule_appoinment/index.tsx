@@ -5,8 +5,29 @@ import PageHeader from 'src/components/PageHeader';
 import ScheduleAppoinmentTable from 'src/content/applications/schedule_appoinment/ScheduleAppoinmentTable';
 import { DoctorList } from 'src/content/applications/doctors/data';
 import { useNavigate } from 'react-router-dom';
+import { setClientToken } from 'src/utils/axios';
 
+export interface IScheduleProps {
+  created_at: string;
+  date: string;
+  doctor: string;
+  id: string;
+  quantity: string;
+  reason: string;
+  status: string;
+  total_money: string;
+  updated_at: string;
+  user: {
+    created_at: string;
+    email: string;
+    id: string;
+    name: string;
+    phone: string;
+  };
+}
 function ScheduleAppoinmentPage() {
+  const token = localStorage.getItem('token');
+  setClientToken(token);
   const navigate = useNavigate();
 
   const onNavigateToAddNewAppoinment = () => {
@@ -35,7 +56,7 @@ function ScheduleAppoinmentPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <ScheduleAppoinmentTable doctorList={DoctorList} />
+              <ScheduleAppoinmentTable />
             </Card>
           </Grid>
         </Grid>

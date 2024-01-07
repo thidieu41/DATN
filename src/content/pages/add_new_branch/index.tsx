@@ -3,15 +3,31 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import CreateNewBranch from 'src/content/applications/branch/add_new_branch';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 
 function AddNewBranchPage() {
+  const [branchId, setIdBranch] = useState('');
+  const location = useLocation();
+  const handlePathNameUrl = () => {
+    const { pathname } = location;
+    const pathnameList = pathname.split('/');
+    const valueId = pathnameList[pathnameList.length - 1];
+    if (!isNaN(Number(valueId))) {
+      setIdBranch(valueId);
+    }
+  };
+  useEffect(() => {
+    handlePathNameUrl();
+  }, []);
+
   return (
     <>
       <Helmet>
         <title>Trang tạo chi nhánh</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Tạo chi nhánh'} />
+        <PageHeader title={branchId ? 'Sửa chi nhánh' : 'Tạo chi nhánh'} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
@@ -28,7 +44,7 @@ function AddNewBranchPage() {
                   padding: 3
                 }}
               >
-                <CreateNewBranch />
+                <CreateNewBranch branchId={branchId} />
               </Stack>
             </Card>
           </Grid>

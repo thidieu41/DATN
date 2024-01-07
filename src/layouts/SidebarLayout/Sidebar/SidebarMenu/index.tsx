@@ -167,11 +167,7 @@ const listmenu = [
     icon: <AccountBalanceIcon />,
     path: '/admin/chi-nhanh'
   },
-  {
-    name: 'Danh Mục',
-    icon: <AutoAwesomeMotionIcon />,
-    path: '/admin/danh-muc'
-  },
+
   {
     name: 'Lịch Khám',
     icon: <VaccinesIcon />,

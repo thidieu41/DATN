@@ -9,18 +9,31 @@ import {
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { IBrachProps } from './interface';
+import { IBrachProps } from 'src/interface/branchs';
+import { useNavigate } from 'react-router';
 
 interface Props {
   data: IBrachProps[];
+  handleRemoveBranch: (id: string) => void;
 }
 
-const BranchTableRow = ({ data = [] }: Props) => {
+const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
   const theme = useTheme();
-
-  const onNavigationToDetails = (event, id: string) => {
+  const navigate = useNavigate();
+  const onNavigationToDetails = (
+    event: React.SyntheticEvent<EventTarget>,
+    id: string
+  ) => {
     event.stopPropagation();
-    console.log(id);
+    navigate(`/admin/chi-nhanh/cap-nhat-chi-nhanh/${id}`);
+  };
+
+  const onRemoveBranch = (
+    event: React.SyntheticEvent<EventTarget>,
+    id: string
+  ) => {
+    event.stopPropagation();
+    handleRemoveBranch(id);
   };
   return (
     <TableBody>
@@ -35,36 +48,24 @@ const BranchTableRow = ({ data = [] }: Props) => {
             }}
           >
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.id}
-              </Typography>
+              <Typography noWrap>{item.id}</Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.name}
-              </Typography>
+              <Typography noWrap>{item.name}</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                variant="body1"
-                fontWeight="bold"
-                color="text.primary"
-                gutterBottom
-                noWrap
-              >
-                <Typography variant="body2" noWrap>
-                  {item.address}
-                </Typography>
-              </Typography>
+              <Typography noWrap>{item.phone}</Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.phone_number}
+              <Typography color="text.primary" noWrap>
+                {item.address}
               </Typography>
             </TableCell>
+
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton
+                  onClick={(e) => onNavigationToDetails(e, item.id)}
                   sx={{
                     '&:hover': {
                       background: theme.colors.primary.lighter
@@ -79,6 +80,7 @@ const BranchTableRow = ({ data = [] }: Props) => {
               </Tooltip>
               <Tooltip title="Xoá" arrow>
                 <IconButton
+                  onClick={(e) => onRemoveBranch(e, item.id)}
                   sx={{
                     '&:hover': { background: theme.colors.error.lighter },
                     color: theme.palette.error.main

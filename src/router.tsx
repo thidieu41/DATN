@@ -115,6 +115,10 @@ const routes: RouteObject[] = [
         element: <AddNewScheduleAppoimentPage />
       },
       {
+        path: 'lich-kham/cap-nhat/:id',
+        element: <AddNewScheduleAppoimentPage />
+      },
+      {
         path: 'khach-hang',
         element: <CustomerPage />
       },
@@ -140,6 +144,10 @@ const routes: RouteObject[] = [
       },
       {
         path: 'chi-nhanh/tao-chi-nhanh',
+        element: <AddNewBranchPage />
+      },
+      {
+        path: 'chi-nhanh/cap-nhat-chi-nhanh/:id',
         element: <AddNewBranchPage />
       },
       {

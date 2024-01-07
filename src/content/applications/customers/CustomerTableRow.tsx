@@ -35,16 +35,13 @@ const CustomerTableRow = ({ data = [] }: Props) => {
             }}
           >
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.name}
-              </Typography>
+              <Typography noWrap>{item.name}</Typography>
             </TableCell>
             <TableCell>
               <Typography
                 variant="body1"
                 fontWeight="bold"
                 color="text.primary"
-                gutterBottom
                 noWrap
               >
                 <Typography variant="body2" noWrap>
@@ -53,14 +50,10 @@ const CustomerTableRow = ({ data = [] }: Props) => {
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.phone_number}
-              </Typography>
+              <Typography noWrap>{item.phone_number}</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography gutterBottom noWrap>
-                {/* {item.role} */}
-              </Typography>
+              <Typography noWrap>{/* {item.role} */}</Typography>
             </TableCell>
             <TableCell align="right">{/* {item.degree} */}</TableCell>
             <TableCell align="right">

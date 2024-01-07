@@ -35,16 +35,13 @@ const CategoryTableRow = ({ data = [] }: Props) => {
             }}
           >
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.name}
-              </Typography>
+              <Typography noWrap>{item.name}</Typography>
             </TableCell>
             <TableCell>
               <Typography
                 variant="body1"
                 fontWeight="bold"
                 color="text.primary"
-                gutterBottom
                 noWrap
               >
                 <Typography variant="body2" noWrap>
@@ -53,14 +50,10 @@ const CategoryTableRow = ({ data = [] }: Props) => {
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.time}
-              </Typography>
+              <Typography noWrap>{item.time}</Typography>
             </TableCell>
             <TableCell align="right">
-              <Typography gutterBottom noWrap>
-                {item.branch}
-              </Typography>
+              <Typography noWrap>{item.branch}</Typography>
             </TableCell>
             <TableCell align="right">{item.name_list}</TableCell>
             <TableCell align="right">{item.price}</TableCell>

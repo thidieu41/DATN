@@ -9,12 +9,19 @@ import {
 } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { IPostCategoriesProps } from 'src/content/pages/post_categories';
 
 interface IProps {
   handleSetisEdit: (id: string) => void;
   handleRemove: (id: string) => void;
+  data: IPostCategoriesProps[];
 }
-const PostCategoriesComponent = ({ handleSetisEdit, handleRemove }: IProps) => {
+
+const PostCategoriesComponent = ({
+  handleSetisEdit,
+  handleRemove,
+  data = []
+}: IProps) => {
   return (
     <Box
       sx={{
@@ -22,7 +29,7 @@ const PostCategoriesComponent = ({ handleSetisEdit, handleRemove }: IProps) => {
       }}
     >
       <Grid container spacing={4}>
-        {new Array(100).fill(0).map((item, key) => (
+        {data.map((item: IPostCategoriesProps, key) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={key}>
             <Card
               sx={{
@@ -31,7 +38,7 @@ const PostCategoriesComponent = ({ handleSetisEdit, handleRemove }: IProps) => {
             >
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Khuyến mãi niềng răng
+                  {item.name}
                 </Typography>
               </CardContent>
               <CardActions
@@ -43,7 +50,7 @@ const PostCategoriesComponent = ({ handleSetisEdit, handleRemove }: IProps) => {
                 <Button
                   size="small"
                   startIcon={<ModeEditOutlineOutlinedIcon />}
-                  onClick={() => handleSetisEdit(item)}
+                  onClick={() => handleSetisEdit(item.id)}
                 >
                   Sửa
                 </Button>
@@ -53,7 +60,7 @@ const PostCategoriesComponent = ({ handleSetisEdit, handleRemove }: IProps) => {
                   sx={{
                     color: 'red'
                   }}
-                  onClick={() => handleRemove(item)}
+                  onClick={() => handleRemove(item.id)}
                 >
                   Xoá
                 </Button>

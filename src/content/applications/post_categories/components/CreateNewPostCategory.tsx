@@ -7,17 +7,19 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Stack, TextField, Typography } from '@mui/material';
-import { createClient } from 'src/utils/axios';
+import { PostCategoriesAPI } from 'src/api/post_categories';
+import { IPostCategoriesProps } from 'src/content/pages/post_categories';
+import { toast } from 'react-toastify';
 
 interface Iprops {
   open: boolean;
-  onOpenModal: () => void;
   onCloseModal: () => void;
+  handleNewValue: (name: string, id: string) => void;
   isEdit: boolean;
-  detailsData: {
-    name: string;
-  };
+  detailsData: IPostCategoriesProps;
+  handleSetIsLoading: (value: boolean) => void;
 }
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -29,37 +31,52 @@ const Transition = React.forwardRef(function Transition(
 
 export default function CreateNewPostCategory({
   open,
-  onOpenModal,
   onCloseModal,
+  handleNewValue,
+  handleSetIsLoading,
   isEdit,
   detailsData
 }: Iprops) {
-  const [name, setName] = React.useState('');
   const [err, setErrors] = React.useState(false);
-
-  const axios = createClient();
+  const [details, setDetails] = React.useState<IPostCategoriesProps>();
 
   const handleSubmit = async () => {
-    if (!name) {
+    if (!details.name) {
       setErrors(true);
     } else {
-      await (isEdit ? axios.put : axios.post)('/post/category', {
-        name
-      })
-        .then((res) => {})
-        .catch((error) => {});
+      handleSetIsLoading(true);
+      handleCloseModal();
+      try {
+        const id = (Math.random() + 1).toString(36).substring(7);
+        let res;
+        if (isEdit) {
+          res = await PostCategoriesAPI.update(details.name, details.id);
+          toast.success('Cập nhật danh mục thành công!');
+        } else {
+          res = await PostCategoriesAPI.addNew(details.name);
+          toast.success('Thêm danh mục thành công!');
+        }
+        handleNewValue(details.name, isEdit ? details.id : id);
+      } catch (error) {
+        if (isEdit) {
+          toast.error('Lỗi cập nhật danh mục!');
+        } else {
+          toast.error('Lỗi thêm danh mục mới!');
+        }
+      }
+      handleSetIsLoading(false);
     }
   };
 
   const handleCloseModal = () => {
     setErrors(false);
-    setName('');
+    setDetails({ ...details, name: '' });
     onCloseModal();
   };
 
   React.useEffect(() => {
     if (isEdit) {
-      setName(detailsData.name);
+      setDetails(detailsData);
     }
   }, [detailsData, isEdit]);
 
@@ -76,7 +93,9 @@ export default function CreateNewPostCategory({
       }}
     >
       <DialogTitle>
-        <Typography variant="h4">Thêm danh mục bài đăng</Typography>
+        <Typography variant="h4">
+          {isEdit ? 'Sửa' : 'Thêm'} danh mục bài đăng
+        </Typography>
       </DialogTitle>
 
       <DialogContent sx={{ width: '100%' }}>
@@ -91,8 +110,8 @@ export default function CreateNewPostCategory({
           <TextField
             id="name"
             variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={details?.name || ''}
+            onChange={(e) => setDetails({ ...details, name: e.target.value })}
             placeholder="Nhập tên danh mục"
           />
           {err && (

@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, ChangeEvent, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Divider,
@@ -17,118 +17,109 @@ import {
   CardHeader
 } from '@mui/material';
 import ScheduleAppoinmentRow from './ScheduleAppoinmentRow';
-import { IScheduleAppoinment } from './interface';
+import { Schedule } from 'src/api/schedule';
+import { toast } from 'react-toastify';
+import BackDropComponent from 'src/components/BackDrop';
+import { statusTableOptions } from './constants';
+import { IPanigationProps } from 'src/utils/interface';
 
-interface RecentOrdersTableProps {
-  className?: string;
-  doctorList: IScheduleAppoinment[];
-}
+const statusOptions = [
+  {
+    id: 'tất cả',
+    name: 'Tất cả'
+  },
+  {
+    id: 'chưa-khám',
+    name: 'Chưa Khám'
+  },
+  {
+    id: 'đang-khám',
+    name: 'Đang Khám'
+  },
+  {
+    id: 'đã-khám',
+    name: 'Đã Khám'
+  }
+];
 
-interface Filters {
-  status?: any;
-}
-
-const applyFilters = (
-  doctorList: IScheduleAppoinment[],
-  filters: Filters
-): IScheduleAppoinment[] => {
-  return doctorList.filter((cryptoOrder) => {
-    let matches = true;
-
-    // if (filters.status && cryptoOrder.status !== filters.status) {
-    //   matches = false;
-    // }
-
-    return matches;
-  });
-};
-
-const applyPagination = (
-  doctorList: IScheduleAppoinment[],
-  page: number,
-  limit: number
-): IScheduleAppoinment[] => {
-  return doctorList.slice(page * limit, page * limit + limit);
-};
-
-const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
-  doctorList
-}) => {
+const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
-    }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
-  };
+  const [status, setStatus] = useState(null);
+  const [scheduleList, setScheduleList] = useState([]);
+  const [paigation, setPagination] = useState<IPanigationProps>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePageChange = (event: any, newPage: number): void => {
+    if (newPage > page) {
+      handleGetBookingList(paigation.next);
+    } else {
+      handleGetBookingList(paigation.previous);
+    }
     setPage(newPage);
   };
 
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
+  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (status === e.target.value) {
+      return;
+    }
+    // handleGetBookingList(`/app/bookings?status=${e.target.value}`);
+    setStatus(e.target.value);
   };
 
-  const filteredCryptoOrders = applyFilters(doctorList, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
+  const handleGetBookingList = async (url: string) => {
+    setIsLoading(true);
+    try {
+      const res = await Schedule.getAll(url);
+      console.log(res.data.results);
+      setScheduleList(res.data.results);
+      setPagination(res.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error('Lỗi lấy tất cả lịch khám!');
+    }
+  };
+
+  const handleSetPagination = (id: string) => {
+    setIsLoading(false);
+    setPagination({
+      ...paigation,
+      count: paigation.count - 1
+    });
+    const list = scheduleList.filter((item) => item.id !== id);
+    setScheduleList(list);
+  };
+
+  const handleSetBackdropRemove = () => {
+    setIsLoading(true);
+  };
+
+  useEffect(() => {
+    handleGetBookingList('/app/bookings/');
+  }, []);
 
   return (
     <Card>
       <CardHeader
-        // action={
-        //   <Box width={150}>
-        //     <FormControl fullWidth variant="outlined">
-        //       <InputLabel>Status</InputLabel>
-        //       <Select
-        //         value={filters.status || 'all'}
-        //         onChange={handleStatusChange}
-        //         label="Status"
-        //         autoWidth
-        //       >
-        //         {statusOptions.map((statusOption) => (
-        //           <MenuItem key={statusOption.id} value={statusOption.id}>
-        //             {statusOption.name}
-        //           </MenuItem>
-        //         ))}
-        //       </Select>
-        //     </FormControl>
-        //   </Box>
-        // }
+        action={
+          <Box width={250}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={status || 'tất cả'}
+                onChange={handleStatusChange}
+                label="Status"
+                fullWidth
+              >
+                {(statusTableOptions || []).map((statusOption) => (
+                  <MenuItem key={statusOption.id} value={statusOption.id}>
+                    {statusOption.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        }
         title="Danh sách đặt lịch khám"
       />
       <Divider />
@@ -138,39 +129,36 @@ const ScheduleAppoinmentTable: FC<RecentOrdersTableProps> = ({
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Họ tên</TableCell>
+              <TableCell>Số điện thoại</TableCell>
               <TableCell>Ngày đặt</TableCell>
-              <TableCell>Giờ khám</TableCell>
+              <TableCell>Giờ đặt</TableCell>
               <TableCell>Lý do khám</TableCell>
-              <TableCell>Tổng người</TableCell>
+              <TableCell>Số người</TableCell>
+              <TableCell>Tổng tiền (VND)</TableCell>
               <TableCell>Trạng thái</TableCell>
-              <TableCell>Địa chỉ</TableCell>
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <ScheduleAppoinmentRow data={[]} />
+          <ScheduleAppoinmentRow
+            data={scheduleList || []}
+            handleSetPagination={handleSetPagination}
+            handleSetBackdropRemove={handleSetBackdropRemove}
+          />
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={paigation?.count || 0}
           onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
           page={page}
-          rowsPerPage={limit}
+          rowsPerPage={10}
           rowsPerPageOptions={[5, 10, 25, 30]}
         />
       </Box>
+      <BackDropComponent open={isLoading} />
     </Card>
   );
-};
-
-ScheduleAppoinmentTable.propTypes = {
-  doctorList: PropTypes.array.isRequired
-};
-
-ScheduleAppoinmentTable.defaultProps = {
-  doctorList: []
 };
 
 export default ScheduleAppoinmentTable;

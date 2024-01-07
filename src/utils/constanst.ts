@@ -8,3 +8,14 @@ export async function getBase64(file: File) {
     reader.onerror = reject;
   });
 }
+
+export const handleObjectKeyData = (data: any) => {
+  const list = (data || []).reduce((obj: any, item: { id: any }) => {
+    obj = {
+      ...obj,
+      [item.id]: item
+    };
+    return obj;
+  }, {});
+  return list;
+};

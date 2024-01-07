@@ -80,7 +80,7 @@ const PostListComponent = () => {
       .get(isPost ? `post/posts/` : 'post/categories/')
       .then((res) => {
         if (isPost) {
-          setPostList(res.data);
+          setPostList(res.data.results);
         } else {
           handleCategoryList(res.data);
         }

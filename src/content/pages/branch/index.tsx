@@ -32,7 +32,7 @@ function BranchPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <BranchTable branchList={[]} />
+              <BranchTable />
             </Card>
           </Grid>
         </Grid>

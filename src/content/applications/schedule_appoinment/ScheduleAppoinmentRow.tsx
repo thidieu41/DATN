@@ -7,66 +7,106 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { format } from 'date-fns';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { IScheduleAppoinment } from './interface';
+import { IScheduleProps } from 'src/content/pages/schedule_appoinment';
+import dayjs from 'dayjs';
+import Label from 'src/components/Label';
+import { useNavigate } from 'react-router';
+import { Schedule } from 'src/api/schedule';
+import { toast } from 'react-toastify';
 
 interface Props {
-  data: IScheduleAppoinment[];
+  data: IScheduleProps[];
+  handleSetPagination: (id: string) => void;
+  handleSetBackdropRemove: () => void;
 }
 
-const ScheduleAppoinmentRow = ({ data = [] }: Props) => {
+const ScheduleAppoinmentRow = ({
+  data,
+  handleSetPagination,
+  handleSetBackdropRemove
+}: Props) => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const onNavigationToDetails = (event, id: string) => {
     event.stopPropagation();
-    console.log(id);
+    navigate(`/admin/lich-kham/cap-nhat/${id}`);
   };
+
+  const onRemoveSchedule = async (event, id: string) => {
+    event.stopPropagation();
+    handleSetBackdropRemove();
+    try {
+      await Schedule.delete(id);
+      handleSetPagination(id);
+      toast.success('Xoá lịch thành công');
+    } catch (error) {
+      toast.error('Xoá lịch không thành công');
+    }
+  };
+
   return (
     <TableBody>
-      {data.map((item) => {
+      {(data || []).map((item) => {
         return (
-          <TableRow
-            hover
-            key={item.id}
-            onClick={(e) => onNavigationToDetails(e, item.id)}
-            sx={{
-              cursor: 'pointer'
-            }}
-          >
+          <TableRow hover key={item.id}>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.name}
+              <Typography noWrap>{item.id}</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>{item?.user?.name || ''}</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>{item?.user?.phone || ''}</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>
+                {dayjs(item.date).format('DD/MM/YYYY')}
               </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>{dayjs(item.date).format('HH:mm')}</Typography>
             </TableCell>
             <TableCell>
               <Typography
-                variant="body1"
-                fontWeight="bold"
-                color="text.primary"
-                gutterBottom
                 noWrap
+                sx={{
+                  textOverflow: 'ellipsis',
+                  maxWidth: 130
+                }}
               >
-                <Typography variant="body2" noWrap>
-                  {format(item.date, 'MMMM dd yyyy')}
-                </Typography>
+                {item.reason}
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.phone_number}
+              <Typography noWrap align="right">
+                {item.quantity}
               </Typography>
             </TableCell>
-            <TableCell align="right">
-              <Typography gutterBottom noWrap>
-                {item.role}
+            <TableCell>
+              <Typography noWrap align="right">
+                {item.total_money}
               </Typography>
             </TableCell>
-            <TableCell align="right">{item.degree}</TableCell>
+            <TableCell align="center">
+              <Label
+                color={
+                  item.status === 'chưa khám'
+                    ? 'warning'
+                    : item.status === 'đang khám'
+                    ? 'primary'
+                    : 'success'
+                }
+              >
+                {item.status}
+              </Label>
+            </TableCell>
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton
+                  onClick={(e) => onNavigationToDetails(e, item.id)}
                   sx={{
                     '&:hover': {
                       background: theme.colors.primary.lighter
@@ -81,6 +121,7 @@ const ScheduleAppoinmentRow = ({ data = [] }: Props) => {
               </Tooltip>
               <Tooltip title="Xoá" arrow>
                 <IconButton
+                  onClick={(e) => onRemoveSchedule(e, item.id)}
                   sx={{
                     '&:hover': { background: theme.colors.error.lighter },
                     color: theme.palette.error.main

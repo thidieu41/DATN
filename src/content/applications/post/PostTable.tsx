@@ -19,10 +19,8 @@ import {
 import PostTableRow from './PostTableRow';
 import { ICategoryProps, IPostProps } from 'src/utils/schema';
 import { createClient } from 'src/utils/axios';
-
-interface RecentOrdersTableProps {
-  className?: string;
-}
+import { toast } from 'react-toastify';
+import BackDropComponent from 'src/components/BackDrop';
 
 interface Filters {
   status?: any;
@@ -51,9 +49,10 @@ const applyPagination = (
   return postList.slice(page * limit, page * limit + limit);
 };
 
-const PostTable: FC<RecentOrdersTableProps> = () => {
+const PostTable = () => {
   const axios = createClient();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -116,19 +115,25 @@ const PostTable: FC<RecentOrdersTableProps> = () => {
   };
 
   const handleGetPostListData = async (isPost) => {
+    if (isPost) {
+      setIsLoading(true);
+    }
     await axios
       .get(isPost ? `post/posts` : 'post/categories')
       .then((res: any) => {
         if (isPost) {
           console.log(res);
-          setPostList(res.data);
+          setPostList(res.data.results);
         } else {
           handleCategoryList(res.data);
         }
       })
       .catch((error) => {
-        console.log(error?.message);
+        toast.error(error?.message);
       });
+    if (isPost) {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -194,6 +199,7 @@ const PostTable: FC<RecentOrdersTableProps> = () => {
           rowsPerPageOptions={[5, 10, 25, 30]}
         />
       </Box>
+      <BackDropComponent open={isLoading} />
     </Card>
   );
 };

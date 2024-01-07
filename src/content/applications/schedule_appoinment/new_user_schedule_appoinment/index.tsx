@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IFormValue, defaultValues, registerSchema } from './schema';
 import { Grid, Typography, styled } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,9 +10,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import { Schedule } from 'src/api/schedule';
 import { setClientToken } from 'src/utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+import { IFormValue, defaultValues, userScheduleSchema } from '../constants';
 
 const LableInput = styled(Typography)(
   () => `
@@ -22,34 +20,31 @@ const LableInput = styled(Typography)(
 );
 
 const NewUserScheduleAppoinment = () => {
-  const navigation = useNavigate();
-  const token = localStorage.getItem("token")
-  setClientToken(token)
+  const token = localStorage.getItem('token');
+  setClientToken(token);
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset,
+    reset
   } = useForm<IFormValue, IFormValue>({
     mode: 'onChange',
     defaultValues,
-    resolver: yupResolver(registerSchema) as any
+    resolver: yupResolver(userScheduleSchema) as any
   });
   const Booking = async (date, quantity, reason) => {
-    try{
-      const res = await Schedule.Add(
-        date, quantity, reason
-      )
-      if (res.status === 201){
-        reset(defaultValues)
-        toast.success("Booking succesed!")
+    try {
+      const res = await Schedule.Add(date, quantity, reason);
+      if (res.status === 201) {
+        reset(defaultValues);
+        toast.success('Booking succesed!');
       }
-    } catch (error){
-      toast.error("Booking failed!")
+    } catch (error) {
+      toast.error('Booking failed!');
     }
-  }
+  };
   const handleSubmission = (data: IFormValue) => {
-    Booking(data.date, data.number, data.reason)
+    Booking(data.date, data.quantity, data.reason);
   };
 
   return (
@@ -97,15 +92,15 @@ const NewUserScheduleAppoinment = () => {
           <LableInput>Số người</LableInput>
           <Controller
             control={control}
-            name="number"
+            name="quantity"
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
                 placeholder="Nhập số người"
                 type="number"
-                error={!!errors.number}
-                helperText={errors.number?.message || ''}
+                error={!!errors.quantity}
+                helperText={errors.quantity?.message || ''}
               />
             )}
           />
@@ -148,7 +143,6 @@ const NewUserScheduleAppoinment = () => {
         >
           Đặt lịch
         </Button>
-        <ToastContainer />
       </Grid>
     </form>
   );
