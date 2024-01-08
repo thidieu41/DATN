@@ -163,6 +163,10 @@ const routes: RouteObject[] = [
         element: <AddNewPostPage />
       },
       {
+        path: 'bai-viet/cap-nhat-bai-viet/:id',
+        element: <AddNewPostPage />
+      },
+      {
         path: 'thong-tin-ca-nhan',
         element: <ProfilePage />
       }

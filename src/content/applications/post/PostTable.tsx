@@ -1,5 +1,4 @@
-import { FC, ChangeEvent, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { ChangeEvent, useState, useEffect } from 'react';
 import {
   Divider,
   Box,
@@ -17,90 +16,40 @@ import {
   CardHeader
 } from '@mui/material';
 import PostTableRow from './PostTableRow';
-import { ICategoryProps, IPostProps } from 'src/utils/schema';
-import { createClient } from 'src/utils/axios';
+import { ICategoryProps } from 'src/utils/schema';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
-
-interface Filters {
-  status?: any;
-}
-
-const applyFilters = (
-  postList: IPostProps[],
-  filters: Filters
-): IPostProps[] => {
-  return (postList || []).filter((cryptoOrder) => {
-    let matches = true;
-
-    // if (filters.status && cryptoOrder.status !== filters.status) {
-    //   matches = false;
-    // }
-
-    return matches;
-  });
-};
-
-const applyPagination = (
-  postList: IPostProps[],
-  page: number,
-  limit: number
-): IPostProps[] => {
-  return postList.slice(page * limit, page * limit + limit);
-};
+import { IPostProps } from 'src/interface/posts';
+import { PostAPI } from 'src/api/posts';
+import { PostCategoriesAPI } from 'src/api/post_categories';
+import { IPanigationProps } from 'src/utils/interface';
 
 const PostTable = () => {
-  const axios = createClient();
-
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
   const [postList, setPostList] = useState<IPostProps[]>([]);
   const [categoryList, setCategory] = useState<{
     [key: number]: ICategoryProps;
   }>({});
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
+  const [filter, setFilter] = useState('');
+  const [pagination, setPagination] = useState<IPanigationProps>();
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
+    const value = e.target.value;
+    setFilter(value);
+    if (value === filter) {
+      return;
     }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
+    handleGetAllPosts(`/post/posts/?danh-muc=${value}`);
   };
 
   const handlePageChange = (event: any, newPage: number): void => {
+    if (newPage > page) {
+      handleGetAllPosts(pagination.next);
+    } else {
+      handleGetAllPosts(pagination.previous);
+    }
     setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
   };
 
   const handleCategoryList = (data: ICategoryProps[]) => {
@@ -114,58 +63,50 @@ const PostTable = () => {
     setCategory(list);
   };
 
-  const handleGetPostListData = async (isPost) => {
-    if (isPost) {
-      setIsLoading(true);
-    }
-    await axios
-      .get(isPost ? `post/posts` : 'post/categories')
-      .then((res: any) => {
-        if (isPost) {
-          console.log(res);
-          setPostList(res.data.results);
-        } else {
-          handleCategoryList(res.data);
-        }
-      })
-      .catch((error) => {
-        toast.error(error?.message);
-      });
-    if (isPost) {
+  const handleGetAllPosts = async (url: string) => {
+    setIsLoading(true);
+    try {
+      const res = await PostAPI.getAll(url);
+      setPostList(res.data.results);
+      setPagination(res.data);
+    } catch (error) {
+      toast.error('Lỗi lấy danh sách bài viết ');
+    } finally {
       setIsLoading(false);
     }
   };
 
+  const handleGetAllCategories = async () => {
+    const res = await PostCategoriesAPI.getAll();
+    handleCategoryList(res.data);
+  };
   useEffect(() => {
-    handleGetPostListData(true);
-    handleGetPostListData(false);
+    handleGetAllPosts('/post/posts/');
+    handleGetAllCategories();
   }, []);
-
-  const filterPostList = applyFilters(postList, filters);
-  const panigatedPostList = applyPagination(filterPostList, page, limit);
 
   return (
     <Card>
       <CardHeader
-        // action={
-        //   <Box width={150}>
-        //     <FormControl fullWidth variant="outlined">
-        //       <InputLabel>Status</InputLabel>
-        //       <Select
-        //         value={filters.status || 'all'}
-        //         onChange={handleStatusChange}
-        //         label="Status"
-        //         autoWidth
-        //       >
-        //         {statusOptions.map((statusOption) => (
-        //           <MenuItem key={statusOption.id} value={statusOption.id}>
-        //             {statusOption.name}
-        //           </MenuItem>
-        //         ))}
-        //       </Select>
-        //     </FormControl>
-        //   </Box>
-        // }
+        action={
+          <Box width={250}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Danh mục</InputLabel>
+              <Select
+                value={filter || 'all'}
+                onChange={handleStatusChange}
+                label="Danh mục"
+                fullWidth
+              >
+                {(Object.values(categoryList) || []).map((statusOption) => (
+                  <MenuItem key={statusOption.id} value={statusOption.id}>
+                    {statusOption.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+        }
         title="Danh sách bài viết"
       />
       <Divider />
@@ -174,16 +115,17 @@ const PostTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
+              <TableCell>Hình ảnh</TableCell>
               <TableCell>Tiêu đề</TableCell>
               <TableCell>Danh mục</TableCell>
               <TableCell>Nội dung</TableCell>
               <TableCell>Thời gian xuất bản</TableCell>
-              <TableCell>Hình ảnh</TableCell>
+
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <PostTableRow
-            data={panigatedPostList}
+            data={postList || []}
             dataCategory={categoryList || {}}
           />
         </Table>
@@ -191,12 +133,11 @@ const PostTable = () => {
       <Box p={2}>
         <TablePagination
           component="div"
-          count={panigatedPostList.length}
+          count={pagination?.count || 0}
           onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
           page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          rowsPerPage={10}
+          rowsPerPageOptions={[10]}
         />
       </Box>
       <BackDropComponent open={isLoading} />

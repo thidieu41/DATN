@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import { DoctorList } from './data';
 import DoctorTable from './DoctorTable';
 
 function DoctorComponent() {
@@ -24,7 +23,7 @@ function DoctorComponent() {
         >
           <Grid item xs={12}>
             <Card>
-              <DoctorTable doctorList={DoctorList} />
+              <DoctorTable />
             </Card>
           </Grid>
         </Grid>

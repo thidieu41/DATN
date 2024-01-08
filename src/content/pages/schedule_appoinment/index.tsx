@@ -3,7 +3,6 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import ScheduleAppoinmentTable from 'src/content/applications/schedule_appoinment/ScheduleAppoinmentTable';
-import { DoctorList } from 'src/content/applications/doctors/data';
 import { useNavigate } from 'react-router-dom';
 import { setClientToken } from 'src/utils/axios';
 

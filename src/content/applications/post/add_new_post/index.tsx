@@ -9,8 +9,10 @@ import { useEffect, useState } from 'react';
 import { ICategoryProps } from 'src/utils/schema';
 import { createClient } from 'src/utils/axios';
 import { useNavigate } from 'react-router-dom';
-import { getBase64 } from 'src/utils/constanst';
+import { fileImageToBase64, urlImageToBase64 } from 'src/utils/constanst';
 import { LoadingButton } from '@mui/lab';
+import BackDropComponent from 'src/components/BackDrop';
+import { IPostProps } from 'src/interface/posts';
 
 const LableInput = styled(Typography)(
   () => `
@@ -18,11 +20,14 @@ const LableInput = styled(Typography)(
 `
 );
 
-const CreateNewPost = () => {
+interface IProps {
+  details: IPostProps;
+}
+const CreateNewPost = ({ details }: IProps) => {
   const [categoryList, setCategory] = useState<ICategoryProps[]>([]);
   const [title, setTitle] = useState('');
   const [fileImg, setFileImg] = useState<File>();
-  const [previewImg, setPreviewImg] = useState();
+  const [previewImg, setPreviewImg] = useState('');
   const [errorsMess, setErrorsMess] = useState<{
     titlecontent: string;
     urlImgerr: string;
@@ -38,6 +43,7 @@ const CreateNewPost = () => {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm<IFormValue, IFormValue>({
     mode: 'onChange',
@@ -55,6 +61,10 @@ const CreateNewPost = () => {
       .catch((error) => {
         console.log(error?.message);
       });
+    const res = (await urlImageToBase64(
+      'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg'
+    )) as string;
+    setPreviewImg(res);
   };
 
   const handleGetContent = async () => {
@@ -83,7 +93,7 @@ const CreateNewPost = () => {
   const handleSetImage = async (e: any) => {
     const file = e.target.files[0];
     setFileImg(file);
-    const base64Url: any = await getBase64(file);
+    const base64Url: any = await fileImageToBase64(file);
     setPreviewImg(base64Url);
     setErrorsMess({
       titlecontent: errorsMess.urlImgerr,
@@ -92,7 +102,7 @@ const CreateNewPost = () => {
   };
 
   const handleSubmission = (data: IFormValue) => {
-    if (!fileImg) {
+    if (!previewImg) {
       setErrorsMess({
         titlecontent: errorsMess.titlecontent,
         urlImgerr: 'Không được để trống hình ảnh'
@@ -101,21 +111,35 @@ const CreateNewPost = () => {
       setLoading('submitBtn');
       const { category, content, title } = data;
 
-      const formData = new FormData();
-      formData.append('category', category);
-      formData.append('content', content);
-      formData.append('title', title);
-      formData.append('image', fileImg, fileImg.name);
+      const params = {
+        category,
+        content,
+        title,
+        image: previewImg
+      };
 
-      axios
-        .post('post/posts/', formData, {
-          headers: {
-            'content-type': 'multipart/form-data'
-          }
-        })
+      // const formData = new FormData();
+      // formData.append('category', category);
+      // formData.append('content', content);
+      // formData.append('title', title);
+      // formData.append('image', fileImg, fileImg.name);
+
+      (details
+        ? axios.put(`post/posts/${details.id}`, params, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+        : axios.post('post/posts/', params, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+      )
         .then((res) => {
           setLoading('');
           navigation('/admin/bai-viet');
+          reset();
         })
         .catch((error) => {
           setLoading('');
@@ -124,210 +148,228 @@ const CreateNewPost = () => {
     }
   };
 
+  const handleSetDetails = () => {
+    reset({
+      category: details.category.toString(),
+      content: details.content,
+      title: details.title
+    });
+    const urlImage = urlImageToBase64(details?.image) as unknown as string;
+    setPreviewImg(urlImage);
+  };
+
+  useEffect(() => {
+    if (details) {
+      handleSetDetails();
+    }
+  }, [details]);
+
   useEffect(() => {
     handleGetCategory();
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(handleSubmission)}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={7}>
-          <Stack>
-            <LableInput>Tiêu đề</LableInput>
-            <Controller
-              control={control}
-              name="title"
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  placeholder="Nhập tiêu đề"
-                  error={!!errors.title}
-                  helperText={errors.title?.message || ''}
-                />
-              )}
-            />
-          </Stack>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <LableInput>Thể loại</LableInput>
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                select
-                placeholder="Nhập thể loại"
-                error={!!errors.category}
-                helperText={errors.category?.message || ''}
-              >
-                {(categoryList || []).map((option, key) => (
-                  <MenuItem key={key} value={option.id}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            spacing={4}
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column-reverse', md: 'row' }
-            }}
-          >
-            <Grid item xs={12} md={7}>
-              <LableInput>Nội dung</LableInput>
+    <>
+      <form onSubmit={handleSubmit(handleSubmission)}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={7}>
+            <Stack>
+              <LableInput>Tiêu đề</LableInput>
               <Controller
                 control={control}
-                name="content"
+                name="title"
                 render={({ field }) => (
                   <TextField
                     {...field}
                     fullWidth
-                    multiline
-                    rows={12}
-                    maxRows={15}
-                    placeholder="Nhập nội dung hoặc sử dụng chatGPT"
-                    error={!!errors.content}
-                    helperText={errors.content?.message || ''}
+                    placeholder="Nhập tiêu đề"
+                    error={!!errors.title}
+                    helperText={errors.title?.message || ''}
                   />
                 )}
               />
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Stack spacing={2}>
-                <Stack spacing={2}>
-                  <Typography variant="h4">HỖ TRỢ BÀI ĐĂNG</Typography>
-                  <img
-                    src="https://blog.logomyway.com/wp-content/uploads/2023/08/chatgpt-logo.png"
-                    style={{
-                      maxHeight: 100
-                    }}
-                  />
-                </Stack>
-                <Stack>
-                  <LableInput>Tiêu đề nội dung</LableInput>
-                  <TextField
-                    fullWidth
-                    placeholder="Nhập tiêu đề nội dung"
-                    value={title}
-                    onChange={(e) => {
-                      setErrorsMess({
-                        titlecontent: '',
-                        urlImgerr: errorsMess.urlImgerr
-                      });
-                      setTitle(e.target.value);
-                    }}
-                  />
-                  {errorsMess.titlecontent && (
-                    <Typography
-                      sx={{
-                        color: 'red',
-                        fontWeight: 600,
-                        mt: 1
-                      }}
-                    >
-                      {errorsMess.titlecontent}
-                    </Typography>
-                  )}
-                </Stack>
-                <LoadingButton
-                  type="button"
-                  loading={loading === 'chatGPTbtn'}
-                  onClick={handleGetContent}
-                  sx={{
-                    border: '1px solid #308a79'
-                  }}
+            </Stack>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <LableInput>Thể loại</LableInput>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  select
+                  placeholder="Nhập thể loại"
+                  error={!!errors.category}
+                  helperText={errors.category?.message || ''}
                 >
-                  Tìm kiếm nội dung
-                </LoadingButton>
-              </Stack>
+                  {(categoryList || []).map((option, key) => (
+                    <MenuItem key={key} value={option.id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Grid
+              container
+              spacing={4}
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column-reverse', md: 'row' }
+              }}
+            >
+              <Grid item xs={12} md={7}>
+                <LableInput>Nội dung</LableInput>
+                <Controller
+                  control={control}
+                  name="content"
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      multiline
+                      rows={12}
+                      maxRows={15}
+                      placeholder="Nhập nội dung hoặc sử dụng chatGPT"
+                      error={!!errors.content}
+                      helperText={errors.content?.message || ''}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <Stack spacing={2}>
+                  <Stack spacing={2}>
+                    <Typography variant="h4">HỖ TRỢ BÀI ĐĂNG</Typography>
+                    <img
+                      src="https://blog.logomyway.com/wp-content/uploads/2023/08/chatgpt-logo.png"
+                      style={{
+                        maxHeight: 100
+                      }}
+                    />
+                  </Stack>
+                  <Stack>
+                    <LableInput>Tiêu đề nội dung</LableInput>
+                    <TextField
+                      fullWidth
+                      placeholder="Nhập tiêu đề nội dung"
+                      value={title}
+                      onChange={(e) => {
+                        setErrorsMess({
+                          titlecontent: '',
+                          urlImgerr: errorsMess.urlImgerr
+                        });
+                        setTitle(e.target.value);
+                      }}
+                    />
+                    {errorsMess.titlecontent && (
+                      <Typography
+                        sx={{
+                          color: 'red',
+                          fontWeight: 600,
+                          mt: 1
+                        }}
+                      >
+                        {errorsMess.titlecontent}
+                      </Typography>
+                    )}
+                  </Stack>
+                  <LoadingButton
+                    type="button"
+                    loading={loading === 'chatGPTbtn'}
+                    onClick={handleGetContent}
+                    sx={{
+                      border: '1px solid #308a79'
+                    }}
+                  >
+                    Tìm kiếm nội dung
+                  </LoadingButton>
+                </Stack>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Grid item>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            Chọn hình ảnh
-          </Typography>
-          <Stack
-            spacing={2}
-            direction={'row'}
-            sx={{
-              maxWidth: 130,
-              maxHeight: 130
-            }}
-          >
-            {previewImg && (
-              <img
-                src={previewImg}
-                className="information-img"
-                style={{
-                  width: '100%',
-                  opacity: 1,
-                  display: 'block',
-                  transition: '0.5s ease',
-                  backfaceVisibility: 'hidden',
-                  border: '1px solid #308a79',
-                  borderRadius: 8
-                }}
-              />
-            )}
-
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              sx={{
-                whiteSpace: 'nowrap',
-                minWidth: 130
-              }}
-            >
-              Chọn File
-              <input type="file" hidden onChange={handleSetImage} />
-            </Button>
-          </Stack>
-          {errorsMess.urlImgerr && (
-            <Typography
-              sx={{
-                color: 'red',
-                fontWeight: 600,
-                mt: 1
-              }}
-            >
-              {errorsMess.urlImgerr}
+          <Grid item>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              Chọn hình ảnh
             </Typography>
-          )}
-        </Grid>
-      </Grid>
-      <Stack
-        sx={{
-          maxWidth: '60%',
-          margin: 'auto',
+            <Stack
+              spacing={2}
+              direction={'row'}
+              sx={{
+                maxWidth: 130,
+                maxHeight: 130
+              }}
+            >
+              {previewImg && (
+                <img
+                  src={previewImg}
+                  className="information-img"
+                  style={{
+                    width: '100%',
+                    opacity: 1,
+                    display: 'block',
+                    transition: '0.5s ease',
+                    backfaceVisibility: 'hidden',
+                    border: '1px solid #308a79',
+                    borderRadius: 8
+                  }}
+                />
+              )}
 
-          marginTop: 3
-        }}
-      >
-        <LoadingButton
-          type="submit"
-          variant="contained"
-          fullWidth
-          loading={loading === 'submitBtn'}
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                sx={{
+                  whiteSpace: 'nowrap',
+                  minWidth: 130
+                }}
+              >
+                Chọn File
+                <input type="file" hidden onChange={handleSetImage} />
+              </Button>
+            </Stack>
+            {errorsMess.urlImgerr && (
+              <Typography
+                sx={{
+                  color: 'red',
+                  fontWeight: 600,
+                  mt: 1
+                }}
+              >
+                {errorsMess.urlImgerr}
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
+        <Stack
           sx={{
-            padding: '10px'
+            maxWidth: '60%',
+            margin: 'auto',
+
+            marginTop: 3
           }}
         >
-          Đăng bài
-        </LoadingButton>
-      </Stack>
-    </form>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{
+              padding: '10px'
+            }}
+          >
+            Đăng bài
+          </Button>
+        </Stack>
+      </form>
+      <BackDropComponent open={loading === 'submitBtn'} />
+    </>
   );
 };
 

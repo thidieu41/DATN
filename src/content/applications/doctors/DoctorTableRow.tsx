@@ -10,8 +10,8 @@ import {
 import { format } from 'date-fns';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { IDoctor } from './data';
 import { useNavigate } from 'react-router-dom';
+import { IDoctor } from 'src/interface/doctor';
 
 interface Props {
   data: IDoctor[];

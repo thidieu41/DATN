@@ -6,7 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import ArticleIcon from '@mui/icons-material/Article';
-import { IPostProps } from 'src/utils/schema';
+import { IPostProps } from 'src/interface/posts';
 
 interface IProps {
   data: IPostProps;

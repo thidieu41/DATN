@@ -18,43 +18,21 @@ import {
 } from '@mui/material';
 
 import DoctorTableRow from './DoctorTableRow';
-import { IDoctor } from './data';
-
-interface RecentOrdersTableProps {
-  className?: string;
-  doctorList: IDoctor[];
-}
+import { IPanigationProps } from 'src/utils/interface';
+import { IDoctor } from 'src/interface/doctor';
 
 interface Filters {
   status?: any;
 }
 
-const applyFilters = (doctorList: IDoctor[], filters: Filters): IDoctor[] => {
-  return doctorList.filter((cryptoOrder) => {
-    let matches = true;
-
-    // if (filters.status && cryptoOrder.status !== filters.status) {
-    //   matches = false;
-    // }
-
-    return matches;
-  });
-};
-
-const applyPagination = (
-  doctorList: IDoctor[],
-  page: number,
-  limit: number
-): IDoctor[] => {
-  return doctorList.slice(page * limit, page * limit + limit);
-};
-
-const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
+const DoctorTable = () => {
   const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
+  const [paigation, setPagination] = useState<IPanigationProps>();
+  const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
 
   const statusOptions = [
     {
@@ -91,17 +69,6 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
-  const filteredCryptoOrders = applyFilters(doctorList, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
 
   return (
     <Card>
@@ -140,18 +107,17 @@ const DoctorTable: FC<RecentOrdersTableProps> = ({ doctorList }) => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <DoctorTableRow data={paginatedCryptoOrders} />
+          <DoctorTableRow data={doctorList || []} />
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={paigation?.count || 0}
           onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
           page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          rowsPerPage={10}
+          rowsPerPageOptions={[10]}
         />
       </Box>
     </Card>

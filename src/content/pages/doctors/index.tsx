@@ -3,8 +3,6 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import DoctorTable from 'src/content/applications/doctors/DoctorTable';
-import { DoctorList } from 'src/content/applications/doctors/data';
-
 
 function DoctorPage() {
   return (
@@ -25,7 +23,7 @@ function DoctorPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <DoctorTable doctorList={DoctorList} />
+              <DoctorTable />
             </Card>
           </Grid>
         </Grid>

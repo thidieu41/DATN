@@ -61,7 +61,7 @@ const BranchTable = () => {
   };
 
   useEffect(() => {
-    onGetAllBranchs('/dental/branches');
+    onGetAllBranchs('/dental/branches/');
   }, []);
 
   return (
@@ -92,6 +92,7 @@ const BranchTable = () => {
           onPageChange={handlePageChange}
           page={page}
           rowsPerPage={10}
+          rowsPerPageOptions={[10]}
         />
       </Box>
       <BackDropComponent open={isLoading} />

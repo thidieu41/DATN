@@ -1,4 +1,4 @@
-export async function getBase64(file: File) {
+export async function fileImageToBase64(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -8,6 +8,21 @@ export async function getBase64(file: File) {
     reader.onerror = reject;
   });
 }
+
+export const urlImageToBase64 = (url: string) => {
+  return fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+      });
+    });
+};
 
 export const handleObjectKeyData = (data: any) => {
   const list = (data || []).reduce((obj: any, item: { id: any }) => {

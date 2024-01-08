@@ -153,7 +153,7 @@ const ScheduleAppoinmentTable = () => {
           onPageChange={handlePageChange}
           page={page}
           rowsPerPage={10}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          rowsPerPageOptions={[10]}
         />
       </Box>
       <BackDropComponent open={isLoading} />

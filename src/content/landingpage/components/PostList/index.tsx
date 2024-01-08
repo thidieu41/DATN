@@ -1,18 +1,11 @@
-import {
-  Avatar,
-  Box,
-  Card,
-  CardHeader,
-  Stack,
-  Typography,
-  styled
-} from '@mui/material';
+import { Box, Stack, Typography, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import RecipeReviewCard from 'src/components/CardPost';
+import { IPostProps } from 'src/interface/posts';
 import { createClient } from 'src/utils/axios';
-import { ICategoryProps, IPostProps } from 'src/utils/schema';
+import { ICategoryProps } from 'src/utils/schema';
 
 const responsive = {
   superLargeDesktop: {
@@ -39,23 +32,7 @@ export const BoxCompo = styled(Box)(
      display:flex,
     `
 );
-const Listdata = [
-  {
-    url: 'https://hoatuoishop.com/wp-content/uploads/2020/02/6eaa319fd49a0393ca28ab14a8625640-300x300.jpg'
-  },
-  {
-    url: 'https://hoatuoishop.com/wp-content/uploads/2020/02/6eaa319fd49a0393ca28ab14a8625640-300x300.jpg'
-  },
-  {
-    url: 'https://hoatuoishop.com/wp-content/uploads/2020/02/6eaa319fd49a0393ca28ab14a8625640-300x300.jpg'
-  },
-  {
-    url: 'https://hoatuoishop.com/wp-content/uploads/2020/02/6eaa319fd49a0393ca28ab14a8625640-300x300.jpg'
-  },
-  {
-    url: 'https://hoatuoishop.com/wp-content/uploads/2020/02/6eaa319fd49a0393ca28ab14a8625640-300x300.jpg'
-  }
-];
+
 const PostListComponent = () => {
   const [postList, setPostList] = useState<IPostProps[]>([]);
   const [categoryList, setCategory] = useState<{

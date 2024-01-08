@@ -95,10 +95,6 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
     setPage(newPage);
   };
 
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
   const filteredCryptoOrders = applyFilters(categoryList, filters);
   const paginatedCryptoOrders = applyPagination(
     filteredCryptoOrders,
@@ -150,10 +146,9 @@ const CategoryTable: FC<RecentOrdersTableProps> = ({ categoryList }) => {
           component="div"
           count={filteredCryptoOrders.length}
           onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
           page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          rowsPerPage={10}
+          rowsPerPageOptions={[10]}
         />
       </Box>
     </Card>
