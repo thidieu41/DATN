@@ -2,16 +2,38 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import UpdateDoctorComponent from 'src/content/applications/doctors/update_doctor';
+import DoctorFormComp from 'src/content/applications/doctors/add_new_doctor';
+import { useLocation } from 'react-router';
+import { useEffect, useState } from 'react';
+import { IDoctor } from 'src/interface/doctor';
+import { DoctorAPI } from 'src/api/doctors';
+import { handleSetToken } from 'src/utils/token';
 
-function UpdateDoctorPage() {
+function DoctorFormPage() {
+  const [details, setDetails] = useState<IDoctor>();
+
+  const location = useLocation();
+
+  const handleGetDetails = async () => {
+    const pathList = location.pathname.split('/');
+    const doctorId = pathList[pathList.length - 1];
+
+    if (!isNaN(Number(doctorId))) {
+      const res = await DoctorAPI.getDetails(doctorId);
+      setDetails(res.data);
+    }
+  };
+  useEffect(() => {
+    handleGetDetails();
+  }, []);
+  handleSetToken();
   return (
     <>
       <Helmet>
         <title>Thông tin nha sĩ</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader title={'Thông tin nha sĩ'} />
+        <PageHeader title={details ? 'Sửa nha sĩ ' : 'Thêm nha sĩ'} />
       </PageTitleWrapper>
       <Container maxWidth="lg">
         <Grid
@@ -28,7 +50,7 @@ function UpdateDoctorPage() {
                   padding: 3
                 }}
               >
-                <UpdateDoctorComponent />
+                <DoctorFormComp details={details} />
               </Stack>
             </Card>
           </Grid>
@@ -38,4 +60,4 @@ function UpdateDoctorPage() {
   );
 }
 
-export default UpdateDoctorPage;
+export default DoctorFormPage;

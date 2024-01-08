@@ -4,6 +4,7 @@ import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import PostTable from 'src/content/applications/post/PostTable';
 import { useNavigate } from 'react-router-dom';
+import { handleSetToken } from 'src/utils/token';
 
 function PostPage() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ function PostPage() {
   const onNavigateToCreateBranch = () => {
     navigate('/admin/bai-viet/tao-bai-viet');
   };
-
+  handleSetToken();
   return (
     <>
       <Helmet>

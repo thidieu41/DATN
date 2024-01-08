@@ -3,8 +3,10 @@ import { Grid, Container, Card, Stack } from '@mui/material';
 import ResponsiveAppBar from 'src/content/landingpage/Nav';
 import Footer from 'src/content/landingpage/components/Footer';
 import NewUserScheduleAppoinment from 'src/content/applications/schedule_appoinment/new_user_schedule_appoinment';
+import { handleSetToken } from 'src/utils/token';
 
 function NewUserScheduleAppoimentPage() {
+  handleSetToken();
   return (
     <>
       <Helmet>

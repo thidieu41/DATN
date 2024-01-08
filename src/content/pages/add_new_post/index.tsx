@@ -7,8 +7,11 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { PostAPI } from 'src/api/posts';
 import { IPostProps } from 'src/interface/posts';
+import { handleSetToken } from 'src/utils/token';
 
 function AddNewPostPage() {
+  handleSetToken();
+
   const [details, setDetails] = useState<IPostProps>();
 
   const location = useLocation();

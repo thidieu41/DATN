@@ -9,7 +9,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import { Schedule } from 'src/api/schedule';
-import { setClientToken } from 'src/utils/axios';
 import { toast } from 'react-toastify';
 import { IFormValue, defaultValues, userScheduleSchema } from '../constants';
 
@@ -20,8 +19,6 @@ const LableInput = styled(Typography)(
 );
 
 const NewUserScheduleAppoinment = () => {
-  const token = localStorage.getItem('token');
-  setClientToken(token);
   const {
     control,
     handleSubmit,

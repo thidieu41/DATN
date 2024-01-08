@@ -3,8 +3,10 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import EditProfile from 'src/content/applications/profile';
+import { handleSetToken } from 'src/utils/token';
 
 function ProfilePage() {
+  handleSetToken();
   return (
     <>
       <Helmet>

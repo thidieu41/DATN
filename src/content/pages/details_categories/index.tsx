@@ -4,13 +4,14 @@ import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import { useNavigate } from 'react-router-dom';
 import DetailsCategoriesTable from 'src/content/applications/detail_categories/DetailsCategoryTable';
+import { handleSetToken } from 'src/utils/token';
 
 function DetailsCategoriesPage() {
   const navigate = useNavigate();
   const onNavigateToCreateBranch = () => {
     navigate('/admin/danh-muc/tao-danh-muc');
   };
-
+  handleSetToken();
   return (
     <>
       <Helmet>

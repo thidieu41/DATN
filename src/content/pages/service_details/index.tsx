@@ -3,8 +3,10 @@ import { Grid, Container, Card, Stack } from '@mui/material';
 import ResponsiveAppBar from 'src/content/landingpage/Nav';
 import Footer from 'src/content/landingpage/components/Footer';
 import ServicesDetailsCom from 'src/content/landingpage/components/Services/ServicesDetails';
+import { handleSetToken } from 'src/utils/token';
 
 function ServiceDetailsPage() {
+  handleSetToken();
   return (
     <>
       <Helmet>

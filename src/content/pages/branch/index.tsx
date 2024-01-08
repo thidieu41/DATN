@@ -4,12 +4,14 @@ import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import BranchTable from 'src/content/applications/branch/BranchTable';
 import { useNavigate } from 'react-router-dom';
+import { handleSetToken } from 'src/utils/token';
 
 function BranchPage() {
   const navigate = useNavigate();
   const onNavigateToCreateBranch = () => {
     navigate('/admin/chi-nhanh/tao-chi-nhanh');
   };
+  handleSetToken();
   return (
     <>
       <Helmet>

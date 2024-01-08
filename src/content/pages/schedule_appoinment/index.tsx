@@ -4,7 +4,7 @@ import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import ScheduleAppoinmentTable from 'src/content/applications/schedule_appoinment/ScheduleAppoinmentTable';
 import { useNavigate } from 'react-router-dom';
-import { setClientToken } from 'src/utils/axios';
+import { handleSetToken } from 'src/utils/token';
 
 export interface IScheduleProps {
   created_at: string;
@@ -25,14 +25,12 @@ export interface IScheduleProps {
   };
 }
 function ScheduleAppoinmentPage() {
-  const token = localStorage.getItem('token');
-  setClientToken(token);
   const navigate = useNavigate();
 
   const onNavigateToAddNewAppoinment = () => {
     navigate('/admin/lich-kham/tao-lich');
   };
-
+  handleSetToken();
   return (
     <>
       <Helmet>

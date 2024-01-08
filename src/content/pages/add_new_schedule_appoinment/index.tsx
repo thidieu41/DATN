@@ -3,8 +3,10 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import CreateNewSchedule from 'src/content/applications/schedule_appoinment/add_new_schedule_appoinment';
+import { handleSetToken } from 'src/utils/token';
 
 function AddNewScheduleAppoimentPage() {
+  handleSetToken();
   return (
     <>
       <Helmet>

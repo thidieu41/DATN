@@ -9,10 +9,12 @@ export const categorySchema = Yup.object().shape({
 
 export const defaultValues = {
   name: '',
-  degree: ''
+  degree: '',
+  date: ''
 };
 
 export interface IFormValue {
   name: string;
   degree: string;
+  date: string;
 }
