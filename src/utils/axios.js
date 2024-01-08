@@ -16,7 +16,7 @@ export const setClientToken = (token) => {
 export const createClient = () => {
 
 	// const baseURL = "http://localhost:8000/api/"
-  const baseURL = "https://stupid-tips-camp.loca.lt/api"
+  const baseURL = "https://eighty-carpets-suffer.loca.lt/api"
 
     const instance = axios.create({
         baseURL,

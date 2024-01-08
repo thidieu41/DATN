@@ -7,8 +7,8 @@ import CreateNewPostCategory from 'src/content/applications/post_categories/comp
 import { useEffect, useState } from 'react';
 import { PostCategoriesAPI } from 'src/api/post_categories';
 import { toast } from 'react-toastify';
-import { setClientToken } from 'src/utils/axios';
 import BackDropComponent from 'src/components/BackDrop';
+import { handleSetToken } from 'src/utils/token';
 
 export interface IPostCategoriesProps {
   id: string;
@@ -26,8 +26,7 @@ function PostCategoriesPage() {
     [key: string]: IPostCategoriesProps;
   }>({});
 
-  const token = localStorage.getItem('token');
-  setClientToken(token);
+  handleSetToken();
 
   const handleObjectKeyData = (data: IPostCategoriesProps[]) => {
     const list = (data || []).reduce((obj, item) => {

@@ -3,8 +3,10 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import CustomerTable from 'src/content/applications/customers/CustomersTable';
+import { handleSetToken } from 'src/utils/token';
 
 function CustomerPage() {
+  handleSetToken();
   return (
     <>
       <Helmet>

@@ -3,8 +3,11 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
 import CreateNewCategory from 'src/content/applications/category/add_new_category';
+import { handleSetToken } from 'src/utils/token';
 
 function AddNewCategoryPage() {
+  handleSetToken();
+
   return (
     <>
       <Helmet>

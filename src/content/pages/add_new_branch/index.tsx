@@ -5,6 +5,7 @@ import PageHeader from 'src/components/PageHeader';
 import CreateNewBranch from 'src/content/applications/branch/add_new_branch';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { handleSetToken } from 'src/utils/token';
 
 function AddNewBranchPage() {
   const [branchId, setIdBranch] = useState('');
@@ -21,6 +22,7 @@ function AddNewBranchPage() {
     handlePathNameUrl();
   }, []);
 
+  handleSetToken();
   return (
     <>
       <Helmet>

@@ -1,10 +1,7 @@
-import { FC, ChangeEvent, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 import {
   Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
   Table,
   TableCell,
@@ -12,96 +9,60 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  Select,
-  MenuItem,
   CardHeader
 } from '@mui/material';
-
 import DoctorTableRow from './DoctorTableRow';
 import { IPanigationProps } from 'src/utils/interface';
 import { IDoctor } from 'src/interface/doctor';
-
-interface Filters {
-  status?: any;
-}
+import BackDropComponent from 'src/components/BackDrop';
+import { DoctorAPI } from 'src/api/doctors';
+import { toast } from 'react-toastify';
 
 const DoctorTable = () => {
   const [page, setPage] = useState<number>(0);
-
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
+  const [isLoading, setIsLoading] = useState(false);
   const [paigation, setPagination] = useState<IPanigationProps>();
   const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
 
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
-    }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
+    if (newPage > page) {
+      handleGetAllDoctor(paigation.next);
+    } else {
+      handleGetAllDoctor(paigation.previous);
+    }
     setPage(newPage);
   };
 
+  const handleGetAllDoctor = async (url: string) => {
+    setIsLoading(true);
+    try {
+      const res = await DoctorAPI.getAll(url);
+      setDoctorList(res.data.results);
+      setPagination(res.data);
+    } catch (error) {
+      toast.error('Lỗi lấy danh sách bác sĩ');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    handleGetAllDoctor('/dental/doctors/');
+  }, []);
+
   return (
     <Card>
-      <CardHeader
-        // action={
-        //   <Box width={150}>
-        //     <FormControl fullWidth variant="outlined">
-        //       <InputLabel>Status</InputLabel>
-        //       <Select
-        //         value={filters.status || 'all'}
-        //         onChange={handleStatusChange}
-        //         label="Status"
-        //         autoWidth
-        //       >
-        //         {statusOptions.map((statusOption) => (
-        //           <MenuItem key={statusOption.id} value={statusOption.id}>
-        //             {statusOption.name}
-        //           </MenuItem>
-        //         ))}
-        //       </Select>
-        //     </FormControl>
-        //   </Box>
-        // }
-        title="Danh sách Bác sĩ"
-      />
+      <CardHeader title="Danh sách Bác sĩ" />
       <Divider />
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>ID</TableCell>
               <TableCell>Họ Và Tên</TableCell>
               <TableCell>Ngày Sinh</TableCell>
               <TableCell>Số điện thoại</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Lượt khám</TableCell>
               <TableCell>Chức vụ</TableCell>
               <TableCell>Bằng Cấp</TableCell>
               <TableCell align="right">Thao tác</TableCell>
@@ -120,16 +81,9 @@ const DoctorTable = () => {
           rowsPerPageOptions={[10]}
         />
       </Box>
+      <BackDropComponent open={isLoading} />
     </Card>
   );
-};
-
-DoctorTable.propTypes = {
-  doctorList: PropTypes.array.isRequired
-};
-
-DoctorTable.defaultProps = {
-  doctorList: []
 };
 
 export default DoctorTable;

@@ -41,7 +41,7 @@ const AddNewPostPage = Loader(
   lazy(() => import('src/content/pages/add_new_post'))
 );
 const ProfilePage = Loader(lazy(() => import('src/content/pages/profile')));
-const UpdateDoctorPage = Loader(
+const DoctorFormPage = Loader(
   lazy(() => import('src/content/pages/update_doctor'))
 );
 const LandingPage = Loader(
@@ -104,7 +104,11 @@ const routes: RouteObject[] = [
       },
       {
         path: 'bac-si/cap-nhat/:id',
-        element: <UpdateDoctorPage />
+        element: <DoctorFormPage />
+      },
+      {
+        path: 'bac-si/tao-moi',
+        element: <DoctorFormPage />
       },
       {
         path: 'lich-kham',
