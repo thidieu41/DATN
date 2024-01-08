@@ -10,22 +10,22 @@ export const DoctorAPI = {
   },
 
   getDetails: async (id: string) => {
-    const response = await client.get(`/dental/doctors/${id}/`);
+    const response = await client.get(`/core/doctors/${id}/`);
     return response;
   },
 
   add: async (params: IBranchsParamsProps) => {
-    const response = await client.post(`/dental/doctors/`, params);
+    const response = await client.post(`/core/doctors/`, params);
     return response;
   },
 
   update: async (id: string, params) => {
-    const response = await client.put(`/dental/doctors/${id}/`, params);
+    const response = await client.put(`/core/doctors/${id}/`, params);
     return response;
   },
 
   delete: async (id: string) => {
-    const response = await client.delete(`/dental/doctors/${id}/`);
+    const response = await client.delete(`/core/doctors/${id}/`);
     return response;
   }
 };

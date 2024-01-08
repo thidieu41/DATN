@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { IScheduleProps } from 'src/content/pages/schedule_appoinment';
 import dayjs from 'dayjs';
 import Label from 'src/components/Label';
 import { useNavigate } from 'react-router';
 import { Schedule } from 'src/api/schedule';
 import { toast } from 'react-toastify';
+import { IScheduleProps } from 'src/interface/booking';
 
 interface Props {
   data: IScheduleProps[];

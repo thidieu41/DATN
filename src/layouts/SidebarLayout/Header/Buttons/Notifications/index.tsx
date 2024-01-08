@@ -10,11 +10,12 @@ import {
   Tooltip,
   Typography
 } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import { styled } from '@mui/material/styles';
-
-import { formatDistance, subDays } from 'date-fns';
+import { NotificationAPI } from 'src/api/notifications';
+import dayjs from 'dayjs';
+import { useNavigate } from 'react-router';
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -40,9 +41,21 @@ const NotificationsBadge = styled(Badge)(
 `
 );
 
+interface INotitficationProps {
+  booking: string;
+  created_at: string;
+  id: string;
+  status: string;
+  updated_at: string;
+}
+
 function HeaderNotifications() {
+  const navigate = useNavigate();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [notificationList, setNotificationList] = useState<
+    INotitficationProps[]
+  >([]);
 
   const handleOpen = (): void => {
     setOpen(true);
@@ -52,12 +65,28 @@ function HeaderNotifications() {
     setOpen(false);
   };
 
+  const handleReadNotitfication = async (data: INotitficationProps) => {
+    navigate(`/admin/lich-kham/cap-nhat/${data.booking}`);
+    handleClose();
+    if (data.status === 'new') {
+      await NotificationAPI.update(data.id);
+    }
+  };
+
+  const handleGetAllNotitfication = async () => {
+    const res = await NotificationAPI.getAll();
+    setNotificationList(res.data);
+  };
+  useEffect(() => {
+    handleGetAllNotitfication();
+  }, []);
+
   return (
     <>
       <Tooltip arrow title="Notifications">
         <IconButton color="primary" ref={ref} onClick={handleOpen}>
           <NotificationsBadge
-            badgeContent={110}
+            badgeContent={notificationList?.length || 0}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right'
@@ -86,32 +115,32 @@ function HeaderNotifications() {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Notifications</Typography>
+          <Typography variant="h5">Thông báo</Typography>
         </Box>
         <Divider />
         <List sx={{ p: 0, maxHeight: 400, overflow: 'scroll' }}>
-          {new Array(20).fill(0).map((item, key) => (
+          {(notificationList || []).map((item: INotitficationProps, key) => (
             <ListItem
               key={key}
               sx={{
                 p: 1,
                 minWidth: 350,
+                opacity: item.status == 'new' ? 1 : 0.4,
                 display: { xs: 'block', sm: 'flex' },
                 cursor: 'pointer',
                 ':hover': {
                   backgroundColor: '#f3f6f6'
                 }
               }}
+              onClick={() => handleReadNotitfication(item)}
             >
               <Box flex="1">
                 <Box display="flex" justifyContent="space-between">
                   <Typography sx={{ fontWeight: 'bold' }}>
-                    Messaging Platform
+                    Thông báo đặt lịch
                   </Typography>
                   <Typography variant="caption" sx={{ textTransform: 'none' }}>
-                    {formatDistance(subDays(new Date(), 3), new Date(), {
-                      addSuffix: true
-                    })}
+                    {dayjs(item.created_at).format('DD/MM/YYYY')}
                   </Typography>
                 </Box>
                 <Typography
@@ -119,8 +148,7 @@ function HeaderNotifications() {
                   variant="body2"
                   color="text.secondary"
                 >
-                  {' '}
-                  new messages in your inbox
+                  Hệ thống nhận được 1 lịch khám mới
                 </Typography>
               </Box>
             </ListItem>

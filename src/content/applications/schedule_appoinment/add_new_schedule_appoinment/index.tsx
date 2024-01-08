@@ -10,7 +10,6 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import { Schedule } from 'src/api/schedule';
 import { useEffect, useState } from 'react';
-import { IScheduleProps } from 'src/content/pages/schedule_appoinment';
 import { useLocation } from 'react-router';
 import {
   IFormValueScheduleProps,
@@ -20,6 +19,7 @@ import {
   statusOptions
 } from '../constants';
 import { toast } from 'react-toastify';
+import { IScheduleProps } from 'src/interface/booking';
 
 const LableInput = styled(Typography)(
   () => `

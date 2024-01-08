@@ -46,7 +46,7 @@ const DoctorTable = () => {
     }
   };
   useEffect(() => {
-    handleGetAllDoctor('/dental/doctors/');
+    handleGetAllDoctor('/core/doctors/');
   }, []);
 
   return (
