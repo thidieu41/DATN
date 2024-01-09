@@ -23,25 +23,6 @@ import { statusTableOptions } from './constants';
 import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
 
-const statusOptions = [
-  {
-    id: 'tất cả',
-    name: 'Tất cả'
-  },
-  {
-    id: 'chưa-khám',
-    name: 'Chưa Khám'
-  },
-  {
-    id: 'đang-khám',
-    name: 'Đang Khám'
-  },
-  {
-    id: 'đã-khám',
-    name: 'Đã Khám'
-  }
-];
-
 const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
   const [status, setStatus] = useState(null);
@@ -70,7 +51,6 @@ const ScheduleAppoinmentTable = () => {
     setIsLoading(true);
     try {
       const res = await ClientAPI.getAll(url);
-      console.log(res.data.results);
       setScheduleList(res.data.results);
       setPagination(res.data);
       setIsLoading(false);

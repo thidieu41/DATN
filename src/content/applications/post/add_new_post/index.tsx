@@ -61,10 +61,6 @@ const CreateNewPost = ({ details }: IProps) => {
       .catch((error) => {
         console.log(error?.message);
       });
-    const res = (await urlImageToBase64(
-      'https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg'
-    )) as string;
-    setPreviewImg(res);
   };
 
   const handleGetContent = async () => {
@@ -148,13 +144,16 @@ const CreateNewPost = ({ details }: IProps) => {
     }
   };
 
-  const handleSetDetails = () => {
+  const handleSetDetails = async () => {
     reset({
       category: details.category.toString(),
       content: details.content,
       title: details.title
     });
-    const urlImage = urlImageToBase64(details?.image) as unknown as string;
+    const urlImage = (await urlImageToBase64(
+      details?.image
+    )) as unknown as string;
+    console.log(urlImage);
     setPreviewImg(urlImage);
   };
 

@@ -2,7 +2,7 @@ export interface IDoctor {
   id: string;
   name: string;
   date: Date | number;
-  phone_number: string;
+  phone: string;
   role: string;
   degree: string;
 }

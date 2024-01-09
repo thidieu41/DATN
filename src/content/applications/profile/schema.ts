@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 export const profileSchema = Yup.object().shape({
   name: Yup.string().required('Không được để trống họ và tên'),
   email: Yup.string().required('Không được để trống email'),
-  phone_number: Yup.string()
+  phone: Yup.string()
     .required('Không được để trống số điện thoại')
     .matches(phoneRegExp, 'Số điện thoại không hợp lệ'),
   address: Yup.string().required('Không được để trống địa chỉ')
@@ -17,7 +17,7 @@ export const defaultValues = {
   email: '',
   gender: 'male',
   dateofbirth: '',
-  phone_number: '',
+  phone: '',
   address: ''
 };
 
@@ -26,6 +26,6 @@ export interface IFormValue {
   email: string;
   gender: string;
   dateofbirth: string;
-  phone_number: string;
+  phone: string;
   address: string;
 }

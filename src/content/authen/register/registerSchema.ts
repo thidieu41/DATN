@@ -15,7 +15,7 @@ export const registerSchema = Yup.object().shape({
     [Yup.ref('password'), null],
     'Mật khẩu không trùng khớp'
   ),
-  phone_number: Yup.string()
+  phone: Yup.string()
     .required('Không được để trống số điện thoại')
     .matches(phoneRegExp, 'Số điện thoại không hợp lệ')
 });
@@ -24,12 +24,12 @@ export const defaultValues = {
   email: '',
   password: '',
   confirm_password: '',
-  phone_number: ''
+  phone: ''
 };
 
 export interface IFormValue {
   email: string;
   password: string;
   confirm_password: string;
-  phone_number: string;
+  phone: string;
 }

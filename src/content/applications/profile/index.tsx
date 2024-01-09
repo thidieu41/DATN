@@ -154,14 +154,14 @@ const EditProfile = () => {
               <LableInput>Số điện thoại</LableInput>
               <Controller
                 control={control}
-                name="phone_number"
+                name="phone"
                 render={({ field }) => (
                   <TextField
                     {...field}
                     fullWidth
                     placeholder="Nhập số điện thoại"
-                    error={!!errors.phone_number}
-                    helperText={errors.phone_number?.message || ''}
+                    error={!!errors.phone}
+                    helperText={errors.phone?.message || ''}
                   />
                 )}
               />

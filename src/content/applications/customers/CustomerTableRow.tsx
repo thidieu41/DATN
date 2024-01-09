@@ -50,40 +50,12 @@ const CustomerTableRow = ({ data = [] }: Props) => {
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>{item.phone_number}</Typography>
+              <Typography noWrap>{item.phone}</Typography>
             </TableCell>
             <TableCell align="right">
               <Typography noWrap>{/* {item.role} */}</Typography>
             </TableCell>
             <TableCell align="right">{/* {item.degree} */}</TableCell>
-            <TableCell align="right">
-              <Tooltip title="Sửa" arrow>
-                <IconButton
-                  sx={{
-                    '&:hover': {
-                      background: theme.colors.primary.lighter
-                    },
-                    color: theme.palette.primary.main
-                  }}
-                  color="inherit"
-                  size="small"
-                >
-                  <EditTwoToneIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Xoá" arrow>
-                <IconButton
-                  sx={{
-                    '&:hover': { background: theme.colors.error.lighter },
-                    color: theme.palette.error.main
-                  }}
-                  color="inherit"
-                  size="small"
-                >
-                  <DeleteTwoToneIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </TableCell>
           </TableRow>
         );
       })}

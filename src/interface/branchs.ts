@@ -2,6 +2,7 @@ export interface IBranchsParamsProps {
   name: string;
   address: string;
   phone: string;
+  rooms: string;
 }
 
 export interface IBrachProps {

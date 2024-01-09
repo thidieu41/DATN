@@ -13,7 +13,7 @@ export const userScheduleSchema = Yup.object().shape({
 });
 
 export const scheduleSchema = userScheduleSchema.shape({
-  phone_number: Yup.string()
+  phone: Yup.string()
     .required('Không được để trống số điện thoại')
     .matches(phoneRegExp, 'Số điện thoại không hợp lệ'),
   name: Yup.string().required('Không được để trống tên')
@@ -31,10 +31,12 @@ export const defaultValues = {
 
 export const scheduledefaultValues = {
   ...defaultValues,
-  phone_number: '',
+  phone: '',
   name: '',
   status: 'chưa khám',
-  total_money: '0'
+  total_money: '0',
+  branch: '',
+  room: ''
 };
 
 export interface IFormValue {
@@ -45,9 +47,11 @@ export interface IFormValue {
 
 export interface IFormValueScheduleProps extends IFormValue {
   name: string;
-  phone_number: string;
+  phone: string;
   status: string;
   total_money: string;
+  branch: string;
+  room: string;
 }
 
 export const statusOptions = [
@@ -66,9 +70,9 @@ export const statusOptions = [
 ];
 
 export const statusTableOptions = [
-  ...statusOptions,
   {
     id: 'tất cả',
     name: 'Tất Cả'
-  }
+  },
+  ...statusOptions
 ];

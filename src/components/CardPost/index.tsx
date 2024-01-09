@@ -14,7 +14,7 @@ interface IProps {
 }
 export default function RecipeReviewCard({ data, categoryName }: IProps) {
   return (
-    <Card sx={{ maxWidth: 345, minWidth: 300 }}>
+    <Card sx={{ width: 370 }}>
       <CardHeader
         avatar={<ArticleIcon />}
         title={categoryName}
@@ -22,18 +22,31 @@ export default function RecipeReviewCard({ data, categoryName }: IProps) {
       />
       <CardMedia
         component="img"
-        height="194"
+        height="250"
         src={data.image}
         alt="Paella dish"
       />
       <CardContent
         sx={{
-          height: 250,
-          overflow: 'scroll'
+          height: 300
         }}
       >
-        <Typography variant="h6">{data.title.toLocaleUpperCase()}</Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="h6"
+          sx={{
+            marginBottom: 1
+          }}
+        >
+          {data.title.toLocaleUpperCase()}
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            maxHeight: 200,
+            overflow: 'scroll'
+          }}
+        >
           {data.content}
         </Typography>
       </CardContent>

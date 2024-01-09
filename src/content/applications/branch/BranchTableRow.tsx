@@ -62,6 +62,11 @@ const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
               </Typography>
             </TableCell>
 
+            <TableCell>
+              <Typography color="text.primary" noWrap>
+                P101 - P102 - P03
+              </Typography>
+            </TableCell>
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton

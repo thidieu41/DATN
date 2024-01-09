@@ -18,27 +18,34 @@ import {
   statusOptions
 } from '../constants';
 import { toast } from 'react-toastify';
-import { IScheduleProps } from 'src/interface/booking';
 import { ClientAPI } from 'src/api';
+import { IBrachProps } from 'src/interface/branchs';
 
 const LableInput = styled(Typography)(
   () => `
   margin-bottom: 10px;
 `
 );
+const GridItem = styled(Grid)(
+  () => `
+  gap: 10px
+`
+);
 
 const CreateNewSchedule = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [details, setDetails] = useState<IScheduleProps>();
-  const [isUserInfor, setIsUserInfor] = useState(false);
-
   const location = useLocation();
+
+  const [isEdit, setIsEdit] = useState(false);
+  const [isUser, setIsUserInfor] = useState(false);
+  const [scheduleId, setScheduleId] = useState('');
+  const [branchList, setBranchList] = useState<IBrachProps[]>([]);
 
   const {
     control,
     handleSubmit,
-    setValue,
     watch,
+    reset,
+    setValue,
     formState: { errors }
   } = useForm<IFormValueScheduleProps, IFormValueScheduleProps>({
     mode: 'onChange',
@@ -47,11 +54,15 @@ const CreateNewSchedule = () => {
   });
 
   const handleSubmission = async (data: IFormValueScheduleProps) => {
-    const { date, quantity, reason } = data;
     try {
+      let res: any;
       if (isEdit) {
+        res = await ClientAPI.update(`/app/bookings/${scheduleId}`, data);
       } else {
-        await ClientAPI.add('/app/bookings/', { date, quantity, reason });
+        res = await ClientAPI.add('/app/bookings/', {
+          ...data,
+          status: 'chưa khám'
+        });
       }
       toast.success(
         isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
@@ -63,13 +74,11 @@ const CreateNewSchedule = () => {
 
   const onGetScheduleDetails = async () => {
     const listPath = location.pathname.split('/');
-    const scheduleId = listPath[listPath.length - 1];
-    console.log(!isNaN(Number(scheduleId)));
-    if (!isNaN(Number(scheduleId))) {
+    const dataId = listPath[listPath.length - 1];
+    if (!isNaN(Number(dataId))) {
       setIsEdit(true);
-      const { data } = await ClientAPI.getDetails(
-        `/app/bookings/${scheduleId}/`
-      );
+      setScheduleId(dataId);
+      const { data } = await ClientAPI.getDetails(`/app/bookings/${dataId}/`);
       const {
         date,
         quantity,
@@ -79,37 +88,48 @@ const CreateNewSchedule = () => {
         user,
         name,
         phone,
-        isUser
+        is_user,
+        room
       } = data;
-      setIsUserInfor(isUser);
-      setValue('date', date);
-      setValue('quantity', quantity);
-      setValue('reason', reason);
-      setValue('name', name);
-      setValue('phone_number', phone);
-      setValue('status', status);
-      setValue('total_money', total_money);
-      console.log(data);
+      setIsUserInfor(is_user);
+      const defaultValues = {
+        date,
+        quantity,
+        reason,
+        name: is_user ? user?.name : name,
+        phone: is_user ? user?.phone : phone,
+        status,
+        total_money
+      };
+      reset(defaultValues);
     }
+  };
+
+  const handleGetBranchs = async () => {
+    const res = await ClientAPI.getAll('/dental/branches/');
+    setBranchList(res.data.results);
+    setValue('branch', res.data?.results[0]?.id);
   };
 
   useEffect(() => {
     onGetScheduleDetails();
+    handleGetBranchs();
   }, []);
 
   const status = watch('status');
+
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <GridItem item xs={12} sm={6}>
           <LableInput>Họ Và Tên</LableInput>
           <Controller
-            disabled={isUserInfor}
             control={control}
             name="name"
             render={({ field }) => (
               <TextField
                 {...field}
+                disabled={isUser}
                 fullWidth
                 placeholder="Nhập tên"
                 error={!!errors.name}
@@ -117,41 +137,27 @@ const CreateNewSchedule = () => {
               />
             )}
           />
-        </Grid>
+        </GridItem>
 
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          sx={{
-            gap: '10px'
-          }}
-        >
+        <GridItem item xs={12} sm={6}>
           <LableInput>Số điện thoại</LableInput>
           <Controller
-            disabled={isUserInfor}
             control={control}
-            name="phone_number"
+            name="phone"
             render={({ field }) => (
               <TextField
                 {...field}
+                disabled={isUser}
                 fullWidth
                 placeholder="Nhập số điện thoại"
-                error={!!errors.phone_number}
-                helperText={errors.phone_number?.message || ''}
+                error={!!errors.phone}
+                helperText={errors.phone?.message || ''}
               />
             )}
           />
-        </Grid>
+        </GridItem>
 
-        <Grid
-          sx={{
-            gap: '10px'
-          }}
-          item
-          xs={12}
-          sm={6}
-        >
+        <GridItem item xs={12} sm={6}>
           <LableInput>Chọn thời gian khám </LableInput>
           <Controller
             control={control}
@@ -175,16 +181,9 @@ const CreateNewSchedule = () => {
               </LocalizationProvider>
             )}
           />
-        </Grid>
+        </GridItem>
 
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          sx={{
-            gap: '10px'
-          }}
-        >
+        <GridItem item xs={12} sm={6}>
           <LableInput>Số người</LableInput>
           <Controller
             control={control}
@@ -200,11 +199,51 @@ const CreateNewSchedule = () => {
               />
             )}
           />
-        </Grid>
+        </GridItem>
+        <GridItem item xs={12} sm={6}>
+          <LableInput>Chi nhánh</LableInput>
+          <Controller
+            control={control}
+            name="branch"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập số người"
+                error={!!errors.branch}
+                helperText={errors.branch?.message || ''}
+                select
+              >
+                {branchList.map((branch) => (
+                  <MenuItem key={branch.id} value={branch.id}>
+                    {branch.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </GridItem>
+
+        <GridItem item xs={12} sm={6}>
+          <LableInput>Chọn phòng</LableInput>
+          <Controller
+            control={control}
+            name="room"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập số phòng"
+                error={!!errors.room}
+                helperText={errors.room?.message || ''}
+              />
+            )}
+          />
+        </GridItem>
 
         {/* IsEdit */}
         {isEdit && (
-          <Grid
+          <GridItem
             item
             xs={12}
             sm={status === 'đã khám' ? 6 : 12}
@@ -232,11 +271,11 @@ const CreateNewSchedule = () => {
                 </TextField>
               )}
             />
-          </Grid>
+          </GridItem>
         )}
 
         {isEdit && status === 'đã khám' && (
-          <Grid
+          <GridItem
             item
             xs={12}
             sm={6}
@@ -259,16 +298,10 @@ const CreateNewSchedule = () => {
                 />
               )}
             />
-          </Grid>
+          </GridItem>
         )}
 
-        <Grid
-          item
-          xs={12}
-          sx={{
-            gap: '10px'
-          }}
-        >
+        <GridItem item xs={12}>
           <LableInput>Lý do đến khám</LableInput>
           <Controller
             control={control}
@@ -285,7 +318,7 @@ const CreateNewSchedule = () => {
               />
             )}
           />
-        </Grid>
+        </GridItem>
         <Button
           type="submit"
           variant="contained"

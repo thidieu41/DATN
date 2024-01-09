@@ -25,7 +25,7 @@ const RegisterForm = () => {
   };
   const handleSubmission = (data: IFormValue) => {
     console.log(data);
-    Register(data.email, data.password, data.phone_number);
+    Register(data.email, data.password, data.phone);
   };
 
   return (
@@ -101,14 +101,14 @@ const RegisterForm = () => {
           <Typography>Số điện thoại</Typography>
           <Controller
             control={control}
-            name="phone_number"
+            name="phone"
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
                 placeholder="Nhập số điện thoại"
-                error={!!errors.phone_number}
-                helperText={errors.phone_number?.message || ''}
+                error={!!errors.phone}
+                helperText={errors.phone?.message || ''}
               />
             )}
           />
