@@ -5,10 +5,10 @@ import PageHeader from 'src/components/PageHeader';
 import PostCategoriesComponent from 'src/content/applications/post_categories';
 import CreateNewPostCategory from 'src/content/applications/post_categories/components/CreateNewPostCategory';
 import { useEffect, useState } from 'react';
-import { PostCategoriesAPI } from 'src/api/post_categories';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
 import { handleSetToken } from 'src/utils/token';
+import { ClientAPI } from 'src/api';
 
 export interface IPostCategoriesProps {
   id: string;
@@ -42,10 +42,10 @@ function PostCategoriesPage() {
   const handleSetIsLoading = (value: boolean) => {
     setIsLoading(value);
   };
-  const onGetPostCategories = async () => {
+  const onGetPostCategories = async (url: string) => {
     handleSetIsLoading(true);
     try {
-      const res = await PostCategoriesAPI.getAll();
+      const res = await ClientAPI.getAll(url);
       const data = handleObjectKeyData(res.data);
       setPostCategories(data);
     } catch (error) {
@@ -56,7 +56,7 @@ function PostCategoriesPage() {
   };
 
   useEffect(() => {
-    onGetPostCategories();
+    onGetPostCategories('/post/categories/');
   }, []);
 
   const onOpenModal = () => {
@@ -77,7 +77,7 @@ function PostCategoriesPage() {
   const handleRemove = async (id: string) => {
     handleSetIsLoading(true);
     try {
-      await PostCategoriesAPI.detelte(id);
+      await ClientAPI.delete(`/post/categories/${id}`);
       const data = Object.values(postCategories).filter(
         (item) => item.id !== id
       );

@@ -20,9 +20,8 @@ import { ICategoryProps } from 'src/utils/schema';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
 import { IPostProps } from 'src/interface/posts';
-import { PostAPI } from 'src/api/posts';
-import { PostCategoriesAPI } from 'src/api/post_categories';
 import { IPanigationProps } from 'src/utils/interface';
+import { ClientAPI } from 'src/api';
 
 const PostTable = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +65,7 @@ const PostTable = () => {
   const handleGetAllPosts = async (url: string) => {
     setIsLoading(true);
     try {
-      const res = await PostAPI.getAll(url);
+      const res = await ClientAPI.getAll(url);
       setPostList(res.data.results);
       setPagination(res.data);
     } catch (error) {
@@ -76,13 +75,13 @@ const PostTable = () => {
     }
   };
 
-  const handleGetAllCategories = async () => {
-    const res = await PostCategoriesAPI.getAll();
+  const handleGetAllCategories = async (url: string) => {
+    const res = await ClientAPI.getAll(url);
     handleCategoryList(res.data);
   };
   useEffect(() => {
     handleGetAllPosts('/post/posts/');
-    handleGetAllCategories();
+    handleGetAllCategories('/post/categories/');
   }, []);
 
   return (

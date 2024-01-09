@@ -5,9 +5,9 @@ import PageHeader from 'src/components/PageHeader';
 import CreateNewPost from 'src/content/applications/post/add_new_post';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { PostAPI } from 'src/api/posts';
 import { IPostProps } from 'src/interface/posts';
 import { handleSetToken } from 'src/utils/token';
+import { ClientAPI } from 'src/api';
 
 function AddNewPostPage() {
   handleSetToken();
@@ -20,7 +20,7 @@ function AddNewPostPage() {
     const pathnameList = location.pathname.split('/');
     const postId = pathnameList[pathnameList.length - 1];
     if (!isNaN(Number(postId))) {
-      const res = await PostAPI.getDetails(postId);
+      const res = await ClientAPI.getDetails(`/post/posts/${postId}/`);
       setDetails(res.data);
     }
   };

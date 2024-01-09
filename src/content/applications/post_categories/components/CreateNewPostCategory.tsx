@@ -7,9 +7,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Stack, TextField, Typography } from '@mui/material';
-import { PostCategoriesAPI } from 'src/api/post_categories';
 import { IPostCategoriesProps } from 'src/content/pages/post_categories';
 import { toast } from 'react-toastify';
+import { ClientAPI } from 'src/api';
 
 interface Iprops {
   open: boolean;
@@ -50,10 +50,14 @@ export default function CreateNewPostCategory({
         const id = (Math.random() + 1).toString(36).substring(7);
         let res;
         if (isEdit) {
-          res = await PostCategoriesAPI.update(details.name, details.id);
+          res = await ClientAPI.update(`/post/categories/${details.id}`, {
+            name: details.name
+          });
           toast.success('Cập nhật danh mục thành công!');
         } else {
-          res = await PostCategoriesAPI.addNew(details.name);
+          res = await ClientAPI.add('/post/categories/', {
+            name: details.name
+          });
           toast.success('Thêm danh mục thành công!');
         }
         handleNewValue(details.name, isEdit ? details.id : id);

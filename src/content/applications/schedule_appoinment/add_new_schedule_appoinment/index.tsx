@@ -8,7 +8,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
-import { Schedule } from 'src/api/schedule';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import {
@@ -20,6 +19,7 @@ import {
 } from '../constants';
 import { toast } from 'react-toastify';
 import { IScheduleProps } from 'src/interface/booking';
+import { ClientAPI } from 'src/api';
 
 const LableInput = styled(Typography)(
   () => `
@@ -46,16 +46,12 @@ const CreateNewSchedule = () => {
     resolver: yupResolver(isEdit ? scheduleEditSchema : scheduleSchema) as any
   });
 
-  const Booking = async (date: string, quantity: string, reason: string) => {
-    const res = await Schedule.Add(date, quantity, reason);
-    console.log(res);
-  };
   const handleSubmission = async (data: IFormValueScheduleProps) => {
     const { date, quantity, reason } = data;
     try {
       if (isEdit) {
       } else {
-        await Schedule.Add(date, quantity, reason);
+        await ClientAPI.add('/app/bookings/', { date, quantity, reason });
       }
       toast.success(
         isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
@@ -71,7 +67,9 @@ const CreateNewSchedule = () => {
     console.log(!isNaN(Number(scheduleId)));
     if (!isNaN(Number(scheduleId))) {
       setIsEdit(true);
-      const { data } = await Schedule.getDetails(scheduleId);
+      const { data } = await ClientAPI.getDetails(
+        `/app/bookings/${scheduleId}/`
+      );
       const {
         date,
         quantity,

@@ -7,7 +7,7 @@ import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 const MenuWrapper = styled(Box)(
@@ -167,7 +167,11 @@ const listmenu = [
     icon: <AccountBalanceIcon />,
     path: '/admin/chi-nhanh'
   },
-
+  {
+    name: 'Danh Mục',
+    icon: <DynamicFeedIcon />,
+    path: '/admin/danh-muc'
+  },
   {
     name: 'Lịch Khám',
     icon: <VaccinesIcon />,

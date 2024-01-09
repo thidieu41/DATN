@@ -6,8 +6,8 @@ import DoctorFormComp from 'src/content/applications/doctors/add_new_doctor';
 import { useLocation } from 'react-router';
 import { useEffect, useState } from 'react';
 import { IDoctor } from 'src/interface/doctor';
-import { DoctorAPI } from 'src/api/doctors';
 import { handleSetToken } from 'src/utils/token';
+import { ClientAPI } from 'src/api';
 
 function DoctorFormPage() {
   const [details, setDetails] = useState<IDoctor>();
@@ -19,7 +19,7 @@ function DoctorFormPage() {
     const doctorId = pathList[pathList.length - 1];
 
     if (!isNaN(Number(doctorId))) {
-      const res = await DoctorAPI.getDetails(doctorId);
+      const res = await ClientAPI.getDetails(`/core/doctors/${doctorId}/`);
       setDetails(res.data);
     }
   };

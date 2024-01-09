@@ -8,9 +8,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
-import { Schedule } from 'src/api/schedule';
 import { toast } from 'react-toastify';
 import { IFormValue, defaultValues, userScheduleSchema } from '../constants';
+import { ClientAPI } from 'src/api';
 
 const LableInput = styled(Typography)(
   () => `
@@ -31,7 +31,11 @@ const NewUserScheduleAppoinment = () => {
   });
   const Booking = async (date, quantity, reason) => {
     try {
-      const res = await Schedule.Add(date, quantity, reason);
+      const res = await ClientAPI.add('/app/bookings/', {
+        date,
+        quantity,
+        reason
+      });
       if (res.status === 201) {
         reset(defaultValues);
         toast.success('Booking succesed!');

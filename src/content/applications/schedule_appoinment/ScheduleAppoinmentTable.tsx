@@ -17,11 +17,11 @@ import {
   CardHeader
 } from '@mui/material';
 import ScheduleAppoinmentRow from './ScheduleAppoinmentRow';
-import { Schedule } from 'src/api/schedule';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
 import { statusTableOptions } from './constants';
 import { IPanigationProps } from 'src/utils/interface';
+import { ClientAPI } from 'src/api';
 
 const statusOptions = [
   {
@@ -69,7 +69,7 @@ const ScheduleAppoinmentTable = () => {
   const handleGetBookingList = async (url: string) => {
     setIsLoading(true);
     try {
-      const res = await Schedule.getAll(url);
+      const res = await ClientAPI.getAll(url);
       console.log(res.data.results);
       setScheduleList(res.data.results);
       setPagination(res.data);

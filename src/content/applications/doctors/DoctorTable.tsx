@@ -15,8 +15,8 @@ import DoctorTableRow from './DoctorTableRow';
 import { IPanigationProps } from 'src/utils/interface';
 import { IDoctor } from 'src/interface/doctor';
 import BackDropComponent from 'src/components/BackDrop';
-import { DoctorAPI } from 'src/api/doctors';
 import { toast } from 'react-toastify';
+import { ClientAPI } from 'src/api';
 
 const DoctorTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -36,7 +36,7 @@ const DoctorTable = () => {
   const handleGetAllDoctor = async (url: string) => {
     setIsLoading(true);
     try {
-      const res = await DoctorAPI.getAll(url);
+      const res = await ClientAPI.getAll(url);
       setDoctorList(res.data.results);
       setPagination(res.data);
     } catch (error) {

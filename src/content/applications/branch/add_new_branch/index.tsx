@@ -6,11 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { defaultValues, branchSchema } from './schema';
 import { Grid, Typography, styled } from '@mui/material';
 import { IBranchsParamsProps } from 'src/interface/branchs';
-import { BranchAPI } from 'src/api/branch';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { ClientAPI } from 'src/api';
 
 const LableInput = styled(Typography)(
   () => `
@@ -42,9 +42,9 @@ const CreateNewBranch = ({ branchId }: IProps) => {
     setIsLoading(true);
     try {
       if (branchId) {
-        await BranchAPI.update(branchId, data);
+        await ClientAPI.update(`/dental/branches/${branchId}/`, data);
       } else {
-        await BranchAPI.add(data);
+        await ClientAPI.add(`/dental/branches/`, data);
       }
       toast.success(
         branchId
@@ -61,7 +61,7 @@ const CreateNewBranch = ({ branchId }: IProps) => {
 
   const handleGetDetails = async () => {
     try {
-      const res = await BranchAPI.getDetails(branchId);
+      const res = await ClientAPI.getDetails(`/dental/branches/${branchId}/`);
       const { name, phone, address } = res.data;
       setValue('address', address);
       setValue('name', name);

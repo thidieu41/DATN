@@ -13,9 +13,9 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import { styled } from '@mui/material/styles';
-import { NotificationAPI } from 'src/api/notifications';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router';
+import { ClientAPI } from 'src/api';
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -47,6 +47,7 @@ interface INotitficationProps {
   id: string;
   status: string;
   updated_at: string;
+  name: string;
 }
 
 function HeaderNotifications() {
@@ -69,12 +70,12 @@ function HeaderNotifications() {
     navigate(`/admin/lich-kham/cap-nhat/${data.booking}`);
     handleClose();
     if (data.status === 'new') {
-      await NotificationAPI.update(data.id);
+      await ClientAPI.update(`/app/notifications/${data.id}`, null);
     }
   };
 
   const handleGetAllNotitfication = async () => {
-    const res = await NotificationAPI.getAll();
+    const res = await ClientAPI.getAll('/app/notifications');
     setNotificationList(res.data);
   };
   useEffect(() => {
@@ -143,12 +144,8 @@ function HeaderNotifications() {
                     {dayjs(item.created_at).format('DD/MM/YYYY')}
                   </Typography>
                 </Box>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  color="text.secondary"
-                >
-                  Hệ thống nhận được 1 lịch khám mới
+                <Typography>
+                  <b>{item.name}</b> đã đặt lịch khám
                 </Typography>
               </Box>
             </ListItem>

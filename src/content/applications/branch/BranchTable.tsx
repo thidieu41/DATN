@@ -12,11 +12,11 @@ import {
   CardHeader
 } from '@mui/material';
 import CategoryTableRow from './BranchTableRow';
-import { BranchAPI } from 'src/api/branch';
 import { IPanigationProps } from 'src/utils/interface';
 import { toast } from 'react-toastify';
 import { IBrachProps } from 'src/interface/branchs';
 import BackDropComponent from 'src/components/BackDrop';
+import { ClientAPI } from 'src/api';
 
 const BranchTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -36,7 +36,7 @@ const BranchTable = () => {
   const handleRemoveBranch = async (id: string) => {
     setIsLoading(true);
     try {
-      await BranchAPI.delete(id);
+      await ClientAPI.delete(`/dental/branches/${id}/`);
       const list = branchList.filter((item) => item.id !== id);
       setBranchlist(list);
       toast.success('Xoá chi nhánh thành công');
@@ -50,7 +50,7 @@ const BranchTable = () => {
   const onGetAllBranchs = async (url: string) => {
     setIsLoading(true);
     try {
-      const res = await BranchAPI.getAll(url);
+      const res = await ClientAPI.getAll(url);
       setBranchlist(res.data.results);
       setPagination(res.data);
     } catch (error) {

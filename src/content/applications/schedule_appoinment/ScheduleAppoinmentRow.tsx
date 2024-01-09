@@ -12,9 +12,9 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import dayjs from 'dayjs';
 import Label from 'src/components/Label';
 import { useNavigate } from 'react-router';
-import { Schedule } from 'src/api/schedule';
 import { toast } from 'react-toastify';
 import { IScheduleProps } from 'src/interface/booking';
+import { ClientAPI } from 'src/api';
 
 interface Props {
   data: IScheduleProps[];
@@ -39,7 +39,7 @@ const ScheduleAppoinmentRow = ({
     event.stopPropagation();
     handleSetBackdropRemove();
     try {
-      await Schedule.delete(id);
+      await ClientAPI.delete(`/app/bookings/${id}/`);
       handleSetPagination(id);
       toast.success('Xoá lịch thành công');
     } catch (error) {
@@ -56,10 +56,14 @@ const ScheduleAppoinmentRow = ({
               <Typography noWrap>{item.id}</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>{item?.user?.name || ''}</Typography>
+              <Typography noWrap>
+                {item.is_user ? item?.user?.name : item.booking_name}
+              </Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>{item?.user?.phone || ''}</Typography>
+              <Typography noWrap>
+                {item.is_user ? item.user?.phone : item.phone}
+              </Typography>
             </TableCell>
             <TableCell>
               <Typography noWrap>
