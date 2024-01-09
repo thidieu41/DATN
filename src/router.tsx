@@ -34,9 +34,6 @@ const PostPage = Loader(lazy(() => import('src/content/pages/post')));
 const AddNewBranchPage = Loader(
   lazy(() => import('src/content/pages/add_new_branch'))
 );
-const AddNewCategoryPage = Loader(
-  lazy(() => import('src/content/pages/add_new_category'))
-);
 const AddNewPostPage = Loader(
   lazy(() => import('src/content/pages/add_new_post'))
 );
@@ -58,9 +55,6 @@ const PostCategoriesPage = Loader(
 );
 const DetailsCategoriesPage = Loader(
   lazy(() => import('src/content/pages/details_categories'))
-);
-const AddNewDetailsCategoryPage = Loader(
-  lazy(() => import('src/content/pages/add_new_details_categories'))
 );
 
 const routes: RouteObject[] = [
@@ -131,16 +125,8 @@ const routes: RouteObject[] = [
         element: <CategoryPage />
       },
       {
-        path: 'danh-muc/chi-tiet-danh-muc/:name',
+        path: 'danh-muc/chi-tiet-danh-muc/:name/:id',
         element: <DetailsCategoriesPage />
-      },
-      {
-        path: 'danh-muc/chi-tiet-danh-muc/:name/tao-moi',
-        element: <AddNewDetailsCategoryPage />
-      },
-      {
-        path: 'danh-muc/tao-danh-muc',
-        element: <AddNewCategoryPage />
       },
       {
         path: 'chi-nhanh',

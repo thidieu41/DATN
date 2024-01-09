@@ -7,7 +7,7 @@ import { IFormValue, defaultValues, registerSchema } from './registerSchema';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
-import { User } from 'src/api/user';
+import { User } from 'src/api/auth';
 
 const RegisterForm = () => {
   const {
@@ -21,11 +21,11 @@ const RegisterForm = () => {
   });
 
   const Register = async (email, password, phone) => {
-    const response = User.Register(email, password, phone)
-  }
+    const response = User.Register(email, password, phone);
+  };
   const handleSubmission = (data: IFormValue) => {
     console.log(data);
-    Register(data.email, data.password, data.phone_number)
+    Register(data.email, data.password, data.phone_number);
   };
 
   return (

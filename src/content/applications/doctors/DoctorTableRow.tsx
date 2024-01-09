@@ -12,6 +12,7 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { useNavigate } from 'react-router-dom';
 import { IDoctor } from 'src/interface/doctor';
+import dayjs from 'dayjs';
 
 interface Props {
   data: IDoctor[];
@@ -31,40 +32,47 @@ const DoctorTableRow = ({ data = [] }: Props) => {
           <TableRow
             hover
             key={item.id}
-            // onClick={(e) => onNavigationToDetails(e, item.id)}
             sx={{
               cursor: 'pointer'
             }}
           >
             <TableCell>
               <Typography gutterBottom noWrap>
+                {item.id}
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography gutterBottom noWrap>
                 {item.name}
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                variant="body1"
-                fontWeight="bold"
-                color="text.primary"
-                gutterBottom
-                noWrap
-              >
-                <Typography variant="body2" noWrap>
-                  {format(item.date, 'MMMM dd yyyy')}
-                </Typography>
+              <Typography variant="body2" noWrap>
+                {dayjs(item.date).format('DD/MM/YYYY')}
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                {item.phone_number}
+                00000
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                {item.role}
+                @GMAIL.COM
               </Typography>
             </TableCell>
-            <TableCell>{item.degree}</TableCell>
+            <TableCell>
+              <Typography gutterBottom noWrap>
+                10
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography gutterBottom noWrap>
+                doctor
+              </Typography>
+            </TableCell>
+
+            <TableCell>{item.degree || '____'}</TableCell>
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton

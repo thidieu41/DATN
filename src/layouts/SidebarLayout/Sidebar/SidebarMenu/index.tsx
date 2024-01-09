@@ -168,7 +168,7 @@ const listmenu = [
     path: '/admin/chi-nhanh'
   },
   {
-    name: 'Danh Mục',
+    name: 'Danh Mục Lịch Khám',
     icon: <DynamicFeedIcon />,
     path: '/admin/danh-muc'
   },

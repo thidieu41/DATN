@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import PostCategoriesComponent from 'src/content/applications/post_categories';
+import CategoriesComponent from 'src/content/applications/post_categories';
 import CreateNewPostCategory from 'src/content/applications/post_categories/components/CreateNewPostCategory';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ export interface IPostCategoriesProps {
   created_at: string;
   updated_at: string;
   name: string;
+  price?: string;
 }
 
 function PostCategoriesPage() {
@@ -77,7 +78,7 @@ function PostCategoriesPage() {
   const handleRemove = async (id: string) => {
     handleSetIsLoading(true);
     try {
-      await ClientAPI.delete(`/post/categories/${id}`);
+      await ClientAPI.delete(`/post/categories/${id}/`);
       const data = Object.values(postCategories).filter(
         (item) => item.id !== id
       );
@@ -91,13 +92,10 @@ function PostCategoriesPage() {
     }
   };
 
-  const handleNewValue = (name: string, id: string) => {
+  const handleNewValue = (newValue: IPostCategoriesProps) => {
     const data = {
       ...postCategories,
-      [id]: {
-        ...postCategories[id],
-        name
-      }
+      [newValue.id]: newValue
     };
     setPostCategories(data);
   };
@@ -128,10 +126,11 @@ function PostCategoriesPage() {
                 overflow: 'scroll'
               }}
             >
-              <PostCategoriesComponent
+              <CategoriesComponent
                 handleSetisEdit={handleSetisEdit}
                 handleRemove={handleRemove}
                 data={Object.values(postCategories)}
+                isCategoryBooking={false}
               />
             </Card>
           </Grid>
@@ -144,6 +143,7 @@ function PostCategoriesPage() {
         detailsData={details}
         handleNewValue={handleNewValue}
         handleSetIsLoading={handleSetIsLoading}
+        isCategoryBooking={false}
       />
       <BackDropComponent open={isLoading} />
     </>
