@@ -13,6 +13,8 @@ import { fileImageToBase64, urlImageToBase64 } from 'src/utils/constanst';
 import { LoadingButton } from '@mui/lab';
 import BackDropComponent from 'src/components/BackDrop';
 import { IPostProps } from 'src/interface/posts';
+import { createOpenAIClient } from 'src/utils/openai';
+import { toast } from 'react-toastify';
 
 const LableInput = styled(Typography)(
   () => `
@@ -27,6 +29,7 @@ const CreateNewPost = ({ details }: IProps) => {
   const [categoryList, setCategory] = useState<ICategoryProps[]>([]);
   const [title, setTitle] = useState('');
   const [fileImg, setFileImg] = useState<File>();
+  const [content, setContent] = useState('')
   const [previewImg, setPreviewImg] = useState('');
   const [errorsMess, setErrorsMess] = useState<{
     titlecontent: string;
@@ -43,6 +46,7 @@ const CreateNewPost = ({ details }: IProps) => {
     control,
     handleSubmit,
     setValue,
+    getValues,
     reset,
     formState: { errors }
   } = useForm<IFormValue, IFormValue>({
@@ -62,7 +66,19 @@ const CreateNewPost = ({ details }: IProps) => {
         console.log(error?.message);
       });
   };
-
+  const openAIHandle = async () => {
+    const openai = createOpenAIClient()
+    const stream = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [{ role: "user", content: title }],
+        stream: true,
+    });
+    for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content)
+          setValue('content', getValues('content') + chunk.choices[0]?.delta?.content)
+    }
+    setLoading('')
+  }
   const handleGetContent = async () => {
     if (!title) {
       setErrorsMess({
@@ -71,18 +87,8 @@ const CreateNewPost = ({ details }: IProps) => {
       });
     } else {
       setLoading('chatGPTbtn');
-      await axios
-        .post('/openAI/GPT/get-response-by-text', {
-          user_input: title
-        })
-        .then((res) => {
-          setLoading('');
-          setValue('content', res.data.data);
-        })
-        .catch((error) => {
-          setLoading('');
-          console.log(error?.message);
-        });
+      setValue('content', '')
+      openAIHandle()
     }
   };
 
