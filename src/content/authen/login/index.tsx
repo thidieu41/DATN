@@ -12,7 +12,6 @@ import { setClientToken } from 'src/utils/axios';
 
 const LoginForm = () => {
   const navigation = useNavigate();
-  const [role, setRole] = useState(null);
   const {
     control,
     handleSubmit,
@@ -23,7 +22,6 @@ const LoginForm = () => {
     resolver: yupResolver(loginSchema) as any
   });
   const routerPrefetch = (role) => {
-    console.log(role);
     switch (role) {
       case 2:
         navigation('/');
@@ -37,8 +35,8 @@ const LoginForm = () => {
     const response = await User.Profile();
     if (response.status === 200) {
       localStorage.setItem('profile', JSON.stringify(response.data));
-      setRole(response.data.role?.name ? response.data.role.name : null);
-      routerPrefetch(role);
+      const dataRole = response.data.role?.name ? response.data.role.name : null
+      routerPrefetch(dataRole);
     }
   };
   const Login = async (email, password) => {

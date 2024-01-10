@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   Avatar,
@@ -22,6 +22,7 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import { setClientToken } from 'src/utils/axios';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -65,6 +66,7 @@ function HeaderUserbox() {
       'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg',
     jobtitle: 'Người dùng'
   };
+  const navigation = useNavigate()
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -76,6 +78,12 @@ function HeaderUserbox() {
   const handleClose = (): void => {
     setOpen(false);
   };
+
+  const handleLogOut = () => {
+    localStorage.clear()
+    setClientToken(null)
+    navigation('/authen')
+  }
 
   return (
     <>
@@ -129,7 +137,11 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button 
+            color="primary" 
+            fullWidth
+            onClick={handleLogOut}
+          >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Đăng xuất
           </Button>
