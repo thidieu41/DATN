@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IFormValue, defaultValues, registerSchema } from './schema';
 import { Grid, MenuItem, Stack, Typography, styled } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ICategoryProps } from 'src/utils/schema';
 import { createClient } from 'src/utils/axios';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,7 @@ const CreateNewPost = ({ details }: IProps) => {
   const [fileImg, setFileImg] = useState<File>();
   const [content, setContent] = useState('')
   const [previewImg, setPreviewImg] = useState('');
+  const messagesEndRef = useRef(null);
   const [errorsMess, setErrorsMess] = useState<{
     titlecontent: string;
     urlImgerr: string;
@@ -74,8 +75,10 @@ const CreateNewPost = ({ details }: IProps) => {
         stream: true,
     });
     for await (const chunk of stream) {
-        if (chunk.choices[0]?.delta?.content)
+        if (chunk.choices[0]?.delta?.content){
           setValue('content', getValues('content') + chunk.choices[0]?.delta?.content)
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }
     }
     setLoading('')
   }
