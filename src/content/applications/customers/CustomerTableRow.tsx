@@ -16,37 +16,17 @@ interface Props {
 }
 
 const CustomerTableRow = ({ data = [] }: Props) => {
-  const theme = useTheme();
-
-  const onNavigationToDetails = (event, id: string) => {
-    event.stopPropagation();
-    console.log(id);
-  };
   return (
     <TableBody>
       {data.map((item) => {
         return (
-          <TableRow
-            hover
-            key={item.id}
-            onClick={(e) => onNavigationToDetails(e, item.id)}
-            sx={{
-              cursor: 'pointer'
-            }}
-          >
+          <TableRow hover key={item.id}>
             <TableCell>
               <Typography noWrap>{item.name}</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                variant="body1"
-                fontWeight="bold"
-                color="text.primary"
-                noWrap
-              >
-                <Typography variant="body2" noWrap>
-                  {/* {format(item.date, 'MMMM dd yyyy')} */}
-                </Typography>
+              <Typography variant="body2" noWrap>
+                {/* {format(item.date, 'MMMM dd yyyy')} */}
               </Typography>
             </TableCell>
             <TableCell>

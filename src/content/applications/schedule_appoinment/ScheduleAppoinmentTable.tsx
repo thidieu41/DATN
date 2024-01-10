@@ -27,14 +27,14 @@ const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
   const [status, setStatus] = useState(null);
   const [scheduleList, setScheduleList] = useState([]);
-  const [paigation, setPagination] = useState<IPanigationProps>();
+  const [pagination, setPagination] = useState<IPanigationProps>();
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePageChange = (event: any, newPage: number): void => {
     if (newPage > page) {
-      handleGetBookingList(paigation.next);
+      handleGetBookingList(pagination.next);
     } else {
-      handleGetBookingList(paigation.previous);
+      handleGetBookingList(pagination.previous);
     }
     setPage(newPage);
   };
@@ -63,8 +63,8 @@ const ScheduleAppoinmentTable = () => {
   const handleSetPagination = (id: string) => {
     setIsLoading(false);
     setPagination({
-      ...paigation,
-      count: paigation.count - 1
+      ...pagination,
+      count: pagination.count - 1
     });
     const list = scheduleList.filter((item) => item.id !== id);
     setScheduleList(list);
@@ -129,7 +129,7 @@ const ScheduleAppoinmentTable = () => {
       <Box p={2}>
         <TablePagination
           component="div"
-          count={paigation?.count || 0}
+          count={pagination?.count || 0}
           onPageChange={handlePageChange}
           page={page}
           rowsPerPage={10}

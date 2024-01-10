@@ -1,10 +1,7 @@
-import { FC, ChangeEvent, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import {
   Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
   Table,
   TableCell,
@@ -12,119 +9,50 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  Select,
-  MenuItem,
   CardHeader
 } from '@mui/material';
 import { ICustomerProps } from './constant';
 import CustomerTableRow from './CustomerTableRow';
+import { IPanigationProps } from 'src/utils/interface';
+import { ClientAPI } from 'src/api';
+import { toast } from 'react-toastify';
+import BackDropComponent from 'src/components/BackDrop';
 
-interface RecentOrdersTableProps {
-  className?: string;
-  customerList: ICustomerProps[];
-}
-
-interface Filters {
-  status?: any;
-}
-
-const applyFilters = (
-  customerList: ICustomerProps[],
-  filters: Filters
-): ICustomerProps[] => {
-  return customerList.filter((cryptoOrder) => {
-    let matches = true;
-
-    // if (filters.status && cryptoOrder.status !== filters.status) {
-    //   matches = false;
-    // }
-
-    return matches;
-  });
-};
-
-const applyPagination = (
-  customerList: ICustomerProps[],
-  page: number,
-  limit: number
-): ICustomerProps[] => {
-  return customerList.slice(page * limit, page * limit + limit);
-};
-
-const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
+const CustomerTable = () => {
   const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
-  const [filters, setFilters] = useState<Filters>({
-    status: null
-  });
-
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'completed',
-      name: 'Completed'
-    },
-    {
-      id: 'pending',
-      name: 'Pending'
-    },
-    {
-      id: 'failed',
-      name: 'Failed'
-    }
-  ];
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
-    }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [pagination, setPagination] = useState<IPanigationProps>();
+  const [customerList, setCustomerList] = useState<ICustomerProps[]>([]);
 
   const handlePageChange = (event: any, newPage: number): void => {
+    if (newPage > page) {
+      handleGetAllCustomer(pagination.next);
+    } else {
+      handleGetAllCustomer(pagination.previous);
+    }
     setPage(newPage);
   };
 
-  const filteredCryptoOrders = applyFilters(customerList, filters);
-  const paginatedCryptoOrders = applyPagination(
-    filteredCryptoOrders,
-    page,
-    limit
-  );
+  const handleGetAllCustomer = async (url: string) => {
+    setIsLoading(true);
+    try {
+      const res = await ClientAPI.getAll(url);
+      setCustomerList(res.data.results || []);
+      setPagination(res.data);
+    } catch (error) {
+      toast.error('Lỗi lấy danh sách khách hàng');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllCustomer('');
+  }, []);
 
   return (
     <Card>
-      <CardHeader
-        // action={
-        //   <Box width={150}>
-        //     <FormControl fullWidth variant="outlined">
-        //       <InputLabel>Status</InputLabel>
-        //       <Select
-        //         value={filters.status || 'all'}
-        //         onChange={handleStatusChange}
-        //         label="Status"
-        //         autoWidth
-        //       >
-        //         {statusOptions.map((statusOption) => (
-        //           <MenuItem key={statusOption.id} value={statusOption.id}>
-        //             {statusOption.name}
-        //           </MenuItem>
-        //         ))}
-        //       </Select>
-        //     </FormControl>
-        //   </Box>
-        // }
-        title="Danh sách khách hàng"
-      />
+      <CardHeader title="Danh sách khách hàng" />
 
       <Divider />
       <TableContainer>
@@ -140,29 +68,22 @@ const CustomerTable: FC<RecentOrdersTableProps> = ({ customerList }) => {
               <TableCell>Địa chỉ</TableCell>
             </TableRow>
           </TableHead>
-          <CustomerTableRow data={paginatedCryptoOrders} />
+          <CustomerTableRow data={customerList || []} />
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={pagination?.count || 0}
           onPageChange={handlePageChange}
           page={page}
           rowsPerPage={10}
           rowsPerPageOptions={[10]}
         />
       </Box>
+      <BackDropComponent open={isLoading} />
     </Card>
   );
-};
-
-CustomerTable.propTypes = {
-  customerList: PropTypes.array.isRequired
-};
-
-CustomerTable.defaultProps = {
-  customerList: []
 };
 
 export default CustomerTable;

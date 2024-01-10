@@ -56,7 +56,13 @@ const ScheduleAppoinmentRow = ({
               <Typography noWrap>{item.id}</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>
+              <Typography
+                noWrap
+                sx={{
+                  textOverflow: 'ellipsis',
+                  maxWidth: 100
+                }}
+              >
                 {item.is_user ? item?.user?.name : item.booking_name}
               </Typography>
             </TableCell>
@@ -78,7 +84,7 @@ const ScheduleAppoinmentRow = ({
                 noWrap
                 sx={{
                   textOverflow: 'ellipsis',
-                  maxWidth: 130
+                  maxWidth: 150
                 }}
               >
                 {item.reason}

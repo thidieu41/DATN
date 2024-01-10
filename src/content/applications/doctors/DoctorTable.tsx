@@ -21,14 +21,14 @@ import { ClientAPI } from 'src/api';
 const DoctorTable = () => {
   const [page, setPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [paigation, setPagination] = useState<IPanigationProps>();
+  const [pagination, setPagination] = useState<IPanigationProps>();
   const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
 
   const handlePageChange = (event: any, newPage: number): void => {
     if (newPage > page) {
-      handleGetAllDoctor(paigation.next);
+      handleGetAllDoctor(pagination.next);
     } else {
-      handleGetAllDoctor(paigation.previous);
+      handleGetAllDoctor(pagination.previous);
     }
     setPage(newPage);
   };
@@ -40,8 +40,8 @@ const DoctorTable = () => {
       const data = doctorList.filter((item) => item.id !== id);
       setDoctorList(data);
       setPagination({
-        ...paigation,
-        count: paigation.count - 1
+        ...pagination,
+        count: pagination.count - 1
       });
       toast.success('Xoá bác sĩ thành công!');
     } catch (error) {
@@ -95,7 +95,7 @@ const DoctorTable = () => {
       <Box p={2}>
         <TablePagination
           component="div"
-          count={paigation?.count || 0}
+          count={pagination?.count || 0}
           onPageChange={handlePageChange}
           page={page}
           rowsPerPage={10}

@@ -37,12 +37,16 @@ const DoctorTableRow = ({ data = [], handleSetPagination }: Props) => {
         return (
           <TableRow hover key={item.id}>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.id}
-              </Typography>
+              <Typography noWrap>{item.id}</Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
+              <Typography
+                noWrap
+                sx={{
+                  maxWidth: 150,
+                  textOverflow: 'ellipsis'
+                }}
+              >
                 {item.name}
               </Typography>
             </TableCell>
@@ -52,27 +56,37 @@ const DoctorTableRow = ({ data = [], handleSetPagination }: Props) => {
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.phone}
-              </Typography>
+              <Typography noWrap>{item.phone}</Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
+              <Typography
+                noWrap
+                sx={{
+                  maxWidth: 150,
+                  textOverflow: 'ellipsis'
+                }}
+              >
                 {item.email}
               </Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                0
-              </Typography>
+              <Typography noWrap>0</Typography>
             </TableCell>
             <TableCell>
-              <Typography gutterBottom noWrap>
-                {item.position}
-              </Typography>
+              <Typography noWrap>{item.position}</Typography>
             </TableCell>
 
-            <TableCell>{item.degree_infor || '____'}</TableCell>
+            <TableCell>
+              <Typography
+                sx={{
+                  maxWidth: 150,
+                  textOverflow: 'ellipsis'
+                }}
+                noWrap
+              >
+                {item.degree_infor || '____'}
+              </Typography>
+            </TableCell>
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton

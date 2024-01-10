@@ -5,12 +5,10 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { defaultValues, branchSchema } from './schema';
 import {
-  Avatar,
   Box,
   Checkbox,
   FormControl,
   Grid,
-  InputLabel,
   ListItemText,
   MenuItem,
   Select,
@@ -19,7 +17,6 @@ import {
   Typography,
   styled
 } from '@mui/material';
-import ImageIcon from '@mui/icons-material/Image';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import AddIcon from '@mui/icons-material/Add';
 import { IBranchsParamsProps } from 'src/interface/branchs';
@@ -188,14 +185,7 @@ const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
             />
           </GridItem>
 
-          <GridItem
-            item
-            xs={12}
-            sm={6}
-            sx={{
-              gap: '10px'
-            }}
-          >
+          <GridItem item xs={12} sm={6}>
             <LableInput>Số điện thoại</LableInput>
             <Controller
               control={control}
@@ -223,7 +213,7 @@ const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
                 renderValue={(selected) => selected.join(', ')}
                 MenuProps={MenuProps}
               >
-                {doctorList.map((item) => (
+                {(doctorList || []).map((item) => (
                   <MenuItem
                     key={item.name}
                     value={item.name}

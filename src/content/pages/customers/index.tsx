@@ -25,7 +25,7 @@ function CustomerPage() {
         >
           <Grid item xs={12}>
             <Card>
-              <CustomerTable customerList={[]} />
+              <CustomerTable />
             </Card>
           </Grid>
         </Grid>

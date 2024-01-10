@@ -71,7 +71,13 @@ const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
               <Typography noWrap>{item.phone}</Typography>
             </TableCell>
             <TableCell>
-              <Typography color="text.primary" noWrap>
+              <Typography
+                noWrap
+                sx={{
+                  maxWidth: 150,
+                  textOverflow: 'ellipsis'
+                }}
+              >
                 {item.address}
               </Typography>
             </TableCell>
