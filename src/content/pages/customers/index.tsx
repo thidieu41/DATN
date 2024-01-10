@@ -10,7 +10,7 @@ function CustomerPage() {
   return (
     <>
       <Helmet>
-        <title>Trang bác sĩ</title>
+        <title>Trang khách hàng</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader title={'Khách hàng'} />

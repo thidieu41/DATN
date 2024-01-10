@@ -125,15 +125,15 @@ const CreateNewSchedule = () => {
           <LableInput>Họ Và Tên</LableInput>
           <Controller
             control={control}
-            name="name"
+            name="booking_name"
             render={({ field }) => (
               <TextField
                 {...field}
                 disabled={isUser}
                 fullWidth
                 placeholder="Nhập tên"
-                error={!!errors.name}
-                helperText={errors.name?.message || ''}
+                error={!!errors.booking_name}
+                helperText={errors.booking_name?.message || ''}
               />
             )}
           />

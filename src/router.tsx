@@ -39,7 +39,7 @@ const AddNewPostPage = Loader(
 );
 const ProfilePage = Loader(lazy(() => import('src/content/pages/profile')));
 const DoctorFormPage = Loader(
-  lazy(() => import('src/content/pages/update_doctor'))
+  lazy(() => import('src/content/pages/add_update_doctor'))
 );
 const LandingPage = Loader(
   lazy(() => import('src/content/pages/landing_page'))

@@ -8,9 +8,11 @@ import { useEffect, useState } from 'react';
 import { IDoctor } from 'src/interface/doctor';
 import { handleSetToken } from 'src/utils/token';
 import { ClientAPI } from 'src/api';
+import BackDropComponent from 'src/components/BackDrop';
 
 function DoctorFormPage() {
   const [details, setDetails] = useState<IDoctor>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
 
@@ -19,9 +21,19 @@ function DoctorFormPage() {
     const doctorId = pathList[pathList.length - 1];
 
     if (!isNaN(Number(doctorId))) {
-      const res = await ClientAPI.getDetails(`/core/doctors/${doctorId}/`);
-      setDetails(res.data);
+      try {
+        handleSetIsLoading(true);
+        const res = await ClientAPI.getDetails(`/core/doctors/${doctorId}/`);
+        setDetails(res.data);
+      } catch (error) {
+      } finally {
+        handleSetIsLoading(false);
+      }
     }
+  };
+
+  const handleSetIsLoading = (newValue: boolean) => {
+    setIsLoading(newValue);
   };
   useEffect(() => {
     handleGetDetails();
@@ -50,12 +62,16 @@ function DoctorFormPage() {
                   padding: 3
                 }}
               >
-                <DoctorFormComp details={details} />
+                <DoctorFormComp
+                  details={details}
+                  handleSetIsLoading={handleSetIsLoading}
+                />
               </Stack>
             </Card>
           </Grid>
         </Grid>
       </Container>
+      <BackDropComponent open={isLoading} />
     </>
   );
 }

@@ -15,7 +15,7 @@ function BranchPage() {
   return (
     <>
       <Helmet>
-        <title>Trang danh sách chi tiết danh mục</title>
+        <title>Trang chi nhánh nha khoa</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader

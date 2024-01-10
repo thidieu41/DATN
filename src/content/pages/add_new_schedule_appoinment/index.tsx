@@ -10,7 +10,7 @@ function AddNewScheduleAppoimentPage() {
   return (
     <>
       <Helmet>
-        <title>Trang bác sĩ</title>
+        <title>Trang đặt lịch khám</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader title={'Đặt lịch khám'} />

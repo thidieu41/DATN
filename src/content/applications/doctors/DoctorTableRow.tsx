@@ -16,26 +16,26 @@ import dayjs from 'dayjs';
 
 interface Props {
   data: IDoctor[];
+  handleSetPagination: (id: string) => void;
 }
 
-const DoctorTableRow = ({ data = [] }: Props) => {
+const DoctorTableRow = ({ data = [], handleSetPagination }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const onNavigationToDetails = (event, id: string) => {
     event.stopPropagation();
     navigate(`/admin/bac-si/cap-nhat/${id}`);
   };
+
+  const handleRemoveDoctor = (event, id: string) => {
+    event.stopPropagation();
+    handleSetPagination(id);
+  };
   return (
     <TableBody>
       {data.map((item) => {
         return (
-          <TableRow
-            hover
-            key={item.id}
-            sx={{
-              cursor: 'pointer'
-            }}
-          >
+          <TableRow hover key={item.id}>
             <TableCell>
               <Typography gutterBottom noWrap>
                 {item.id}
@@ -48,31 +48,31 @@ const DoctorTableRow = ({ data = [] }: Props) => {
             </TableCell>
             <TableCell>
               <Typography variant="body2" noWrap>
-                {dayjs(item.date).format('DD/MM/YYYY')}
+                {dayjs(item.DoB).format('DD/MM/YYYY')}
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                00000
+                {item.phone}
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                @GMAIL.COM
+                {item.email}
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                10
+                0
               </Typography>
             </TableCell>
             <TableCell>
               <Typography gutterBottom noWrap>
-                doctor
+                {item.position}
               </Typography>
             </TableCell>
 
-            <TableCell>{item.degree || '____'}</TableCell>
+            <TableCell>{item.degree_infor || '____'}</TableCell>
             <TableCell align="right">
               <Tooltip title="Sửa" arrow>
                 <IconButton
@@ -91,6 +91,7 @@ const DoctorTableRow = ({ data = [] }: Props) => {
               </Tooltip>
               <Tooltip title="Xoá" arrow>
                 <IconButton
+                  onClick={(e) => handleRemoveDoctor(e, item.id)}
                   sx={{
                     '&:hover': { background: theme.colors.error.lighter },
                     color: theme.palette.error.main

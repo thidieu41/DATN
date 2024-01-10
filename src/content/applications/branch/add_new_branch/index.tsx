@@ -4,7 +4,23 @@ import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { defaultValues, branchSchema } from './schema';
-import { Box, Grid, Stack, Typography, styled } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Checkbox,
+  FormControl,
+  Grid,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+  styled
+} from '@mui/material';
+import ImageIcon from '@mui/icons-material/Image';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import AddIcon from '@mui/icons-material/Add';
 import { IBranchsParamsProps } from 'src/interface/branchs';
 import { toast } from 'react-toastify';
@@ -13,20 +29,47 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { ClientAPI } from 'src/api';
 import Label from 'src/components/Label';
+import { IDoctor } from 'src/interface/doctor';
 
 const LableInput = styled(Typography)(() => `margin-bottom: 10px;`);
 const GridItem = styled(Grid)(() => `gap: 10px`);
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
 
 interface IProps {
   branchId: string;
+  doctorList: IDoctor[];
+}
+interface IRoomProps {
+  id: number;
+  name: string;
 }
 
-const CreateNewBranch = ({ branchId }: IProps) => {
+const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [details, setDetails] = useState<IBranchsParamsProps>();
-  const [listRoom, setListRoom] = useState<string[]>([]);
-  const [room, setRoom] = useState('');
+  const [listRoom, setListRoom] = useState<IRoomProps[]>([]);
+  const [roomName, setRoomName] = useState('');
   const [errorsText, setErrorsText] = useState('');
+  const [personName, setPersonName] = useState<string[]>([]);
+  const [doctorSelectedList, setDoctorSelectedList] = useState<{
+    [key: string]: IDoctor;
+  }>();
+  const [listIdDoctor, setListIdDoctor] = useState<string[]>([]);
+
+  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
+    const {
+      target: { value }
+    } = event;
+    setPersonName(typeof value === 'string' ? value.split(',') : value);
+  };
 
   const navigate = useNavigate();
   const {
@@ -41,14 +84,32 @@ const CreateNewBranch = ({ branchId }: IProps) => {
   });
 
   const handleAddNewRoom = () => {
-    if (!room) {
+    if (!roomName) {
       setErrorsText('Không được để trống tên phòng');
       return;
     } else {
-      setRoom('');
+      setRoomName('');
       setErrorsText('');
-      const data = [...listRoom, room];
-      setListRoom(data);
+      const data = {
+        id: listRoom.length,
+        name: roomName
+      };
+      setListRoom([...listRoom, data]);
+    }
+  };
+
+  const handleSelectedDoctor = (data: IDoctor) => {
+    const isduplicate = listIdDoctor.some((id) => id === data.id);
+    if (isduplicate) {
+      delete doctorSelectedList[data.id];
+      const reNewListId = listIdDoctor.filter((id) => id !== data.id);
+      setListIdDoctor(reNewListId);
+    } else {
+      setListIdDoctor([...listIdDoctor, data.id]);
+      setDoctorSelectedList({
+        ...doctorSelectedList,
+        [data.id]: data
+      });
     }
   };
 
@@ -58,10 +119,19 @@ const CreateNewBranch = ({ branchId }: IProps) => {
     } else {
       setIsLoading(true);
       try {
+        const roomList = listRoom.map((item) => {
+          return {
+            name: item.name
+          };
+        });
+        const params = {
+          ...data,
+          branch_room: roomList
+        };
         if (branchId) {
-          await ClientAPI.update(`/dental/branches/${branchId}/`, data);
+          await ClientAPI.update(`/dental/branches/${branchId}/`, params);
         } else {
-          await ClientAPI.add(`/dental/branches/`, data);
+          await ClientAPI.add(`/dental/branches/`, params);
         }
         toast.success(
           branchId
@@ -97,7 +167,6 @@ const CreateNewBranch = ({ branchId }: IProps) => {
     }
   }, [branchId]);
 
-  console.log(listRoom);
   return (
     <>
       <form onSubmit={handleSubmit(handleSubmission)}>
@@ -143,7 +212,32 @@ const CreateNewBranch = ({ branchId }: IProps) => {
             />
           </GridItem>
 
-          <GridItem item xs={12}>
+          <GridItem item xs={12} sm={6}>
+            <LableInput>Chọn bác sĩ</LableInput>
+            <FormControl sx={{ width: '100%' }}>
+              <Select
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<OutlinedInput />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {doctorList.map((item) => (
+                  <MenuItem
+                    key={item.name}
+                    value={item.name}
+                    onClick={() => handleSelectedDoctor(item)}
+                  >
+                    <Checkbox checked={personName.indexOf(item.name) > -1} />
+                    <ListItemText primary={item.name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
+
+          <GridItem item xs={12} sm={6}>
             <LableInput>Địa chỉ</LableInput>
             <Controller
               control={control}
@@ -178,7 +272,7 @@ const CreateNewBranch = ({ branchId }: IProps) => {
                     mx: 0.5
                   }}
                 >
-                  <Label color={'primary'}>{item}</Label>
+                  <Label color={'primary'}>{item.name}</Label>
                 </Box>
               ))}
             </Stack>
@@ -193,8 +287,8 @@ const CreateNewBranch = ({ branchId }: IProps) => {
               <TextField
                 fullWidth
                 placeholder="Nhập tên phòng"
-                value={room}
-                onChange={(e) => setRoom(e.target.value)}
+                value={roomName}
+                onChange={(e) => setRoomName(e.target.value)}
               />
               <Button
                 sx={{
@@ -207,7 +301,7 @@ const CreateNewBranch = ({ branchId }: IProps) => {
                 startIcon={<AddIcon />}
                 onClick={() => handleAddNewRoom()}
               >
-                Thêm phòng
+                <Typography noWrap>Thêm phòng</Typography>
               </Button>
             </Stack>
             {errorsText && (

@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 export const registerSchema = Yup.object().shape({
   title: Yup.string().required('Không được để trống tiêu đề'),
-  content: Yup.string().required('Không được để nội dung')
+  content: Yup.string().required('Không được để trống nội dung')
 });
 
 export const defaultValues = {

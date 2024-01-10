@@ -16,7 +16,7 @@ function PostPage() {
   return (
     <>
       <Helmet>
-        <title>Trang danh sách bài viết</title>
+        <title>Trang bài viết</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader

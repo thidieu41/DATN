@@ -31,12 +31,14 @@ export const defaultValues = {
 
 export const scheduledefaultValues = {
   ...defaultValues,
-  phone: '',
-  name: '',
   status: 'chưa khám',
   total_money: '0',
   branch: '',
-  room: ''
+  room: '',
+  is_user: false,
+  booking_name: '',
+  doctor: '',
+  phone: ''
 };
 
 export interface IFormValue {
@@ -46,12 +48,14 @@ export interface IFormValue {
 }
 
 export interface IFormValueScheduleProps extends IFormValue {
-  name: string;
+  booking_name: string;
   phone: string;
   status: string;
   total_money: string;
   branch: string;
   room: string;
+  is_user: boolean;
+  doctor: string;
 }
 
 export const statusOptions = [

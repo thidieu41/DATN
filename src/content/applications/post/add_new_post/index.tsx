@@ -28,8 +28,6 @@ interface IProps {
 const CreateNewPost = ({ details }: IProps) => {
   const [categoryList, setCategory] = useState<ICategoryProps[]>([]);
   const [title, setTitle] = useState('');
-  const [fileImg, setFileImg] = useState<File>();
-  const [content, setContent] = useState('')
   const [previewImg, setPreviewImg] = useState('');
   const messagesEndRef = useRef(null);
   const [errorsMess, setErrorsMess] = useState<{
@@ -43,6 +41,8 @@ const CreateNewPost = ({ details }: IProps) => {
 
   const axios = createClient();
   const navigation = useNavigate();
+  const textarea = useRef(null);
+
   const {
     control,
     handleSubmit,
@@ -67,21 +67,31 @@ const CreateNewPost = ({ details }: IProps) => {
         console.log(error?.message);
       });
   };
+
   const openAIHandle = async () => {
-    const openai = createOpenAIClient()
-    const stream = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [{ role: "user", content: title }],
-        stream: true,
-    });
-    for await (const chunk of stream) {
-        if (chunk.choices[0]?.delta?.content){
-          setValue('content', getValues('content') + chunk.choices[0]?.delta?.content)
-          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    try {
+      const openai = createOpenAIClient();
+      const stream = await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: title }],
+        stream: true
+      });
+      for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content) {
+          setValue(
+            'content',
+            getValues('content') + chunk.choices[0]?.delta?.content
+          );
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
+      }
+    } catch (error) {
+      toast.error('Lỗi lấy nội dung từ chatGPT');
+    } finally {
+      setLoading('');
     }
-    setLoading('')
-  }
+  };
+
   const handleGetContent = async () => {
     if (!title) {
       setErrorsMess({
@@ -90,18 +100,17 @@ const CreateNewPost = ({ details }: IProps) => {
       });
     } else {
       setLoading('chatGPTbtn');
-      setValue('content', '')
-      openAIHandle()
+      setValue('content', '');
+      openAIHandle();
     }
   };
 
   const handleSetImage = async (e: any) => {
     const file = e.target.files[0];
-    setFileImg(file);
     const base64Url: any = await fileImageToBase64(file);
     setPreviewImg(base64Url);
     setErrorsMess({
-      titlecontent: errorsMess.urlImgerr,
+      titlecontent: errorsMess.titlecontent,
       urlImgerr: ''
     });
   };
@@ -238,6 +247,7 @@ const CreateNewPost = ({ details }: IProps) => {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      disabled={loading === 'chatGPTbtn'}
                       fullWidth
                       multiline
                       rows={12}

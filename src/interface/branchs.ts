@@ -4,6 +4,13 @@ export interface IBranchsParamsProps {
   phone: string;
   rooms: string;
 }
+export interface IBranchRoom {
+  branch: number;
+  created_at: string;
+  id: number;
+  name: string;
+  updated_at: string;
+}
 
 export interface IBrachProps {
   id: string;
@@ -12,5 +19,6 @@ export interface IBrachProps {
   created_at: string;
   phone: string;
   updated_at: string;
-  user: number;
+  branch_room: IBranchRoom[];
+  doctor: number;
 }

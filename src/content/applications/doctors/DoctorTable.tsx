@@ -33,6 +33,24 @@ const DoctorTable = () => {
     setPage(newPage);
   };
 
+  const handleSetPagination = async (id: string) => {
+    setIsLoading(true);
+    try {
+      await ClientAPI.delete(`/core/doctors/${id}/`);
+      const data = doctorList.filter((item) => item.id !== id);
+      setDoctorList(data);
+      setPagination({
+        ...paigation,
+        count: paigation.count - 1
+      });
+      toast.success('Xoá bác sĩ thành công!');
+    } catch (error) {
+      toast.error('Xoá bác sĩ không thành công');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleGetAllDoctor = async (url: string) => {
     setIsLoading(true);
     try {
@@ -68,7 +86,10 @@ const DoctorTable = () => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <DoctorTableRow data={doctorList || []} />
+          <DoctorTableRow
+            data={doctorList || []}
+            handleSetPagination={handleSetPagination}
+          />
         </Table>
       </TableContainer>
       <Box p={2}>

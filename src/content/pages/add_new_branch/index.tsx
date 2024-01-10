@@ -6,10 +6,15 @@ import CreateNewBranch from 'src/content/applications/branch/add_new_branch';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { handleSetToken } from 'src/utils/token';
+import { IDoctor } from 'src/interface/doctor';
+import { ClientAPI } from 'src/api';
 
 function AddNewBranchPage() {
   const [branchId, setIdBranch] = useState('');
+  const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
+
   const location = useLocation();
+
   const handlePathNameUrl = () => {
     const { pathname } = location;
     const pathnameList = pathname.split('/');
@@ -18,8 +23,15 @@ function AddNewBranchPage() {
       setIdBranch(valueId);
     }
   };
+
+  const handleGetAllDoctors = async () => {
+    const res = await ClientAPI.getAll('/core/doctors/');
+    setDoctorList(res.data);
+  };
+
   useEffect(() => {
     handlePathNameUrl();
+    handleGetAllDoctors();
   }, []);
 
   handleSetToken();
@@ -46,7 +58,7 @@ function AddNewBranchPage() {
                   padding: 3
                 }}
               >
-                <CreateNewBranch branchId={branchId} />
+                <CreateNewBranch branchId={branchId} doctorList={doctorList} />
               </Stack>
             </Card>
           </Grid>
