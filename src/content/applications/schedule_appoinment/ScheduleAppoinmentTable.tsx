@@ -14,7 +14,9 @@ import {
   TableContainer,
   Select,
   MenuItem,
-  CardHeader
+  CardHeader,
+  Typography,
+  styled
 } from '@mui/material';
 import ScheduleAppoinmentRow from './ScheduleAppoinmentRow';
 import { toast } from 'react-toastify';
@@ -23,11 +25,30 @@ import { statusTableOptions } from './constants';
 import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
 import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
+import { IScheduleProps } from 'src/interface/booking';
 
+const LableInput = styled(Typography)(() => `font-weight: 600`);
+
+const headerTableTitle = [
+  { title: 'ID' },
+  { title: 'Họ tên' },
+  { title: 'Số điện thoại' },
+  { title: 'Ngày đặt' },
+  { title: 'Giờ đặt' },
+  { title: 'Chi Nhánh' },
+  { title: 'Phòng' },
+  { title: 'Danh mục' },
+  { title: 'Chi tiết' },
+  { title: '	Lý do khám' },
+  { title: 'Số người' },
+  { title: 'Tổng (VND)' },
+  { title: 'Trạng thái' },
+  { title: 'Thao tác' }
+];
 const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
   const [status, setStatus] = useState(null);
-  const [scheduleList, setScheduleList] = useState([]);
+  const [scheduleList, setScheduleList] = useState<IScheduleProps[]>([]);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -104,20 +125,15 @@ const ScheduleAppoinmentTable = () => {
         title="Danh sách đặt lịch khám"
       />
       <Divider />
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ height: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Họ tên</TableCell>
-              <TableCell>Số điện thoại</TableCell>
-              <TableCell>Ngày đặt</TableCell>
-              <TableCell>Giờ đặt</TableCell>
-              <TableCell>Lý do khám</TableCell>
-              <TableCell>Số người</TableCell>
-              <TableCell>Tổng tiền (VND)</TableCell>
-              <TableCell>Trạng thái</TableCell>
-              <TableCell align="right">Thao tác</TableCell>
+              {headerTableTitle.map((item, index) => (
+                <TableCell key={index}>
+                  <LableInput noWrap>{item.title}</LableInput>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           {scheduleList.length === 0 ? (
@@ -131,6 +147,7 @@ const ScheduleAppoinmentTable = () => {
           )}
         </Table>
       </TableContainer>
+      <Divider />
       <Box p={2}>
         <TablePagination
           component="div"

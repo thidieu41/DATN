@@ -11,7 +11,6 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import {
-  IFormValueScheduleProps,
   scheduleEditSchema,
   scheduleSchema,
   scheduledefaultValues,
@@ -24,6 +23,8 @@ import {
   IPostCategoriesProps,
   IDetailsCategoriesProps
 } from 'src/interface/categories';
+import { handleObjectKeyData } from 'src/utils/constanst';
+import { IFormValueScheduleProps } from 'src/interface/booking';
 
 const LableInput = styled(Typography)(() => `margin-bottom: 10px`);
 const GridItem = styled(Grid)(() => ``);
@@ -34,7 +35,9 @@ const CreateNewSchedule = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [isUser, setIsUserInfor] = useState(false);
   const [scheduleId, setScheduleId] = useState('');
-  const [branchList, setBranchList] = useState<IBrachProps[]>([]);
+  const [branchList, setBranchList] = useState<{
+    [key: string]: IBrachProps;
+  }>({});
   const [categories, setCategories] = useState<IPostCategoriesProps[]>([]);
   const [detailsCategories, setDetailsCategories] = useState<
     IDetailsCategoriesProps[]
@@ -55,15 +58,23 @@ const CreateNewSchedule = () => {
 
   const status = watch('status');
   const category = watch('category');
+  const branch = watch('branch');
 
   const handleSubmission = async (data: IFormValueScheduleProps) => {
     try {
       let res: any;
+      const { category, branch, date, ...rest } = data;
+      const dateTime = new Date(date).getTime().toString();
+      const params = {
+        ...rest,
+        is_user: false,
+        date: Number(dateTime.slice(0, dateTime.length - 3))
+      };
       if (isEdit) {
-        res = await ClientAPI.update(`/app/bookings/${scheduleId}`, data);
+        res = await ClientAPI.update(`/app/bookings/${scheduleId}`, params);
       } else {
         res = await ClientAPI.add('/app/bookings/', {
-          ...data,
+          ...params,
           status: 'chưa khám'
         });
       }
@@ -92,6 +103,7 @@ const CreateNewSchedule = () => {
         name,
         phone,
         is_user,
+        branch,
         room
       } = data;
       setIsUserInfor(is_user);
@@ -102,7 +114,9 @@ const CreateNewSchedule = () => {
         name: is_user ? user?.name : name,
         phone: is_user ? user?.phone : phone,
         status,
-        total_money
+        total_money,
+        room,
+        branch
       };
       reset(defaultValues);
     }
@@ -110,18 +124,20 @@ const CreateNewSchedule = () => {
 
   const handleGetBranchs = async () => {
     const res = await ClientAPI.getAll('/dental/branches/');
-    setBranchList(res.data.results);
+    const data = handleObjectKeyData(res.data.results);
+    setBranchList(data);
     setValue('branch', res.data?.results[0]?.id);
   };
 
   const handleGetAllCategories = async () => {
-    const res = await ClientAPI.getAll('/');
-    setCategories(res.data.results);
+    const res = await ClientAPI.getAll('/app/menus/');
+    setCategories(res.data);
+    setValue('category', res.data[0]?.id);
   };
 
   const handleGetAllDetailsCategories = async () => {
-    const res = await ClientAPI.getAll(`/?menu=${category}`);
-    setDetailsCategories(res.data.results);
+    const res = await ClientAPI.getAll(`/app/menu-items/?menu=${category}`);
+    setDetailsCategories(res.data);
   };
 
   useEffect(() => {
@@ -134,6 +150,7 @@ const CreateNewSchedule = () => {
     handleGetAllDetailsCategories();
   }, [category]);
 
+  console.log();
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Grid container spacing={2}>
@@ -217,21 +234,21 @@ const CreateNewSchedule = () => {
           />
         </GridItem>
 
-        <GridItem item xs={12} sm={category === 'đã khám' ? 6 : 12}>
+        <GridItem item xs={12} sm={category ? 6 : 12}>
           <LableInput>Danh mục</LableInput>
           <Controller
             control={control}
-            name="quantity"
+            name="category"
             render={({ field }) => (
               <TextField
                 {...field}
                 fullWidth
                 placeholder="Nhập số người"
                 select
-                error={!!errors.quantity}
-                helperText={errors.quantity?.message || ''}
+                error={!!errors.category}
+                helperText={errors.category?.message || ''}
               >
-                {categories.map((category) => (
+                {(categories || []).map((category) => (
                   <MenuItem key={category.id} value={category.id}>
                     {category.name}
                   </MenuItem>
@@ -246,17 +263,17 @@ const CreateNewSchedule = () => {
             <LableInput>Chi tiết danh mục</LableInput>
             <Controller
               control={control}
-              name="quantity"
+              name="item"
               render={({ field }) => (
                 <TextField
                   {...field}
                   fullWidth
                   select
                   placeholder="Nhập số người"
-                  error={!!errors.quantity}
-                  helperText={errors.quantity?.message || ''}
+                  error={!!errors.item}
+                  helperText={errors.item?.message || ''}
                 >
-                  {detailsCategories.map((details) => (
+                  {(detailsCategories || []).map((details) => (
                     <MenuItem key={details.id} value={details.id}>
                       {details.name}
                     </MenuItem>
@@ -267,7 +284,7 @@ const CreateNewSchedule = () => {
           </GridItem>
         )}
 
-        <GridItem item xs={12} sm={6}>
+        <GridItem item xs={12} sm={branch ? 6 : 12}>
           <LableInput>Chi nhánh</LableInput>
           <Controller
             control={control}
@@ -281,7 +298,7 @@ const CreateNewSchedule = () => {
                 helperText={errors.branch?.message || ''}
                 select
               >
-                {branchList.map((branch) => (
+                {Object.values(branchList).map((branch) => (
                   <MenuItem key={branch.id} value={branch.id}>
                     {branch.name}
                   </MenuItem>
@@ -290,23 +307,31 @@ const CreateNewSchedule = () => {
             )}
           />
         </GridItem>
-
-        <GridItem item xs={12} sm={6}>
-          <LableInput>Chọn phòng</LableInput>
-          <Controller
-            control={control}
-            name="room"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                placeholder="Nhập số phòng"
-                error={!!errors.room}
-                helperText={errors.room?.message || ''}
-              />
-            )}
-          />
-        </GridItem>
+        {branch && (
+          <GridItem item xs={12} sm={6}>
+            <LableInput>Chọn phòng</LableInput>
+            <Controller
+              control={control}
+              name="room"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  select
+                  placeholder="Nhập số phòng"
+                  error={!!errors.room}
+                  helperText={errors.room?.message || ''}
+                >
+                  {(branchList[branch]?.branch_room || []).map((branch) => (
+                    <MenuItem key={branch.id} value={branch.id}>
+                      {branch.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </GridItem>
+        )}
 
         {/* IsEdit */}
         {isEdit && (

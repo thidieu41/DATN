@@ -80,7 +80,7 @@ export default function CustomEmptyOverlayTable() {
         height: 320
       }}
     >
-      <TableCell colSpan={10} rowSpan={10}>
+      <TableCell colSpan={12} rowSpan={12}>
         <CustomNoRowsOverlay />
       </TableCell>
     </TableBody>

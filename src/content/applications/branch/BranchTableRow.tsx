@@ -129,7 +129,12 @@ const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
                 </Box>
               )}
             </TableCell>
-            <TableCell align="right">
+            <TableCell
+              sx={{
+                display: 'flex',
+                flexWrap: 'nowrap'
+              }}
+            >
               <Tooltip title="Sửa" arrow>
                 <IconButton
                   onClick={(e) => onNavigationToDetails(e, item.id)}

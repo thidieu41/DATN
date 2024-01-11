@@ -12,6 +12,7 @@ export interface IScheduleProps {
   is_user: boolean;
   phone: null;
   room: null;
+  item: null;
   user: {
     created_at: string;
     email: string;
@@ -25,4 +26,23 @@ export interface IScheduleProps {
       updated_at: string;
     };
   };
+}
+
+export interface IFormValue {
+  date: string;
+  quantity: string;
+  reason: string;
+  category: string;
+  item: string;
+}
+
+export interface IFormValueScheduleProps extends IFormValue {
+  booking_name: string;
+  phone: string;
+  status: string;
+  total_money: string;
+  branch: string;
+  room: string;
+  is_user: boolean;
+  doctor: string;
 }

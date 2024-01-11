@@ -63,7 +63,9 @@ const ScheduleAppoinmentRow = ({
                   maxWidth: 100
                 }}
               >
-                {item.is_user ? item?.user?.name : item.booking_name}
+                {item.is_user
+                  ? item?.user?.name || '___'
+                  : item.booking_name || '___'}
               </Typography>
             </TableCell>
             <TableCell>
@@ -78,6 +80,18 @@ const ScheduleAppoinmentRow = ({
             </TableCell>
             <TableCell>
               <Typography noWrap>{dayjs(item.date).format('HH:mm')}</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>___</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>___</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>___</Typography>
+            </TableCell>
+            <TableCell>
+              <Typography noWrap>___</Typography>
             </TableCell>
             <TableCell>
               <Typography
@@ -113,7 +127,12 @@ const ScheduleAppoinmentRow = ({
                 {item.status}
               </Label>
             </TableCell>
-            <TableCell align="right">
+            <TableCell
+              sx={{
+                display: 'flex',
+                flexWrap: 'nowrap'
+              }}
+            >
               <Tooltip title="Sửa" arrow>
                 <IconButton
                   onClick={(e) => onNavigationToDetails(e, item.id)}

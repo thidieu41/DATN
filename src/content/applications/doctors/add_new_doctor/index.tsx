@@ -70,7 +70,6 @@ const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
       const images = listUrlImage.map((item) => item.url);
       const { DoB } = data;
       const date = new Date(DoB).getTime().toString();
-      console.log(new Date(DoB).getTime());
 
       try {
         const params = {

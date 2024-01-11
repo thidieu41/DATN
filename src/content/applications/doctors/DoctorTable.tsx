@@ -72,8 +72,8 @@ const DoctorTable = () => {
     <Card>
       <CardHeader title="Danh sách Bác sĩ" />
       <Divider />
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ height: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>

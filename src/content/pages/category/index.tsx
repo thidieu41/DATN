@@ -127,7 +127,7 @@ function CategoryPage() {
                   handleSetisEdit={handleSetisEdit}
                   handleRemove={handleRemove}
                   data={Object.values(scheduleCategories)}
-                  isCategoryBooking={false}
+                  isCategoryBooking={true}
                 />
               )}
             </Card>

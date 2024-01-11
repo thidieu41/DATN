@@ -4,6 +4,5 @@ export interface ICustomerProps {
   date: string;
   phone: string;
   email: string;
-  gender: string;
-  address: string;
+  image: string;
 }

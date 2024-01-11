@@ -48,7 +48,7 @@ const CustomerTable = () => {
   };
 
   useEffect(() => {
-    handleGetAllCustomer('');
+    handleGetAllCustomer('/app/customers');
   }, []);
 
   return (
@@ -56,8 +56,8 @@ const CustomerTable = () => {
       <CardHeader title="Danh sách khách hàng" />
 
       <Divider />
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ height: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -65,8 +65,6 @@ const CustomerTable = () => {
               <TableCell>Ngày sinh</TableCell>
               <TableCell>Số điện thoại</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Giới tính</TableCell>
-              <TableCell>Địa chỉ</TableCell>
             </TableRow>
           </TableHead>
           {customerList.length === 0 ? (
@@ -76,6 +74,7 @@ const CustomerTable = () => {
           )}
         </Table>
       </TableContainer>
+      <Divider />
       <Box p={2}>
         <TablePagination
           component="div"

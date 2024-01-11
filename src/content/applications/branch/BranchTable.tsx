@@ -69,8 +69,8 @@ const BranchTable = () => {
     <Card>
       <CardHeader title="Danh sách chi nhánh nha khoa" />
       <Divider />
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ height: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -92,6 +92,7 @@ const BranchTable = () => {
           )}
         </Table>
       </TableContainer>
+      <Divider />
       <Box p={2}>
         <TablePagination
           component="div"

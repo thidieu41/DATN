@@ -16,7 +16,9 @@ export const scheduleSchema = userScheduleSchema.shape({
   phone: Yup.string()
     .required('Không được để trống số điện thoại')
     .matches(phoneRegExp, 'Số điện thoại không hợp lệ'),
-  name: Yup.string().required('Không được để trống tên')
+  booking_name: Yup.string().required('Không được để trống tên'),
+  item: Yup.string().required('Không được để trống chi tiết danh mục'),
+  room: Yup.string().required('Không được để trống phòng')
 });
 
 export const scheduleEditSchema = scheduleSchema.shape({
@@ -28,7 +30,7 @@ export const defaultValues = {
   quantity: '',
   reason: '',
   category: '',
-  detail_category: ''
+  item: ''
 };
 
 export const scheduledefaultValues = {
@@ -42,25 +44,6 @@ export const scheduledefaultValues = {
   doctor: '',
   phone: ''
 };
-
-export interface IFormValue {
-  date: string;
-  quantity: string;
-  reason: string;
-  category: string;
-  detail_category: string;
-}
-
-export interface IFormValueScheduleProps extends IFormValue {
-  booking_name: string;
-  phone: string;
-  status: string;
-  total_money: string;
-  branch: string;
-  room: string;
-  is_user: boolean;
-  doctor: string;
-}
 
 export const statusOptions = [
   {

@@ -110,8 +110,8 @@ const PostTable = () => {
         title="Danh sách bài viết"
       />
       <Divider />
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ height: 400 }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
@@ -134,6 +134,7 @@ const PostTable = () => {
           )}
         </Table>
       </TableContainer>
+      <Divider />
       <Box p={2}>
         <TablePagination
           component="div"

@@ -9,8 +9,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import { IFormValue, defaultValues, userScheduleSchema } from '../constants';
+import { defaultValues, userScheduleSchema } from '../constants';
 import { ClientAPI } from 'src/api';
+import { IFormValue } from 'src/interface/booking';
 
 const LableInput = styled(Typography)(
   () => `
