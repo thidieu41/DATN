@@ -11,7 +11,6 @@ import { ClientAPI } from 'src/api';
 
 function AddNewBranchPage() {
   const [branchId, setIdBranch] = useState('');
-  const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
 
   const location = useLocation();
 
@@ -24,14 +23,9 @@ function AddNewBranchPage() {
     }
   };
 
-  const handleGetAllDoctors = async () => {
-    const res = await ClientAPI.getAll('/core/doctors/');
-    setDoctorList(res.data);
-  };
-
   useEffect(() => {
     handlePathNameUrl();
-    handleGetAllDoctors();
+    
   }, []);
 
   handleSetToken();
@@ -58,7 +52,7 @@ function AddNewBranchPage() {
                   padding: 3
                 }}
               >
-                <CreateNewBranch branchId={branchId} doctorList={doctorList} />
+                <CreateNewBranch branchId={branchId} />
               </Stack>
             </Card>
           </Grid>

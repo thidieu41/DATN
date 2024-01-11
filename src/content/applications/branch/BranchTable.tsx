@@ -74,6 +74,7 @@ const BranchTable = () => {
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Tên chi nhánh</TableCell>
+              <TableCell>Bác sĩ</TableCell>
               <TableCell>Số điện thoại</TableCell>
               <TableCell>Địa chỉ</TableCell>
               <TableCell>Danh sách phòng</TableCell>

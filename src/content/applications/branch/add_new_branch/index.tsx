@@ -43,36 +43,27 @@ const MenuProps = {
 
 interface IProps {
   branchId: string;
-  doctorList: IDoctor[];
 }
 interface IRoomProps {
   id: number;
   name: string;
 }
 
-const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
+const CreateNewBranch = ({ branchId}: IProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [listRoom, setListRoom] = useState<IRoomProps[]>([]);
   const [roomName, setRoomName] = useState('');
   const [errorsText, setErrorsText] = useState('');
-  const [personName, setPersonName] = useState<string[]>([]);
-  const [doctorSelectedList, setDoctorSelectedList] = useState<{
-    [key: string]: IDoctor;
-  }>();
-  const [listIdDoctor, setListIdDoctor] = useState<string[]>([]);
+  const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
 
-  const handleChange = (event: SelectChangeEvent<typeof personName>) => {
-    const {
-      target: { value }
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
-  };
+
 
   const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm<IBranchsParamsProps, IBranchsParamsProps>({
     mode: 'onChange',
@@ -92,21 +83,6 @@ const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
         name: roomName
       };
       setListRoom([...listRoom, data]);
-    }
-  };
-
-  const handleSelectedDoctor = (data: IDoctor) => {
-    const isduplicate = listIdDoctor.some((id) => id === data.id);
-    if (isduplicate) {
-      delete doctorSelectedList[data.id];
-      const reNewListId = listIdDoctor.filter((id) => id !== data.id);
-      setListIdDoctor(reNewListId);
-    } else {
-      setListIdDoctor([...listIdDoctor, data.id]);
-      setDoctorSelectedList({
-        ...doctorSelectedList,
-        [data.id]: data
-      });
     }
   };
 
@@ -149,14 +125,24 @@ const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
   const handleGetDetails = async () => {
     try {
       const res = await ClientAPI.getDetails(`/dental/branches/${branchId}/`);
-      const { name, phone, address } = res.data;
-      setValue('address', address);
-      setValue('name', name);
-      setValue('phone', phone);
+      const { name, phone, address,doctor, branch_room
+      } = res.data;
+      reset({address,name,phone,doctor:doctor?.id|| doctorList[0].id})
+      setListRoom(branch_room)
     } catch (error) {
       toast.error('Lỗi lấy thông tin chi nhánh chi tiết!');
     }
   };
+
+  const handleGetAllDoctors = async () => {
+    const res = await ClientAPI.getAll('/core/doctors/');
+    setDoctorList(res.data.results);
+    setValue('doctor', res.data.results[0].id)
+  };
+
+  useEffect(() => {
+    handleGetAllDoctors();
+  }, []);
 
   useEffect(() => {
     if (branchId) {
@@ -204,27 +190,27 @@ const CreateNewBranch = ({ branchId, doctorList }: IProps) => {
 
           <GridItem item xs={12} sm={6}>
             <LableInput>Chọn bác sĩ</LableInput>
-            <FormControl sx={{ width: '100%' }}>
-              <Select
-                multiple
-                value={personName}
-                onChange={handleChange}
-                input={<OutlinedInput />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
-              >
-                {(doctorList || []).map((item) => (
-                  <MenuItem
-                    key={item.name}
-                    value={item.name}
-                    onClick={() => handleSelectedDoctor(item)}
-                  >
-                    <Checkbox checked={personName.indexOf(item.name) > -1} />
-                    <ListItemText primary={item.name} />
+            <Controller
+              control={control}
+              name="doctor"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  placeholder="Chọn bác sĩ"
+                  error={!!errors.doctor}
+                  helperText={errors.doctor?.message || ''}
+                  select
+                >
+                 {doctorList.map((doctor) => (
+                  <MenuItem key={doctor.id} value={doctor.id}>
+                    {doctor.name}
                   </MenuItem>
                 ))}
-              </Select>
-            </FormControl>
+                </TextField>
+              )}
+            />
+          
           </GridItem>
 
           <GridItem item xs={12} sm={6}>

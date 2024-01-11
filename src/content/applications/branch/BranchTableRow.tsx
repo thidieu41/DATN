@@ -68,6 +68,9 @@ const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
               <Typography noWrap>{item.name}</Typography>
             </TableCell>
             <TableCell>
+              <Typography noWrap>{item?.doctor?.name || '___'}</Typography>
+            </TableCell>
+            <TableCell>
               <Typography noWrap>{item.phone}</Typography>
             </TableCell>
             <TableCell>

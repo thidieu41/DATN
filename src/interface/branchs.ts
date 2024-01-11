@@ -1,8 +1,13 @@
+import { IDoctor } from "./doctor";
+
 export interface IBranchsParamsProps {
   name: string;
   address: string;
   phone: string;
-  rooms: string;
+  rooms: {
+    name: string;
+  }[];
+  doctor: string;
 }
 export interface IBranchRoom {
   branch: number;
@@ -20,5 +25,5 @@ export interface IBrachProps {
   phone: string;
   updated_at: string;
   branch_room: IBranchRoom[];
-  doctor: number;
+  doctor: IDoctor;
 }
