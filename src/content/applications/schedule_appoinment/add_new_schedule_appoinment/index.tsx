@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import {
   scheduleEditSchema,
   scheduleSchema,
@@ -43,6 +43,7 @@ const CreateNewSchedule = () => {
     IDetailsCategoriesProps[]
   >([]);
 
+  const navigate = useNavigate()
   const {
     control,
     handleSubmit,
@@ -78,6 +79,7 @@ const CreateNewSchedule = () => {
           status: 'chưa khám'
         });
       }
+      navigate('/admin/lich-kham');
       toast.success(
         isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
       );
@@ -123,10 +125,10 @@ const CreateNewSchedule = () => {
   };
 
   const handleGetBranchs = async () => {
-    const res = await ClientAPI.getAll('/dental/branches/');
-    const data = handleObjectKeyData(res.data.results);
+    const res = await ClientAPI.getAll('/dental/branches/?all=true');
+    const data = handleObjectKeyData(res.data);
     setBranchList(data);
-    setValue('branch', res.data?.results[0]?.id);
+    setValue('branch', res.data[0]?.id);
   };
 
   const handleGetAllCategories = async () => {

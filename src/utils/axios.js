@@ -13,8 +13,8 @@ export const setClientToken = (token) => {
 };
 
 export const createClient = () => {
-  const baseURL = "https://full-friends-send.loca.lt/api"
-  // const baseURL = 'http://localhost:8000/api/';
+  // const baseURL = "https://full-friends-send.loca.lt/api"
+  const baseURL = 'http://localhost:8000/api/';
 
   const instance = axios.create({
     baseURL,

@@ -135,9 +135,9 @@ const CreateNewBranch = ({ branchId }: IProps) => {
   };
 
   const handleGetAllDoctors = async () => {
-    const res = await ClientAPI.getAll('/core/doctors/');
-    setDoctorList(res.data.results);
-    setValue('doctor', res.data.results[0].id);
+    const res = await ClientAPI.getAll('/core/doctors/?all=true');
+    setDoctorList(res.data);
+    setValue('doctor', res.data[0].id);
   };
 
   useEffect(() => {

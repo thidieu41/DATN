@@ -68,7 +68,7 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Rows</Box>
+      <Box sx={{ mt: 1 }}>Không có dữ liệu</Box>
     </StyledGridOverlay>
   );
 }
