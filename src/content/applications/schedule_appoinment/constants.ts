@@ -26,7 +26,9 @@ export const scheduleEditSchema = scheduleSchema.shape({
 export const defaultValues = {
   date: dayjs(new Date()).format(),
   quantity: '',
-  reason: ''
+  reason: '',
+  category: '',
+  detail_category: ''
 };
 
 export const scheduledefaultValues = {
@@ -45,6 +47,8 @@ export interface IFormValue {
   date: string;
   quantity: string;
   reason: string;
+  category: string;
+  detail_category: string;
 }
 
 export interface IFormValueScheduleProps extends IFormValue {

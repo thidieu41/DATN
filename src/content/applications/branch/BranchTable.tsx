@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import { IBrachProps } from 'src/interface/branchs';
 import BackDropComponent from 'src/components/BackDrop';
 import { ClientAPI } from 'src/api';
+import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const BranchTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -81,10 +82,14 @@ const BranchTable = () => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <CategoryTableRow
-            data={branchList || []}
-            handleRemoveBranch={handleRemoveBranch}
-          />
+          {branchList.length === 0 ? (
+            <CustomEmptyOverlayTable />
+          ) : (
+            <CategoryTableRow
+              data={branchList || []}
+              handleRemoveBranch={handleRemoveBranch}
+            />
+          )}
         </Table>
       </TableContainer>
       <Box p={2}>

@@ -16,11 +16,7 @@ import { ClientAPI } from 'src/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 
-const LableInput = styled(Typography)(
-  () => `
-  margin-bottom: 10px;
-`
-);
+const LableInput = styled(Typography)(() => `margin-bottom: 10px`);
 
 interface IUrlImageProps {
   id: number;

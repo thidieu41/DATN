@@ -7,16 +7,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Stack, TextField, Typography } from '@mui/material';
-import { IPostCategoriesProps } from 'src/content/pages/post_categories';
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
+import { IDetailsCategoriesProps } from 'src/interface/categories';
 
 interface Iprops {
   open: boolean;
   onCloseModal: () => void;
-  handleNewValue: (data: IPostCategoriesProps) => void;
+  handleNewValue: (data: IDetailsCategoriesProps) => void;
   isEdit: boolean;
-  detailsData: IPostCategoriesProps;
+  detailsData: IDetailsCategoriesProps;
   handleSetIsLoading: (value: boolean) => void;
   isCategoryBooking: boolean;
   isDetailsCategory?: boolean;
@@ -44,7 +44,7 @@ export default function CreateNewPostCategory({
 }: Iprops) {
   const [err, setErrors] = React.useState(false);
   const [priceErrors, setPriceErrors] = React.useState(false);
-  const [details, setDetails] = React.useState<IPostCategoriesProps>();
+  const [details, setDetails] = React.useState<IDetailsCategoriesProps>();
 
   const handleCloseModal = () => {
     if (isDetailsCategory) {

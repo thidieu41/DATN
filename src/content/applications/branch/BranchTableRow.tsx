@@ -115,13 +115,13 @@ const BranchTableRow = ({ data = [], handleRemoveBranch }: Props) => {
                     <Stack
                       sx={{
                         maxHeight: 300,
+                        minWidth: 140,
                         overflow: 'scroll'
                       }}
                     >
-                      {new Array(1000).fill(0).map((room, index) => (
-                        <Typography key={index} sx={{ p: 1, minWidth: 100 }}>
-                          {/* {room.name} */}
-                          00000
+                      {(item.branch_room || []).map((room, index) => (
+                        <Typography key={index} sx={{ p: 0.5, minWidth: 100 }}>
+                          {room.name}
                         </Typography>
                       ))}
                     </Stack>

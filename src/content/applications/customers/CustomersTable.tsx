@@ -17,6 +17,7 @@ import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
+import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const CustomerTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -68,7 +69,11 @@ const CustomerTable = () => {
               <TableCell>Địa chỉ</TableCell>
             </TableRow>
           </TableHead>
-          <CustomerTableRow data={customerList || []} />
+          {customerList.length === 0 ? (
+            <CustomEmptyOverlayTable />
+          ) : (
+            <CustomerTableRow data={customerList || []} />
+          )}
         </Table>
       </TableContainer>
       <Box p={2}>

@@ -22,6 +22,7 @@ import BackDropComponent from 'src/components/BackDrop';
 import { IPostProps } from 'src/interface/posts';
 import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
+import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const PostTable = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -123,10 +124,14 @@ const PostTable = () => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <PostTableRow
-            data={postList || []}
-            dataCategory={categoryList || {}}
-          />
+          {postList.length === 0 ? (
+            <CustomEmptyOverlayTable />
+          ) : (
+            <PostTableRow
+              data={postList || []}
+              dataCategory={categoryList || {}}
+            />
+          )}
         </Table>
       </TableContainer>
       <Box p={2}>

@@ -10,8 +10,11 @@ import {
 } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { IPostCategoriesProps } from 'src/content/pages/post_categories';
 import { useNavigate } from 'react-router';
+import {
+  IDetailsCategoriesProps,
+  IPostCategoriesProps
+} from 'src/interface/categories';
 
 interface IProps {
   handleSetisEdit: (id: string) => void;
@@ -42,7 +45,7 @@ const CategoriesComponent = ({
       }}
     >
       <Grid container spacing={4}>
-        {data.map((item: IPostCategoriesProps, key) => (
+        {data.map((item: IDetailsCategoriesProps, key) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={key}>
             <Card
               sx={{

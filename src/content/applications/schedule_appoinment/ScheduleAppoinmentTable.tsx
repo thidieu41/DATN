@@ -22,6 +22,7 @@ import BackDropComponent from 'src/components/BackDrop';
 import { statusTableOptions } from './constants';
 import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
+import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -119,11 +120,15 @@ const ScheduleAppoinmentTable = () => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <ScheduleAppoinmentRow
-            data={scheduleList || []}
-            handleSetPagination={handleSetPagination}
-            handleSetBackdropRemove={handleSetBackdropRemove}
-          />
+          {scheduleList.length === 0 ? (
+            <CustomEmptyOverlayTable />
+          ) : (
+            <ScheduleAppoinmentRow
+              data={scheduleList || []}
+              handleSetPagination={handleSetPagination}
+              handleSetBackdropRemove={handleSetBackdropRemove}
+            />
+          )}
         </Table>
       </TableContainer>
       <Box p={2}>

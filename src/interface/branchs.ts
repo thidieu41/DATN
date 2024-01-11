@@ -1,4 +1,4 @@
-import { IDoctor } from "./doctor";
+import { IDoctor } from './doctor';
 
 export interface IBranchsParamsProps {
   name: string;
@@ -10,11 +10,11 @@ export interface IBranchsParamsProps {
   doctor: string;
 }
 export interface IBranchRoom {
-  branch: number;
-  created_at: string;
+  branch?: number;
+  created_at?: string;
   id: number;
-  name: string;
-  updated_at: string;
+  name?: string;
+  updated_at?: string;
 }
 
 export interface IBrachProps {

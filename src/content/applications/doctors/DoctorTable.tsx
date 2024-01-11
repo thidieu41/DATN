@@ -17,6 +17,7 @@ import { IDoctor } from 'src/interface/doctor';
 import BackDropComponent from 'src/components/BackDrop';
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
+import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const DoctorTable = () => {
   const [page, setPage] = useState<number>(0);
@@ -86,12 +87,17 @@ const DoctorTable = () => {
               <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
-          <DoctorTableRow
-            data={doctorList || []}
-            handleSetPagination={handleSetPagination}
-          />
+          {doctorList.length === 0 ? (
+            <CustomEmptyOverlayTable />
+          ) : (
+            <DoctorTableRow
+              data={doctorList || []}
+              handleSetPagination={handleSetPagination}
+            />
+          )}
         </Table>
       </TableContainer>
+      <Divider />
       <Box p={2}>
         <TablePagination
           component="div"

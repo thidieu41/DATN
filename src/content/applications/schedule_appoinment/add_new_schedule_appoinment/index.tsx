@@ -20,17 +20,13 @@ import {
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
 import { IBrachProps } from 'src/interface/branchs';
+import {
+  IPostCategoriesProps,
+  IDetailsCategoriesProps
+} from 'src/interface/categories';
 
-const LableInput = styled(Typography)(
-  () => `
-  margin-bottom: 10px;
-`
-);
-const GridItem = styled(Grid)(
-  () => `
-  gap: 10px
-`
-);
+const LableInput = styled(Typography)(() => `margin-bottom: 10px`);
+const GridItem = styled(Grid)(() => ``);
 
 const CreateNewSchedule = () => {
   const location = useLocation();
@@ -39,6 +35,10 @@ const CreateNewSchedule = () => {
   const [isUser, setIsUserInfor] = useState(false);
   const [scheduleId, setScheduleId] = useState('');
   const [branchList, setBranchList] = useState<IBrachProps[]>([]);
+  const [categories, setCategories] = useState<IPostCategoriesProps[]>([]);
+  const [detailsCategories, setDetailsCategories] = useState<
+    IDetailsCategoriesProps[]
+  >([]);
 
   const {
     control,
@@ -52,6 +52,9 @@ const CreateNewSchedule = () => {
     defaultValues: scheduledefaultValues,
     resolver: yupResolver(isEdit ? scheduleEditSchema : scheduleSchema) as any
   });
+
+  const status = watch('status');
+  const category = watch('category');
 
   const handleSubmission = async (data: IFormValueScheduleProps) => {
     try {
@@ -111,12 +114,25 @@ const CreateNewSchedule = () => {
     setValue('branch', res.data?.results[0]?.id);
   };
 
+  const handleGetAllCategories = async () => {
+    const res = await ClientAPI.getAll('/');
+    setCategories(res.data.results);
+  };
+
+  const handleGetAllDetailsCategories = async () => {
+    const res = await ClientAPI.getAll(`/?menu=${category}`);
+    setDetailsCategories(res.data.results);
+  };
+
   useEffect(() => {
     onGetScheduleDetails();
     handleGetBranchs();
+    handleGetAllCategories();
   }, []);
 
-  const status = watch('status');
+  useEffect(() => {
+    handleGetAllDetailsCategories();
+  }, [category]);
 
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
@@ -200,6 +216,57 @@ const CreateNewSchedule = () => {
             )}
           />
         </GridItem>
+
+        <GridItem item xs={12} sm={category === 'đã khám' ? 6 : 12}>
+          <LableInput>Danh mục</LableInput>
+          <Controller
+            control={control}
+            name="quantity"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập số người"
+                select
+                error={!!errors.quantity}
+                helperText={errors.quantity?.message || ''}
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </GridItem>
+
+        {category && (
+          <GridItem item xs={12} sm={6}>
+            <LableInput>Chi tiết danh mục</LableInput>
+            <Controller
+              control={control}
+              name="quantity"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  select
+                  placeholder="Nhập số người"
+                  error={!!errors.quantity}
+                  helperText={errors.quantity?.message || ''}
+                >
+                  {detailsCategories.map((details) => (
+                    <MenuItem key={details.id} value={details.id}>
+                      {details.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
+          </GridItem>
+        )}
+
         <GridItem item xs={12} sm={6}>
           <LableInput>Chi nhánh</LableInput>
           <Controller

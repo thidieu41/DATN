@@ -2,27 +2,22 @@ import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Grid, Container, Card } from '@mui/material';
 import PageHeader from 'src/components/PageHeader';
-import CategoriesComponent from 'src/content/applications/post_categories';
-import CreateNewPostCategory from 'src/content/applications/post_categories/components/CreateNewPostCategory';
+import CategoriesComponent from 'src/components/CardCategories';
+import CreateNewPostCategory from 'src/components/CardCategories/CreateNewCardCategory';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import BackDropComponent from 'src/components/BackDrop';
 import { handleSetToken } from 'src/utils/token';
 import { ClientAPI } from 'src/api';
-
-export interface IPostCategoriesProps {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  name: string;
-}
+import { IPostCategoriesProps } from 'src/interface/categories';
+import CustomEmptyData from 'src/components/TableEmptyRow/CardEmptyData';
 
 function CategoryPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [details, setDetails] = useState<IPostCategoriesProps>();
-  const [postCategories, setPostCategories] = useState<{
+  const [scheduleCategories, setScheduleCategories] = useState<{
     [key: string]: IPostCategoriesProps;
   }>({});
 
@@ -47,7 +42,7 @@ function CategoryPage() {
     try {
       const res = await ClientAPI.getAll(url);
       const data = handleObjectKeyData(res.data);
-      setPostCategories(data);
+      setScheduleCategories(data);
     } catch (error) {
       toast.error('Lỗi lấy tất cả danh mục lịch khám!');
     } finally {
@@ -70,7 +65,7 @@ function CategoryPage() {
 
   const handleSetisEdit = (id: string) => {
     setIsEdit(true);
-    setDetails(postCategories[id]);
+    setDetails(scheduleCategories[id]);
     onOpenModal();
   };
 
@@ -78,11 +73,11 @@ function CategoryPage() {
     handleSetIsLoading(true);
     try {
       await ClientAPI.delete(`/app/menus/${id}/`);
-      const data = Object.values(postCategories).filter(
+      const data = Object.values(scheduleCategories).filter(
         (item) => item.id !== id
       );
       const list = handleObjectKeyData(data);
-      setPostCategories(list);
+      setScheduleCategories(list);
       toast.success('Xoá danh mục thành công!');
     } catch (error) {
       toast.error('Xoá danh mục không thành công!');
@@ -93,10 +88,10 @@ function CategoryPage() {
 
   const handleNewValue = (newValue: IPostCategoriesProps) => {
     const data = {
-      ...postCategories,
+      ...scheduleCategories,
       [newValue.id]: newValue
     };
-    setPostCategories(data);
+    setScheduleCategories(data);
   };
   return (
     <>
@@ -121,16 +116,20 @@ function CategoryPage() {
           <Grid item xs={12}>
             <Card
               sx={{
-                height: 560,
+                height: 520,
                 overflow: 'scroll'
               }}
             >
-              <CategoriesComponent
-                handleSetisEdit={handleSetisEdit}
-                handleRemove={handleRemove}
-                data={Object.values(postCategories)}
-                isCategoryBooking={true}
-              />
+              {Object.values(scheduleCategories).length === 0 ? (
+                <CustomEmptyData />
+              ) : (
+                <CategoriesComponent
+                  handleSetisEdit={handleSetisEdit}
+                  handleRemove={handleRemove}
+                  data={Object.values(scheduleCategories)}
+                  isCategoryBooking={false}
+                />
+              )}
             </Card>
           </Grid>
         </Grid>

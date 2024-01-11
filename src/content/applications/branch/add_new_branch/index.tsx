@@ -49,14 +49,12 @@ interface IRoomProps {
   name: string;
 }
 
-const CreateNewBranch = ({ branchId}: IProps) => {
+const CreateNewBranch = ({ branchId }: IProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [listRoom, setListRoom] = useState<IRoomProps[]>([]);
   const [roomName, setRoomName] = useState('');
   const [errorsText, setErrorsText] = useState('');
   const [doctorList, setDoctorList] = useState<IDoctor[]>([]);
-
-
 
   const navigate = useNavigate();
   const {
@@ -123,21 +121,23 @@ const CreateNewBranch = ({ branchId}: IProps) => {
   };
 
   const handleGetDetails = async () => {
+    setIsLoading(true);
     try {
       const res = await ClientAPI.getDetails(`/dental/branches/${branchId}/`);
-      const { name, phone, address,doctor, branch_room
-      } = res.data;
-      reset({address,name,phone,doctor:doctor?.id|| doctorList[0].id})
-      setListRoom(branch_room)
+      const { name, phone, address, doctor, branch_room } = res.data;
+      reset({ address, name, phone, doctor: doctor?.id || doctorList[0]?.id });
+      setListRoom(branch_room);
     } catch (error) {
       toast.error('Lỗi lấy thông tin chi nhánh chi tiết!');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleGetAllDoctors = async () => {
     const res = await ClientAPI.getAll('/core/doctors/');
     setDoctorList(res.data.results);
-    setValue('doctor', res.data.results[0].id)
+    setValue('doctor', res.data.results[0].id);
   };
 
   useEffect(() => {
@@ -202,15 +202,14 @@ const CreateNewBranch = ({ branchId}: IProps) => {
                   helperText={errors.doctor?.message || ''}
                   select
                 >
-                 {doctorList.map((doctor) => (
-                  <MenuItem key={doctor.id} value={doctor.id}>
-                    {doctor.name}
-                  </MenuItem>
-                ))}
+                  {doctorList.map((doctor) => (
+                    <MenuItem key={doctor.id} value={doctor.id}>
+                      {doctor.name}
+                    </MenuItem>
+                  ))}
                 </TextField>
               )}
             />
-          
           </GridItem>
 
           <GridItem item xs={12} sm={6}>
