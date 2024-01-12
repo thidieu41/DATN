@@ -7,14 +7,13 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-scroll';
 import { Stack } from '@mui/material';
 import HeaderUserbox from 'src/layouts/SidebarLayout/Header/Userbox';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { IProfileProps } from 'src/interface/profile';
 
 const pages = [
   { title: 'Giới thiệu', to: 'trang-chu' },
@@ -24,8 +23,9 @@ const pages = [
 ];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [navActive, setNavActive] = React.useState('');
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [navActive, setNavActive] = useState('');
+  const [profile, setProfile] = useState<IProfileProps>();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -46,6 +46,15 @@ function ResponsiveAppBar() {
     }
     setNavActive(to);
   };
+
+  const handleSetProfile = () => {
+    const data = JSON.parse(localStorage.getItem('profile') || '{}');
+    setProfile(data);
+  };
+
+  useEffect(() => {
+    handleSetProfile();
+  }, []);
 
   return (
     <AppBar
@@ -205,16 +214,24 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Stack sx={{ flexGrow: 0 }} direction={'row'} spacing={2}>
+          {Object.keys(profile || {}).length > 0 ? (
+            <Stack sx={{ flexGrow: 0 }} direction={'row'} spacing={2}>
+              <HeaderUserbox profile={profile} />
+              {profile.role.id === 1 && (
+                <Button href="/admin"> Trang Admin</Button>
+              )}
+            </Stack>
+          ) : (
             <Button variant="outlined" href="/authen">
-              Login
+              Đăng Nhập
             </Button>
-
-            <HeaderUserbox />
-          </Stack>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
 export default ResponsiveAppBar;
+function setAnchorElNav(currentTarget: any) {
+  throw new Error('Function not implemented.');
+}

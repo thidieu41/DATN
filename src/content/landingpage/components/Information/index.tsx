@@ -3,6 +3,7 @@ import VerifiedUserOutlinedIcon from '@mui/icons-material/VerifiedUserOutlined';
 import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
 import MapsHomeWorkOutlinedIcon from '@mui/icons-material/MapsHomeWorkOutlined';
 import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 const servicesList = [
   {
@@ -31,6 +32,15 @@ const servicesList = [
   }
 ];
 export default function ServicesInformation() {
+  const navigate = useNavigate();
+  const handleCreateNewSchedule = () => {
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+    if (Object.keys(profile || {}).length > 0) {
+      navigate('/dat-lich-kham');
+    } else {
+      navigate('/authen');
+    }
+  };
   return (
     <Box id="services">
       <Grid
@@ -133,7 +143,7 @@ export default function ServicesInformation() {
                 padding: 1.5
               }}
               fullWidth
-              href="/dat-lich-kham"
+              onClick={handleCreateNewSchedule}
             >
               Đặt Lịch
             </Button>

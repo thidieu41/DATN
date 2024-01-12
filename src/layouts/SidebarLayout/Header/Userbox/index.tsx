@@ -1,72 +1,37 @@
 import { useRef, useState } from 'react';
-
 import { NavLink, useNavigate } from 'react-router-dom';
-
 import {
   Avatar,
   Box,
   Button,
   Divider,
   Hidden,
-  lighten,
   List,
   ListItem,
   ListItemText,
-  Popover,
-  Typography
+  Popover
 } from '@mui/material';
-
-import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
-import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import { setClientToken } from 'src/utils/axios';
+import {
+  MenuUserBox,
+  UserBoxButton,
+  UserBoxDescription,
+  UserBoxLabel,
+  UserBoxText
+} from '../style';
+import { IProfileProps } from 'src/interface/profile';
 
-const UserBoxButton = styled(Button)(
-  ({ theme }) => `
-        padding-left: ${theme.spacing(1)};
-        padding-right: ${theme.spacing(1)};
-`
-);
+interface IProps {
+  profile: IProfileProps;
+}
+function HeaderUserbox({ profile }: IProps) {
+  const avatar =
+    'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg';
 
-const MenuUserBox = styled(Box)(
-  ({ theme }) => `
-        background: ${theme.colors.alpha.black[5]};
-        padding: ${theme.spacing(2)};
-`
-);
-
-const UserBoxText = styled(Box)(
-  ({ theme }) => `
-        text-align: left;
-        padding-left: ${theme.spacing(1)};
-`
-);
-
-const UserBoxLabel = styled(Typography)(
-  ({ theme }) => `
-        font-weight: ${theme.typography.fontWeightBold};
-        color: ${theme.palette.secondary.main};
-        display: block;
-`
-);
-
-const UserBoxDescription = styled(Typography)(
-  ({ theme }) => `
-        color: ${lighten(theme.palette.secondary.main, 0.5)}
-`
-);
-
-function HeaderUserbox() {
-  const user = {
-    name: 'Nguyễn Thị Thanh Hưng',
-    avatar:
-      'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg',
-    jobtitle: 'Người dùng'
-  };
-  const navigation = useNavigate()
+  const navigation = useNavigate();
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -80,20 +45,34 @@ function HeaderUserbox() {
   };
 
   const handleLogOut = () => {
-    localStorage.clear()
-    setClientToken(null)
-    navigation('/authen')
-  }
+    localStorage.clear();
+    setClientToken(null);
+    navigation('/authen');
+  };
+
+  const handleNavigateProfile = (role: number) => {
+    switch (Number(role)) {
+      case 2:
+        navigation('/thong-tin-ca-nhan');
+        break;
+      case 1:
+        navigation('/admin/thong-tin-ca-nhan');
+        break;
+    }
+    handleClose();
+  };
 
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+        <Avatar variant="rounded" alt={profile?.name || '___'} src={avatar} />
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">
+              {profile?.name || '___'}
+            </UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {profile?.email}
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
@@ -115,33 +94,31 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+          <Avatar variant="rounded" alt={profile?.name || '___'} src={avatar} />
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">
+              {profile?.name || '___'}
+            </UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {profile?.email}
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
           <ListItem
-            button
-            to="admin/thong-tin-ca-nhan"
-            component={NavLink}
-            onClick={handleClose}
+            onClick={() => handleNavigateProfile(profile?.role?.id)}
+            sx={{
+              cursor: 'pointer'
+            }}
           >
-            <AccountBoxTwoToneIcon fontSize="small" />
+            <AccountBoxTwoToneIcon fontSize="small" sx={{ mr: 1 }} />
             <ListItemText primary="Thông tin cá nhân" />
           </ListItem>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button 
-            color="primary" 
-            fullWidth
-            onClick={handleLogOut}
-          >
+          <Button color="primary" fullWidth onClick={handleLogOut}>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Đăng xuất
           </Button>

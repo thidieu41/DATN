@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import Scrollbar from 'src/components/Scrollbar';
 import { SidebarContext } from 'src/contexts/SidebarContext';
-
 import {
   Box,
   Drawer,
@@ -9,12 +8,9 @@ import {
   styled,
   Divider,
   useTheme,
-  Button,
   lighten,
-  darken,
-  Tooltip
+  darken
 } from '@mui/material';
-
 import SidebarMenu from './SidebarMenu';
 import Logo from 'src/components/LogoSign';
 

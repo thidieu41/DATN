@@ -115,7 +115,6 @@ export default function CreateNewPostCategory({
     if (!details.name) {
       setErrors(true);
     } else {
-      console.log(isDetailsCategory);
       if (isDetailsCategory) {
         if (!details.price) {
           setPriceErrors(true);

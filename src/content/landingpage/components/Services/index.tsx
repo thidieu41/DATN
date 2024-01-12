@@ -63,7 +63,8 @@ export const ServicesComponent = () => {
                   src={item.urlImg}
                   alt="project"
                   style={{
-                    borderRadius: 8
+                    borderRadius: 8,
+                    height: 240
                   }}
                 />
               </Stack>

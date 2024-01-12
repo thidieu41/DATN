@@ -9,16 +9,16 @@ export const userScheduleSchema = Yup.object().shape({
     .typeError('Hãy nhập số cho trường này')
     .min(1, 'Nhập ít nhất 1 người')
     .max(50, 'Chỉ được nhập tối đa 50'),
-  reason: Yup.string().required('Không được để trống lý do khám')
+  reason: Yup.string().required('Không được để trống lý do khám'),
+  item: Yup.string().required('Không được để trống chi tiết danh mục'),
+  room: Yup.string().required('Không được để trống phòng')
 });
 
 export const scheduleSchema = userScheduleSchema.shape({
   phone: Yup.string()
     .required('Không được để trống số điện thoại')
     .matches(phoneRegExp, 'Số điện thoại không hợp lệ'),
-  booking_name: Yup.string().required('Không được để trống tên'),
-  item: Yup.string().required('Không được để trống chi tiết danh mục'),
-  room: Yup.string().required('Không được để trống phòng')
+  booking_name: Yup.string().required('Không được để trống tên')
 });
 
 export const scheduleEditSchema = scheduleSchema.shape({
@@ -30,18 +30,17 @@ export const defaultValues = {
   quantity: '',
   reason: '',
   category: '',
-  item: ''
-};
-
-export const scheduledefaultValues = {
-  ...defaultValues,
+  item: '',
   status: 'chưa khám',
   total_money: '0',
   branch: '',
   room: '',
-  is_user: false,
+  is_user: false
+};
+
+export const scheduledefaultValues = {
+  ...defaultValues,
   booking_name: '',
-  doctor: '',
   phone: ''
 };
 

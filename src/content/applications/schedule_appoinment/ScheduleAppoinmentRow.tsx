@@ -73,6 +73,21 @@ const ScheduleAppoinmentRow = ({
                 {item.is_user ? item.user?.phone : item.phone}
               </Typography>
             </TableCell>
+            <TableCell align="center">
+              <Label
+                color={
+                  item.status === 'chưa khám'
+                    ? 'warning'
+                    : item.status === 'đang khám'
+                    ? 'primary'
+                    : 'success'
+                }
+              >
+                <Typography noWrap fontSize={12}>
+                  {item.status}
+                </Typography>
+              </Label>
+            </TableCell>
             <TableCell>
               <Typography noWrap>
                 {dayjs(item.date).format('DD/MM/YYYY')}
@@ -81,17 +96,20 @@ const ScheduleAppoinmentRow = ({
             <TableCell>
               <Typography noWrap>{dayjs(item.date).format('HH:mm')}</Typography>
             </TableCell>
+
             <TableCell>
-              <Typography noWrap>___</Typography>
+              <Typography noWrap>
+                {item?.room?.branch?.name || '___'}
+              </Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>___</Typography>
+              <Typography noWrap>{item?.room?.name || '___'}</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>___</Typography>
+              <Typography noWrap>{item?.item?.menu?.name || '___'}</Typography>
             </TableCell>
             <TableCell>
-              <Typography noWrap>___</Typography>
+              <Typography noWrap>{item?.item?.name || '___'}</Typography>
             </TableCell>
             <TableCell>
               <Typography
@@ -114,19 +132,7 @@ const ScheduleAppoinmentRow = ({
                 {item.total_money}
               </Typography>
             </TableCell>
-            <TableCell align="center">
-              <Label
-                color={
-                  item.status === 'chưa khám'
-                    ? 'warning'
-                    : item.status === 'đang khám'
-                    ? 'primary'
-                    : 'success'
-                }
-              >
-                {item.status}
-              </Label>
-            </TableCell>
+
             <TableCell
               sx={{
                 display: 'flex',

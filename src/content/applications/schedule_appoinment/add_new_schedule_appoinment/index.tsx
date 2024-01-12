@@ -14,7 +14,8 @@ import {
   scheduleEditSchema,
   scheduleSchema,
   scheduledefaultValues,
-  statusOptions
+  statusOptions,
+  userScheduleSchema
 } from '../constants';
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
@@ -25,11 +26,16 @@ import {
 } from 'src/interface/categories';
 import { handleObjectKeyData } from 'src/utils/constanst';
 import { IFormValueScheduleProps } from 'src/interface/booking';
+import { IProfileProps } from 'src/interface/profile';
 
 const LableInput = styled(Typography)(() => `margin-bottom: 10px`);
 const GridItem = styled(Grid)(() => ``);
 
-const CreateNewSchedule = () => {
+interface IProps {
+  is_user: boolean;
+}
+
+const CreateNewSchedule = ({ is_user }: IProps) => {
   const location = useLocation();
 
   const [isEdit, setIsEdit] = useState(false);
@@ -43,7 +49,7 @@ const CreateNewSchedule = () => {
     IDetailsCategoriesProps[]
   >([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -54,7 +60,13 @@ const CreateNewSchedule = () => {
   } = useForm<IFormValueScheduleProps, IFormValueScheduleProps>({
     mode: 'onChange',
     defaultValues: scheduledefaultValues,
-    resolver: yupResolver(isEdit ? scheduleEditSchema : scheduleSchema) as any
+    resolver: yupResolver(
+      isEdit
+        ? scheduleEditSchema
+        : is_user
+        ? userScheduleSchema
+        : scheduleSchema
+    ) as any
   });
 
   const status = watch('status');
@@ -68,7 +80,7 @@ const CreateNewSchedule = () => {
       const dateTime = new Date(date).getTime().toString();
       const params = {
         ...rest,
-        is_user: false,
+        is_user,
         date: Number(dateTime.slice(0, dateTime.length - 3))
       };
       if (isEdit) {
@@ -79,7 +91,7 @@ const CreateNewSchedule = () => {
           status: 'chưa khám'
         });
       }
-      navigate('/admin/lich-kham');
+      navigate(is_user ? '/' : '/admin/lich-kham');
       toast.success(
         isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
       );
@@ -152,45 +164,61 @@ const CreateNewSchedule = () => {
     handleGetAllDetailsCategories();
   }, [category]);
 
-  console.log();
+  const handleGetProfileData = () => {
+    const profileData = JSON.parse(
+      localStorage.getItem('profile') || '{}'
+    ) as IProfileProps;
+    setValue('booking_name', profileData.name || '');
+    setValue('phone', profileData.phone || '');
+  };
+
+  useEffect(() => {
+    if (is_user) {
+      handleGetProfileData();
+    }
+  }, [is_user]);
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Grid container spacing={2}>
-        <GridItem item xs={12} sm={6}>
-          <LableInput>Họ Và Tên</LableInput>
-          <Controller
-            control={control}
-            name="booking_name"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                disabled={isUser}
-                fullWidth
-                placeholder="Nhập tên"
-                error={!!errors.booking_name}
-                helperText={errors.booking_name?.message || ''}
-              />
-            )}
-          />
-        </GridItem>
+        {!is_user && (
+          <GridItem item xs={12} sm={6}>
+            <LableInput>Họ Và Tên</LableInput>
+            <Controller
+              control={control}
+              name="booking_name"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  disabled={isUser}
+                  fullWidth
+                  placeholder="Nhập tên"
+                  error={!!errors.booking_name}
+                  helperText={errors.booking_name?.message || ''}
+                />
+              )}
+            />
+          </GridItem>
+        )}
 
-        <GridItem item xs={12} sm={6}>
-          <LableInput>Số điện thoại</LableInput>
-          <Controller
-            control={control}
-            name="phone"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                disabled={isUser}
-                fullWidth
-                placeholder="Nhập số điện thoại"
-                error={!!errors.phone}
-                helperText={errors.phone?.message || ''}
-              />
-            )}
-          />
-        </GridItem>
+        {!is_user && (
+          <GridItem item xs={12} sm={6}>
+            <LableInput>Số điện thoại</LableInput>
+            <Controller
+              control={control}
+              name="phone"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  disabled={isUser}
+                  fullWidth
+                  placeholder="Nhập số điện thoại"
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message || ''}
+                />
+              )}
+            />
+          </GridItem>
+        )}
 
         <GridItem item xs={12} sm={6}>
           <LableInput>Chọn thời gian khám </LableInput>

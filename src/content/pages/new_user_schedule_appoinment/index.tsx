@@ -2,8 +2,8 @@ import { Helmet } from 'react-helmet-async';
 import { Grid, Container, Card, Stack } from '@mui/material';
 import ResponsiveAppBar from 'src/content/landingpage/Nav';
 import Footer from 'src/content/landingpage/components/Footer';
-import NewUserScheduleAppoinment from 'src/content/applications/schedule_appoinment/new_user_schedule_appoinment';
 import { handleSetToken } from 'src/utils/token';
+import CreateNewSchedule from 'src/content/applications/schedule_appoinment/add_new_schedule_appoinment';
 
 function NewUserScheduleAppoimentPage() {
   handleSetToken();
@@ -34,7 +34,7 @@ function NewUserScheduleAppoimentPage() {
                   padding: 3
                 }}
               >
-                <NewUserScheduleAppoinment />
+                <CreateNewSchedule is_user={true} />
               </Stack>
             </Card>
           </Grid>

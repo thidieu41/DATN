@@ -3,7 +3,9 @@
 import * as Yup from 'yup';
 
 export const loginSchema = Yup.object().shape({
-  email: Yup.string().required('Không được để trống email'),
+  email: Yup.string()
+    .email('Email không đúng định dạng')
+    .required('Không được để trống email'),
   password: Yup.string()
     .required('Không được để trống mật khẩu')
     .min(4, 'Mật khẩu phải ít nhất 4 kí tự')
@@ -15,7 +17,7 @@ export const defaultValues = {
   password: ''
 };
 
-export interface IFormValue {
+export interface ILoginFormValue {
   email: string;
   password: string;
 }

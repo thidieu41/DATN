@@ -3,34 +3,76 @@ import Button from '@mui/material/Button';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IFormValue, defaultValues, registerSchema } from './registerSchema';
+import {
+  IRegisterFormValue,
+  defaultValues,
+  registerSchema
+} from './registerSchema';
 import { Box, Divider, Stack, Typography } from '@mui/material';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
 import { User } from 'src/api/auth';
+import { toast } from 'react-toastify';
 
-const RegisterForm = () => {
+interface IProps {
+  handleSetIsLoading: (newValue: boolean) => void;
+  handleChange: (event: any, newValue: number) => void;
+}
+
+const RegisterForm = ({ handleSetIsLoading, handleChange }: IProps) => {
   const {
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm<IFormValue, IFormValue>({
+  } = useForm<IRegisterFormValue, IRegisterFormValue>({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(registerSchema) as any
   });
 
-  const Register = async (email, password, phone) => {
-    const response = User.Register(email, password, phone);
+  const Register = async (params: IRegisterFormValue) => {
+    handleSetIsLoading(true);
+    try {
+      await User.Register(params);
+      toast.success(
+        'Đăng ký thành công. Hãy đăng nhập bằng tài khoản đã đăng ký'
+      );
+      handleChange(null, 0);
+    } catch (error) {
+      toast.error('Đăng ký không thành công. Vui lòng đăng ký lại!');
+    } finally {
+      handleSetIsLoading(false);
+    }
   };
-  const handleSubmission = (data: IFormValue) => {
-    console.log(data);
-    Register(data.email, data.password, data.phone);
+  const handleSubmission = (data: IRegisterFormValue) => {
+    const { confirm_password, ...rest } = data;
+    Register(rest);
   };
 
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Stack sx={{ gap: '20px', maxWidth: '400px', margin: 'auto' }}>
+        <Stack
+          sx={{
+            gap: '10px'
+          }}
+        >
+          <Typography>Tên</Typography>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field }) => (
+              <TextField
+                {...field}
+                fullWidth
+                placeholder="Nhập tên"
+                error={!!errors.name}
+                helperText={errors.name?.message || ''}
+              />
+            )}
+          />
+        </Stack>
+
         <Stack
           sx={{
             gap: '10px'

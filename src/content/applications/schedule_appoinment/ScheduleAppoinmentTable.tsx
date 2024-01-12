@@ -33,16 +33,16 @@ const headerTableTitle = [
   { title: 'ID' },
   { title: 'Họ tên' },
   { title: 'Số điện thoại' },
+  { title: 'Trạng thái' },
   { title: 'Ngày đặt' },
   { title: 'Giờ đặt' },
   { title: 'Chi Nhánh' },
   { title: 'Phòng' },
   { title: 'Danh mục' },
   { title: 'Chi tiết' },
-  { title: '	Lý do khám' },
+  { title: 'Lý do khám' },
   { title: 'Số người' },
   { title: 'Tổng (VND)' },
-  { title: 'Trạng thái' },
   { title: 'Thao tác' }
 ];
 const ScheduleAppoinmentTable = () => {
@@ -62,11 +62,14 @@ const ScheduleAppoinmentTable = () => {
   };
 
   const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (status === e.target.value) {
+    const value = e.target.value;
+    if (status === value) {
       return;
     }
-    // handleGetBookingList(`/app/bookings?status=${e.target.value}`);
-    setStatus(e.target.value);
+    handleGetBookingList(
+      value === 'tất cả' ? '/app/bookings/' : `/app/bookings/?status=${value}`
+    );
+    setStatus(value);
   };
 
   const handleGetBookingList = async (url: string) => {

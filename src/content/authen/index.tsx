@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import LoginForm from './login';
 import RegisterForm from './register';
+import BackDropComponent from 'src/components/BackDrop';
 
 const TabCustom = styled(Tab)(
   () => `
@@ -44,10 +45,17 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function AuthenticarionPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState(0);
+
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const handleSetIsLoading = (newValue: boolean) => {
+    setIsLoading(newValue);
+  };
+
   return (
     <Box
       style={{
@@ -95,16 +103,20 @@ function AuthenticarionPage() {
                 </Tabs>
                 <Divider />
                 <TabPanel value={value} index={0}>
-                  <LoginForm />
+                  <LoginForm handleSetIsLoading={handleSetIsLoading} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                  <RegisterForm />
+                  <RegisterForm
+                    handleSetIsLoading={handleSetIsLoading}
+                    handleChange={handleChange}
+                  />
                 </TabPanel>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
       </Container>
+      <BackDropComponent open={isLoading} />
     </Box>
   );
 }

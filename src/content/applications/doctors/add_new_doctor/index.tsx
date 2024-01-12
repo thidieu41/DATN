@@ -110,8 +110,6 @@ const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
     }
   }, [details]);
 
-  console.log(listUrlImage);
-
   return (
     <>
       <form onSubmit={handleSubmit(handleSubmission)}>

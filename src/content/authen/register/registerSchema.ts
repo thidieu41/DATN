@@ -6,7 +6,10 @@ export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const registerSchema = Yup.object().shape({
-  email: Yup.string().required('Không được để trống email'),
+  email: Yup.string()
+    .email('Nhập email không đúng định dạng')
+    .required('Không được để trống email'),
+  name: Yup.string().required('Không được để trống tên'),
   password: Yup.string()
     .required('Không được để trống mật khẩu')
     .min(4, 'Mật khẩu phải ít nhất 4 kí tự')
@@ -24,12 +27,14 @@ export const defaultValues = {
   email: '',
   password: '',
   confirm_password: '',
-  phone: ''
+  phone: '',
+  name: ''
 };
 
-export interface IFormValue {
+export interface IRegisterFormValue {
   email: string;
   password: string;
-  confirm_password: string;
+  confirm_password?: string;
   phone: string;
+  name: string;
 }

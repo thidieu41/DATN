@@ -3,20 +3,23 @@ import Button from '@mui/material/Button';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IFormValue, defaultValues, loginSchema } from './LoginSchema';
+import { ILoginFormValue, defaultValues, loginSchema } from './LoginSchema';
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { User } from 'src/api/auth';
 import { setClientToken } from 'src/utils/axios';
+import { toast } from 'react-toastify';
 
-const LoginForm = () => {
+interface IProps {
+  handleSetIsLoading: (newValue: boolean) => void;
+}
+const LoginForm = ({ handleSetIsLoading }: IProps) => {
   const navigation = useNavigate();
   const {
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm<IFormValue, IFormValue>({
+  } = useForm<ILoginFormValue, ILoginFormValue>({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(loginSchema) as any
@@ -35,21 +38,28 @@ const LoginForm = () => {
     const response = await User.Profile();
     if (response.status === 200) {
       localStorage.setItem('profile', JSON.stringify(response.data));
-      const dataRole = response.data.role?.name ? response.data.role.name : null
+      const dataRole = response.data.role?.name
+        ? response.data.role.name
+        : null;
       routerPrefetch(dataRole);
     }
   };
-  const Login = async (email, password) => {
-    const response = await User.Login(email, password);
-    if (response.status === 200) {
+  const Login = async (data: ILoginFormValue) => {
+    handleSetIsLoading(true);
+    try {
+      const response = await User.Login(data);
       setClientToken(response.data.access);
       localStorage.setItem('token', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
       setProfile();
+    } catch (error) {
+      toast.error('Đăng nhập thất bại. Vui lòng thử lại lần nữa!');
+    } finally {
+      handleSetIsLoading(false);
     }
   };
-  const handleSubmission = (data: IFormValue) => {
-    Login(data.email, data.password);
+  const handleSubmission = (data: ILoginFormValue) => {
+    Login(data);
   };
 
   return (

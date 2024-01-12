@@ -22,7 +22,6 @@ const ServicesDetailsCom = () => {
   useEffect(() => {
     const data = servicesList.find((item) => item.id === Number(idService));
     setDetailsInformation(data);
-    console.log(data);
   }, [servicesList, idService]);
 
   return (

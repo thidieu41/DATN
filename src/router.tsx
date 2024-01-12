@@ -4,6 +4,7 @@ import { RouteObject } from 'react-router';
 import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import UserProfilePage from './content/pages/user_profile';
 
 const Loader = (Component) => (props) =>
   (
@@ -73,6 +74,10 @@ const routes: RouteObject[] = [
   {
     path: 'dich-vu/:id',
     element: <ServiceDetailsPage />
+  },
+  {
+    path: 'thong-tin-ca-nhan',
+    element: <UserProfilePage />
   },
   {
     path: '',

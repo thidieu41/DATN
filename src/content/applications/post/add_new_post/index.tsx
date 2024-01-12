@@ -171,7 +171,6 @@ const CreateNewPost = ({ details }: IProps) => {
     const urlImage = (await urlImageToBase64(
       details?.image
     )) as unknown as string;
-    console.log(urlImage);
     setPreviewImg(urlImage);
   };
 

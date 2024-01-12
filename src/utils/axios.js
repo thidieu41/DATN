@@ -13,8 +13,8 @@ export const setClientToken = (token) => {
 };
 
 export const createClient = () => {
-  // const baseURL = "https://full-friends-send.loca.lt/api"
-  const baseURL = 'http://localhost:8000/api/';
+  const baseURL = 'https://fruity-cobras-divide.loca.lt/api';
+  // const baseURL = 'http://localhost:8000/api/';
 
   const instance = axios.create({
     baseURL,
@@ -28,6 +28,9 @@ export const createClient = () => {
       return response;
     },
     (error) => {
+      // if (error.response.status === 401) {
+      //   window.open(`${window.location.origin}/authen`,'_self');
+      // }
       return Promise.reject(error.response?.data);
     }
   );

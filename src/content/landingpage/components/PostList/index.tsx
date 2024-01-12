@@ -9,7 +9,6 @@ import { ICategoryProps } from 'src/utils/schema';
 
 const responsive = {
   superLargeDesktop: {
-    // the naming can be any, depends on you.
     breakpoint: { max: 4000, min: 3000 },
     items: 5
   },
@@ -74,7 +73,8 @@ const PostListComponent = () => {
   return (
     <Box
       sx={{
-        m: 5
+        mx: 10,
+        my: 5
       }}
       id="bai-viet"
     >
