@@ -101,20 +101,34 @@ export default function Footer() {
           </Grid>
           <Grid item sm={12} md={2}>
             <Typography variant="h5" color="text.primary" gutterBottom>
-              Follow Us
+              Theo dõi chúng tôi
             </Typography>
-            <Link href="https://www.facebook.com/" color="inherit">
-              <Facebook />
-            </Link>
             <Link
-              href="https://www.instagram.com/"
+              href="https://www.messenger.com/t/2408838036062972/"
+              target="_blank"
               color="inherit"
               sx={{ pl: 1, pr: 1 }}
             >
-              <Instagram />
+              <img
+                src="/static/images/social/messageser.svg"
+                style={{
+                  width: 30,
+                  height: 30
+                }}
+              />
             </Link>
-            <Link href="https://www.twitter.com/" color="inherit">
-              <Twitter />
+            <Link
+              target="_blank"
+              href="https://zalo.me/0849074627"
+              color="inherit"
+            >
+              <img
+                src="/static/images/social/zalo.svg"
+                style={{
+                  width: 30,
+                  height: 30
+                }}
+              />
             </Link>
           </Grid>
         </Grid>
