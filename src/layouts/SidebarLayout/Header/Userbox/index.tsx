@@ -23,6 +23,7 @@ import {
   UserBoxText
 } from '../style';
 import { IProfileProps } from 'src/interface/profile';
+import { handleImage } from 'src/utils/constanst';
 
 interface IProps {
   profile: IProfileProps;
@@ -65,7 +66,7 @@ function HeaderUserbox({ profile }: IProps) {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={profile?.name || '___'} src={avatar} />
+        <Avatar variant="rounded" alt={profile?.name || '___'} src={handleImage(profile?.image)} />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">
@@ -94,7 +95,7 @@ function HeaderUserbox({ profile }: IProps) {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={profile?.name || '___'} src={avatar} />
+          <Avatar variant="rounded" alt={profile?.name || '___'} src={handleImage(profile?.image)} />
           <UserBoxText>
             <UserBoxLabel variant="body1">
               {profile?.name || '___'}

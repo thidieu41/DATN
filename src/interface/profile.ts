@@ -6,7 +6,7 @@ export interface IProfileProps {
   phone: string;
   is_male: boolean;
   addr: string;
-  avatar: string;
+  image: string;
   DoB: string;
   role: {
     created_at: string;

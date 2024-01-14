@@ -1,4 +1,4 @@
-import { createClient } from 'src/utils/axios';
+import { createClient, getClientToken } from 'src/utils/axios';
 
 const client = createClient();
 
@@ -13,18 +13,33 @@ export const ClientAPI = {
     return response;
   },
 
-  add: async (url: string, params: any) => {
-    const response = await client.post(url, params);
+  add: async (url: string, params: any, headers?:any) => {
+    const response = await client.post(url, params, headers);
     return response;
   },
 
-  update: async (url: string, params) => {
-    const response = await client.put(url, params);
+  update: async (url: string, params,headers?:any) => {
+    const response = await client.put(url, params,headers);
     return response;
   },
 
   delete: async (url: string) => {
     const response = await client.delete(url);
     return response;
-  }
+  },
+
+  updateFormdata: async (url: string, params) => {
+    const response = await client.put(
+      url, 
+      params,
+      {
+        headers: {
+          Authorization: getClientToken(),
+          'Content-Type': 'multipart/form-data',
+      },
+      }
+      );
+    return response;
+  },
+
 };
