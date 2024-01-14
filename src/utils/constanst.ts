@@ -1,3 +1,10 @@
+export const MEDIA_ROOT = 'http://localhost:8000';
+
+export function handleImage(imageURL: string) {
+  console.log(imageURL)
+  if ((imageURL || '')?.includes(MEDIA_ROOT)) return imageURL;
+  return `${MEDIA_ROOT}${imageURL}`;
+}
 export async function fileImageToBase64(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

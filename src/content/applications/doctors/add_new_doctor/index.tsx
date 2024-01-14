@@ -30,6 +30,12 @@ interface IProps {
 const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
   const [listUrlImage, setListUrlImage] = useState<IUrlImageProps[]>([]);
   const [errorsImg, setErrorsImg] = useState(false);
+  const [files, setFiles] = useState<
+    {
+      id: number;
+      file: File;
+    }[]
+  >([]);
 
   const navigate = useNavigate();
   const {
@@ -46,6 +52,13 @@ const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
   const handleSetImage = async (e: any) => {
     setErrorsImg(false);
     const file = e.target.files[0];
+    setFiles([
+      ...files,
+      {
+        id: listUrlImage.length,
+        file
+      }
+    ]);
     const base64Url: any = await fileImageToBase64(file);
     const urlImage = [
       ...listUrlImage,
@@ -59,6 +72,8 @@ const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
 
   const handleRemoveImage = (id: number) => {
     const data = listUrlImage.filter((item) => item.id !== id);
+    const datafile = files.filter((item) => item.id !== id);
+    setFiles(datafile);
     setListUrlImage(data);
   };
 
@@ -67,20 +82,28 @@ const DoctorFormComp = ({ details, handleSetIsLoading }: IProps) => {
       setErrorsImg(true);
     } else {
       handleSetIsLoading(true);
-      const images = listUrlImage.map((item) => item.url);
+      const images = files.map((item) => item.file);
       const { DoB } = data;
       const date = new Date(DoB).getTime().toString();
 
       try {
         const params = {
           ...data,
-          images,
+          ...(images.length > 0 && { images }),
           DoB: Number(date.slice(0, date.length - 3))
         };
         if (details) {
-          await ClientAPI.update(`/core/doctors/${details.id}/`, params);
+          await ClientAPI.update(`/core/doctors/${details.id}/`, params, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          });
         } else {
-          await ClientAPI.add(`/core/doctors/`, params);
+          await ClientAPI.add(`/core/doctors/`, params, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          });
         }
 
         navigate('/admin/bac-si');

@@ -15,6 +15,7 @@ import BackDropComponent from 'src/components/BackDrop';
 import { IPostProps } from 'src/interface/posts';
 import { createOpenAIClient } from 'src/utils/openai';
 import { toast } from 'react-toastify';
+import { ClientAPI } from 'src/api';
 
 const LableInput = styled(Typography)(
   () => `
@@ -29,6 +30,7 @@ const CreateNewPost = ({ details }: IProps) => {
   const [categoryList, setCategory] = useState<ICategoryProps[]>([]);
   const [title, setTitle] = useState('');
   const [previewImg, setPreviewImg] = useState('');
+  const [file, setFile] = useState<File>();
   const messagesEndRef = useRef(null);
   const [errorsMess, setErrorsMess] = useState<{
     titlecontent: string;
@@ -41,7 +43,6 @@ const CreateNewPost = ({ details }: IProps) => {
 
   const axios = createClient();
   const navigation = useNavigate();
-  const textarea = useRef(null);
 
   const {
     control,
@@ -107,6 +108,7 @@ const CreateNewPost = ({ details }: IProps) => {
 
   const handleSetImage = async (e: any) => {
     const file = e.target.files[0];
+    setFile(file);
     const base64Url: any = await fileImageToBase64(file);
     setPreviewImg(base64Url);
     setErrorsMess({
@@ -129,22 +131,18 @@ const CreateNewPost = ({ details }: IProps) => {
         category,
         content,
         title,
-        image: previewImg
+        ...(file && {
+          image: file
+        })
       };
 
-      // const formData = new FormData();
-      // formData.append('category', category);
-      // formData.append('content', content);
-      // formData.append('title', title);
-      // formData.append('image', fileImg, fileImg.name);
-
       (details
-        ? axios.put(`post/posts/${details.id}`, params, {
+        ? ClientAPI.update(`post/posts/${details.id}/`, params, {
             headers: {
               'content-type': 'multipart/form-data'
             }
           })
-        : axios.post('post/posts/', params, {
+        : ClientAPI.add('post/posts/', params, {
             headers: {
               'content-type': 'multipart/form-data'
             }

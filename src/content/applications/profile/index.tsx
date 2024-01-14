@@ -16,11 +16,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect, useState } from 'react';
-import { fileImageToBase64 } from 'src/utils/constanst';
+import { fileImageToBase64, handleImage } from 'src/utils/constanst';
 import BackDropComponent from 'src/components/BackDrop';
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
 import { IProfileProps } from 'src/interface/profile';
+import dayjs from 'dayjs';
 
 const LableInput = styled(Typography)(
   () => `
@@ -34,9 +35,10 @@ const genderList = [
 
 const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [previewImg, setPreviewImg] = useState('');
+  const [file, setFile] = useState(null);
   const [errorsMess, setErrorsMess] = useState(false);
   const [profileInfor, setProfileInfor] = useState<IProfileProps>();
+  const [previewImg, setPreviewImg] = useState('');
 
   const {
     control,
@@ -50,11 +52,19 @@ const EditProfile = () => {
   });
 
   const handleSetImage = async (e: any) => {
-    const file = e.target.files[0];
-    const base64Url: any = await fileImageToBase64(file);
+    const files = e.target.files[0];
+    setFile(files);
+    const base64Url: any = await fileImageToBase64(files);
     setPreviewImg(base64Url);
     setErrorsMess(false);
   };
+
+  useEffect(() => {
+    if (profileInfor?.image){
+      console.log(profileInfor.image)
+      setPreviewImg(handleImage(profileInfor?.image))
+    }
+  }, [profileInfor?.image])
 
   const handleSubmission = async (data: IFormValue) => {
     if (!previewImg) {
@@ -64,18 +74,24 @@ const EditProfile = () => {
       try {
         const { DoB, gender, ...rest } = data;
         const date = new Date(DoB).getTime().toString();
-
+        console.log(date,rest)
         const params = {
           ...rest,
           id: profileInfor.id,
-          role: profileInfor.role.id,
-          avatar: previewImg,
           is_male: gender === 'male' ? true : false,
-          DoB: Number(date)
+          DoB:Number(date.slice(0, date.length - 3)),
+          ...(file && {
+            image: file
+          })
         };
-
-        await ClientAPI.update(`users/me`, params);
+       const res = await ClientAPI.update(`users/me`, params,{
+          headers: {
+            'content-type': 'multipart/form-data'
+          }
+        });
+        localStorage.setItem('profile',JSON.stringify(res.data))
         toast.success('Lưu thông tin cá nhân thành công');
+        // window.location.reload();
       } catch (error) {
         toast.error('Lỗi lưu thông tin cá nhân');
       } finally {
@@ -84,21 +100,21 @@ const EditProfile = () => {
     }
   };
 
-  const handleResetDataProfile = () => {
+  const handleResetDataProfile = async () => {
     const data = JSON.parse(
       localStorage.getItem('profile') || '{}'
     ) as IProfileProps;
     setProfileInfor(data);
-    const { email, name, phone, is_male, addr, DoB, avatar } = data;
+    const { email, name, phone, is_male, addr, DoB, image } = data;
     reset({
       name,
       email,
       phone,
       gender: is_male ? 'male' : 'female',
       addr,
-      DoB
+      DoB 
     });
-    setPreviewImg(avatar);
+    setPreviewImg(image);
   };
   useEffect(() => {
     handleResetDataProfile();
@@ -169,6 +185,7 @@ const EditProfile = () => {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      disabled
                       fullWidth
                       placeholder="Nhập email"
                       error={!!errors.email}
@@ -212,7 +229,6 @@ const EditProfile = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         {...field}
-                        inputFormat="DD-MM-YYYY"
                         renderInput={(params) => (
                           <TextField
                             fullWidth
