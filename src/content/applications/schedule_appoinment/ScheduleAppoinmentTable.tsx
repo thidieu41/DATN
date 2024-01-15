@@ -1,5 +1,4 @@
-import { FC, ChangeEvent, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { ChangeEvent, useState, useEffect } from 'react';
 import {
   Divider,
   Box,
@@ -26,19 +25,16 @@ import { IPanigationProps } from 'src/utils/interface';
 import { ClientAPI } from 'src/api';
 import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 import { IScheduleProps } from 'src/interface/booking';
+import ScheduleAppoinmentInvoice from './Invoice';
 
 const LableInput = styled(Typography)(() => `font-weight: 600`);
 
 const headerTableTitle = [
   { title: 'ID' },
   { title: 'Họ tên' },
-  { title: 'Số điện thoại' },
   { title: 'Trạng thái' },
   { title: 'Ngày đặt' },
-  { title: 'Giờ đặt' },
-  { title: 'Chi Nhánh' },
   { title: 'Phòng' },
-  { title: 'Danh mục' },
   { title: 'Chi tiết' },
   { title: 'Lý do khám' },
   { title: 'Số người' },
@@ -51,6 +47,25 @@ const ScheduleAppoinmentTable = () => {
   const [scheduleList, setScheduleList] = useState<IScheduleProps[]>([]);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [detailsInvoice, setDetailsInvoice] = useState<IScheduleProps>();
+
+  const handleOpen = async (dataId: string) => {
+    setIsLoading(true);
+    try {
+      const { data } = await ClientAPI.getDetails(`/app/bookings/${dataId}/`);
+      setDetailsInvoice(data);
+      setOpen(true);
+    } catch (error) {
+      toast.error('Không thể xuất hoá đơn. Vui lòng thử lại sau');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handlePageChange = (event: any, newPage: number): void => {
     if (newPage > page) {
@@ -146,6 +161,7 @@ const ScheduleAppoinmentTable = () => {
               data={scheduleList || []}
               handleSetPagination={handleSetPagination}
               handleSetBackdropRemove={handleSetBackdropRemove}
+              handleOpen={handleOpen}
             />
           )}
         </Table>
@@ -161,6 +177,11 @@ const ScheduleAppoinmentTable = () => {
           rowsPerPageOptions={[10]}
         />
       </Box>
+      <ScheduleAppoinmentInvoice
+        open={open}
+        handleClose={handleClose}
+        detailsInvoice={detailsInvoice}
+      />
       <BackDropComponent open={isLoading} />
     </Card>
   );

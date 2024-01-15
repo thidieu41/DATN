@@ -10,6 +10,7 @@ import { Stack, TextField, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
 import { ClientAPI } from 'src/api';
 import { IDetailsCategoriesProps } from 'src/interface/categories';
+import { Transition } from '../Transition';
 
 interface Iprops {
   open: boolean;
@@ -22,14 +23,6 @@ interface Iprops {
   isDetailsCategory?: boolean;
   categoryId?: string;
 }
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement<any, any>;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 export default function CreateNewPostCategory({
   open,

@@ -1,7 +1,7 @@
 export const MEDIA_ROOT = 'http://localhost:8000';
 
 export function handleImage(imageURL: string) {
-  console.log(imageURL)
+  console.log(imageURL);
   if ((imageURL || '')?.includes(MEDIA_ROOT)) return imageURL;
   return `${MEDIA_ROOT}${imageURL}`;
 }

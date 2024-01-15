@@ -1,14 +1,17 @@
 import {
   IconButton,
+  Stack,
   TableBody,
   TableCell,
   TableRow,
   Tooltip,
   Typography,
+  styled,
   useTheme
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import DescriptionIcon from '@mui/icons-material/Description';
 import dayjs from 'dayjs';
 import Label from 'src/components/Label';
 import { useNavigate } from 'react-router';
@@ -16,16 +19,25 @@ import { toast } from 'react-toastify';
 import { IScheduleProps } from 'src/interface/booking';
 import { ClientAPI } from 'src/api';
 
+const RowContent = styled(Typography)(
+  () => `     
+  text-overflow: 'ellipsis';
+  max-width: 120px
+  `
+);
+
 interface Props {
   data: IScheduleProps[];
   handleSetPagination: (id: string) => void;
   handleSetBackdropRemove: () => void;
+  handleOpen: (id: string) => void;
 }
 
 const ScheduleAppoinmentRow = ({
   data,
   handleSetPagination,
-  handleSetBackdropRemove
+  handleSetBackdropRemove,
+  handleOpen
 }: Props) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -47,6 +59,11 @@ const ScheduleAppoinmentRow = ({
     }
   };
 
+  const onOpenScheduleInvoice = async (event, id: string) => {
+    event.stopPropagation();
+    handleOpen(id);
+  };
+
   return (
     <TableBody>
       {(data || []).map((item) => {
@@ -56,23 +73,16 @@ const ScheduleAppoinmentRow = ({
               <Typography noWrap>{item.id}</Typography>
             </TableCell>
             <TableCell>
-              <Typography
-                noWrap
-                sx={{
-                  textOverflow: 'ellipsis',
-                  maxWidth: 100
-                }}
-              >
+              <RowContent noWrap>
                 {item.is_user
                   ? item?.user?.name || '___'
                   : item.booking_name || '___'}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>
+              </RowContent>
+              <Typography noWrap variant="body1">
                 {item.is_user ? item.user?.phone : item.phone}
               </Typography>
             </TableCell>
+
             <TableCell align="center">
               <Label
                 color={
@@ -92,35 +102,20 @@ const ScheduleAppoinmentRow = ({
               <Typography noWrap>
                 {dayjs(item.date).format('DD/MM/YYYY')}
               </Typography>
-            </TableCell>
-            <TableCell>
               <Typography noWrap>{dayjs(item.date).format('HH:mm')}</Typography>
             </TableCell>
-
             <TableCell>
-              <Typography noWrap>
+              <RowContent noWrap>{item?.room?.name || '___'}</RowContent>
+              <RowContent noWrap>
                 {item?.room?.branch?.name || '___'}
-              </Typography>
+              </RowContent>
             </TableCell>
             <TableCell>
-              <Typography noWrap>{item?.room?.name || '___'}</Typography>
+              <RowContent noWrap>{item?.item?.name || '___'}</RowContent>
+              <RowContent noWrap>{item?.item?.menu?.name || '___'}</RowContent>
             </TableCell>
             <TableCell>
-              <Typography noWrap>{item?.item?.menu?.name || '___'}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography noWrap>{item?.item?.name || '___'}</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography
-                noWrap
-                sx={{
-                  textOverflow: 'ellipsis',
-                  maxWidth: 150
-                }}
-              >
-                {item.reason}
-              </Typography>
+              <RowContent noWrap>{item.reason}</RowContent>
             </TableCell>
             <TableCell>
               <Typography noWrap align="right">
@@ -132,41 +127,50 @@ const ScheduleAppoinmentRow = ({
                 {item.total_money}
               </Typography>
             </TableCell>
-
-            <TableCell
-              sx={{
-                display: 'flex',
-                flexWrap: 'nowrap'
-              }}
-            >
-              <Tooltip title="Sửa" arrow>
-                <IconButton
-                  onClick={(e) => onNavigationToDetails(e, item.id)}
-                  sx={{
-                    '&:hover': {
-                      background: theme.colors.primary.lighter
-                    },
-                    color: theme.palette.primary.main
-                  }}
-                  color="inherit"
-                  size="small"
-                >
-                  <EditTwoToneIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Xoá" arrow>
-                <IconButton
-                  onClick={(e) => onRemoveSchedule(e, item.id)}
-                  sx={{
-                    '&:hover': { background: theme.colors.error.lighter },
-                    color: theme.palette.error.main
-                  }}
-                  color="inherit"
-                  size="small"
-                >
-                  <DeleteTwoToneIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
+            <TableCell>
+              <Stack direction={'row'}>
+                <Tooltip title="Sửa" arrow>
+                  <IconButton
+                    onClick={(e) => onNavigationToDetails(e, item.id)}
+                    sx={{
+                      '&:hover': {
+                        background: theme.colors.primary.lighter
+                      },
+                      color: theme.palette.primary.main
+                    }}
+                    color="inherit"
+                    size="small"
+                  >
+                    <EditTwoToneIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Hoá đơn" arrow>
+                  <IconButton
+                    onClick={(e) => onOpenScheduleInvoice(e, item.id)}
+                    sx={{
+                      '&:hover': { background: theme.colors.secondary.lighter },
+                      color: theme.palette.secondary.main
+                    }}
+                    color="inherit"
+                    size="small"
+                  >
+                    <DescriptionIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Xoá" arrow>
+                  <IconButton
+                    onClick={(e) => onRemoveSchedule(e, item.id)}
+                    sx={{
+                      '&:hover': { background: theme.colors.error.lighter },
+                      color: theme.palette.error.main
+                    }}
+                    color="inherit"
+                    size="small"
+                  >
+                    <DeleteTwoToneIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
             </TableCell>
           </TableRow>
         );
