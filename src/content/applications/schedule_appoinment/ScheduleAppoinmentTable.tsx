@@ -47,7 +47,7 @@ const ScheduleAppoinmentTable = () => {
   const [scheduleList, setScheduleList] = useState<IScheduleProps[]>([]);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [detailsInvoice, setDetailsInvoice] = useState<IScheduleProps>();
 
   const handleOpen = async (dataId: string) => {
