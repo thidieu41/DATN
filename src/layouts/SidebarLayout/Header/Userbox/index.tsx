@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -30,7 +30,9 @@ interface IProps {
 }
 function HeaderUserbox({ profile }: IProps) {
   const avatar =
-    'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg';
+    profile?.role?.id === 1
+      ? 'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg'
+      : 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png';
 
   const navigation = useNavigate();
 
@@ -66,7 +68,11 @@ function HeaderUserbox({ profile }: IProps) {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={profile?.name || '___'} src={handleImage(profile?.image)} />
+        <Avatar
+          variant="rounded"
+          alt={profile?.name || '___'}
+          src={handleImage(profile?.image)}
+        />
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant="body1">
@@ -95,7 +101,11 @@ function HeaderUserbox({ profile }: IProps) {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={profile?.name || '___'} src={handleImage(profile?.image)} />
+          <Avatar
+            variant="rounded"
+            alt={profile?.name || '___'}
+            src={handleImage(profile?.image)}
+          />
           <UserBoxText>
             <UserBoxLabel variant="body1">
               {profile?.name || '___'}
