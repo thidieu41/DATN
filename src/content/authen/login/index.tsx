@@ -4,7 +4,13 @@ import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ILoginFormValue, defaultValues, loginSchema } from './LoginSchema';
-import { IconButton, InputAdornment, Stack, Typography } from '@mui/material';
+import {
+  IconButton,
+  InputAdornment,
+  Stack,
+  Typography,
+  styled
+} from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +19,12 @@ import { setClientToken } from 'src/utils/axios';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
+const LableInput = styled(Typography)(
+  () => `
+  margin-bottom: 10px;
+  font-weight:600
+  `
+);
 interface IProps {
   handleSetIsLoading: (newValue: boolean) => void;
 }
@@ -72,12 +84,8 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
   return (
     <form onSubmit={handleSubmit(handleSubmission)}>
       <Stack sx={{ gap: '20px', maxWidth: '400px', margin: 'auto' }}>
-        <Stack
-          sx={{
-            gap: '10px'
-          }}
-        >
-          <Typography>Email</Typography>
+        <Stack>
+          <LableInput>Email</LableInput>
           <Controller
             control={control}
             name="email"
@@ -92,12 +100,8 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
             )}
           />
         </Stack>
-        <Stack
-          sx={{
-            gap: '10px'
-          }}
-        >
-          <Typography>Mật Khẩu </Typography>
+        <Stack>
+          <LableInput>Mật Khẩu </LableInput>
           <Controller
             control={control}
             name="password"
@@ -112,15 +116,18 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                     
-                      edge="end"
-                    >
-                      {showPassword ? < VisibilityOffOutlinedIcon  fontSize='small'/> : <VisibilityOutlinedIcon fontSize='small'/>}
-                    </IconButton>
-                  </InputAdornment>
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? (
+                          <VisibilityOffOutlinedIcon fontSize="small" />
+                        ) : (
+                          <VisibilityOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
                   )
                 }}
               />
