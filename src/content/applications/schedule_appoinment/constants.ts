@@ -22,7 +22,8 @@ export const scheduleSchema = userScheduleSchema.shape({
 });
 
 export const scheduleEditSchema = scheduleSchema.shape({
-  total_money: Yup.number().typeError('Hãy nhập số cho trường này')
+  total_money: Yup.number().typeError('Hãy nhập số cho trường này'),
+  incurred: Yup.number().typeError('Hãy nhập số cho trường này')
 });
 
 export const defaultValues = {
@@ -32,16 +33,18 @@ export const defaultValues = {
   category: '',
   item: '',
   status: 'chưa khám',
-  total_money: '0',
+  total_money: 0,
   branch: '',
   room: '',
+  service_money: 0,
   is_user: false
 };
 
 export const scheduledefaultValues = {
   ...defaultValues,
   booking_name: '',
-  phone: ''
+  phone: '',
+  incurred: 0
 };
 
 export const statusOptions = [

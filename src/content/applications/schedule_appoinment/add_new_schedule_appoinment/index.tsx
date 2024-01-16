@@ -3,7 +3,13 @@ import Button from '@mui/material/Button';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Grid, MenuItem, Typography, styled } from '@mui/material';
+import {
+  Grid,
+  InputAdornment,
+  MenuItem,
+  Typography,
+  styled
+} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -28,6 +34,7 @@ import { handleObjectKeyData } from 'src/utils/constanst';
 import { IFormValueScheduleProps, IScheduleProps } from 'src/interface/booking';
 import { IProfileProps } from 'src/interface/profile';
 import BackDropComponent from 'src/components/BackDrop';
+import { set } from 'date-fns';
 
 const LableInput = styled(Typography)(() => `margin-bottom: 10px`);
 const GridItem = styled(Grid)(() => ``);
@@ -73,12 +80,13 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
   const status = watch('status');
   const category = watch('category');
   const branch = watch('branch');
+  const service = watch('item');
 
   const handleSubmission = async (data: IFormValueScheduleProps) => {
     setIsLoading(true);
     try {
       let res: any;
-      const { category, branch, date, ...rest } = data;
+      const { category, branch, service_money, date, ...rest } = data;
       const dateTime = new Date(date).getTime().toString();
       const params = {
         ...rest,
@@ -113,11 +121,11 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
         setIsEdit(true);
         setScheduleId(dataId);
         const { data } = await ClientAPI.getDetails(`/app/bookings/${dataId}/`);
-        console.log(data);
         const {
           date,
           quantity,
           total_money,
+          incurred,
           status,
           reason,
           user,
@@ -136,6 +144,7 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
           phone: is_user ? user?.phone : phone,
           status,
           total_money,
+          incurred,
           room: room?.id.toString(),
           branch: room?.branch?.id.toString(),
           category: item.menu.id.toString(),
@@ -156,18 +165,38 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
     const res = await ClientAPI.getAll('/dental/branches/?all=true');
     const data = handleObjectKeyData(res.data);
     setBranchList(data);
-    setValue('branch', res.data[0]?.id);
+    console.log(data);
+    if (Object.values(data).length > 0) {
+      setValue('branch', res.data[0]?.id);
+      if ((res.data[0]?.branch_room || []).length > 0) {
+        setValue('room', res.data[0]?.branch_room[0]?.id);
+      } else {
+        toast.error('Hãy thêm phòng cho chi nhánh này');
+      }
+    } else {
+      toast.error('Hãy tạo chi nhánh trước khi chọn lịch');
+    }
   };
 
   const handleGetAllCategories = async () => {
     const res = await ClientAPI.getAll('/app/menus/');
     setCategories(res.data);
-    setValue('category', res.data[0]?.id);
+    if (res.data.length > 0) {
+      setValue('category', res.data[0]?.id);
+    } else {
+      toast.error('Hãy thêm danh mục trước khi chọn lịch');
+    }
   };
 
   const handleGetAllDetailsCategories = async () => {
     const res = await ClientAPI.getAll(`/app/menu-items/?menu=${category}`);
     setDetailsCategories(res.data);
+    if (res.data.length > 0) {
+      setValue('service_money', res.data[0]?.price || 0);
+      setValue('item', res.data[0]?.id);
+    } else {
+      toast.error('Hãy thêm chi tiết danh mục trước khi chọn lịch');
+    }
   };
 
   useEffect(() => {
@@ -193,6 +222,11 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
       handleGetProfileData();
     }
   }, [is_user]);
+
+  useEffect(() => {
+    const service_price = detailsCategories.find((item) => item.id === service);
+    setValue('service_money', service_price?.price || 0);
+  }, [service]);
   return (
     <>
       <form onSubmit={handleSubmit(handleSubmission)}>
@@ -280,7 +314,6 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
               )}
             />
           </GridItem>
-
           <GridItem item xs={12} sm={category ? 6 : 12}>
             <LableInput>Danh mục</LableInput>
             <Controller
@@ -381,6 +414,52 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
           )}
 
           {/* IsEdit */}
+
+          <GridItem item xs={12} sm={isEdit ? 6 : 12}>
+            <LableInput>Tiền dịch vụ</LableInput>
+            <Controller
+              control={control}
+              name="service_money"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  disabled
+                  placeholder="Nhập số người"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">(VND)</InputAdornment>
+                    )
+                  }}
+                />
+              )}
+            />
+          </GridItem>
+
+          {isEdit && (
+            <GridItem item xs={12} sm={6}>
+              <LableInput>Thụ phí khác</LableInput>
+              <Controller
+                control={control}
+                name="incurred"
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Nhập thụ phí khác"
+                    error={!!errors.incurred}
+                    helperText={errors.incurred?.message || ''}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">(VND)</InputAdornment>
+                      )
+                    }}
+                  />
+                )}
+              />
+            </GridItem>
+          )}
+
           {isEdit && (
             <GridItem
               item
@@ -414,14 +493,7 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
           )}
 
           {isEdit && status === 'đã khám' && (
-            <GridItem
-              item
-              xs={12}
-              sm={6}
-              sx={{
-                gap: '10px'
-              }}
-            >
+            <GridItem item xs={12} sm={6}>
               <LableInput>Tổng tiền</LableInput>
               <Controller
                 control={control}
@@ -431,9 +503,13 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
                     {...field}
                     fullWidth
                     placeholder="Nhập số người"
-                    type="number"
                     error={!!errors.total_money}
                     helperText={errors.total_money?.message || ''}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">(VND)</InputAdornment>
+                      )
+                    }}
                   />
                 )}
               />

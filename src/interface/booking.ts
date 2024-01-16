@@ -36,7 +36,8 @@ export interface IScheduleProps {
   quantity: string;
   reason: string;
   status: string;
-  total_money: string;
+  total_money: number;
+  incurred: number;
   updated_at: string;
   booking_name: string;
   is_user: boolean;
@@ -64,15 +65,17 @@ export interface IFormValue {
   reason: string;
   category: string;
   item: string;
+  service_money: number | string;
 }
 
 export interface IFormValueScheduleProps extends IFormValue {
   booking_name: string;
   phone: string;
   status: string;
-  total_money: string;
+  total_money: number;
   branch: string;
   room: string;
   is_user: boolean;
   doctor: string;
+  incurred: number;
 }

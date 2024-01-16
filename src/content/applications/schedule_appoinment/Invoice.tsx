@@ -40,15 +40,23 @@ const ScheduleAppoinmentInvoice = ({
       aria-describedby="alert-dialog-slide-description"
     >
       <div className="invoice">
-        <DialogTitle>Hoá đơn Nha khoa Thanh Sơn</DialogTitle>
+        <DialogTitle
+          sx={{
+            textAlign: 'center',
+            fontSize: 20,
+            fontWeight: 700
+          }}
+        >
+          Hoá đơn Nha khoa Thanh Sơn
+        </DialogTitle>
         <DialogContent>
           <Stack
             spacing={2}
             sx={{
-              minWidth: 300
+              minWidth: 400
             }}
           >
-            <Stack>
+            <Stack spacing={1}>
               <Typography>
                 Chi Nhánh : {detailsInvoice?.room?.branch?.name}
               </Typography>
@@ -57,38 +65,41 @@ const ScheduleAppoinmentInvoice = ({
               </Typography>
             </Stack>
             <Divider />
-            <Stack>
+            <Stack spacing={1}>
               <Typography>
                 Tên người : {detailsInvoice?.booking_name}{' '}
               </Typography>
               <Typography>Số điện thoại : {detailsInvoice?.phone} </Typography>
-            </Stack>
-            <Stack>
               <Typography>
                 Tên dịch vụ : {detailsInvoice?.item?.name}
               </Typography>
-              <Typography
-                sx={{
-                  fontWeight: 600
-                }}
-              >
-                Tiền dịch vụ : {detailsInvoice?.item?.price || 0} (VND)
-              </Typography>
             </Stack>
             <Divider />
-            <Stack>
+            <Stack spacing={1}>
               <Typography>Tổng người : {detailsInvoice?.quantity}</Typography>
               <Typography
                 sx={{
                   fontWeight: 600
                 }}
               >
-                Tổng tiền :{' '}
-                {Number(detailsInvoice?.item?.price || 0) *
-                  Number(detailsInvoice?.quantity || 0)}
-                (VND)
+                Phí dịch vụ : {detailsInvoice?.item?.price || 0} (VND)
+              </Typography>
+              <Typography>
+                Thụ phí khác: {detailsInvoice?.incurred || 0} (VND)
               </Typography>
             </Stack>
+            <Divider />
+            <Typography
+              sx={{
+                fontWeight: 600
+              }}
+            >
+              Tổng tiền :{' '}
+              {Number(detailsInvoice?.item?.price || 0) *
+                Number(detailsInvoice?.quantity || 0) +
+                Number(detailsInvoice?.incurred) || 0}{' '}
+              (VND)
+            </Typography>
           </Stack>
         </DialogContent>
       </div>
