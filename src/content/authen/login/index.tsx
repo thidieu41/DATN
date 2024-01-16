@@ -4,16 +4,20 @@ import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ILoginFormValue, defaultValues, loginSchema } from './LoginSchema';
-import { Stack, Typography } from '@mui/material';
+import { IconButton, InputAdornment, Stack, Typography } from '@mui/material';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import { useNavigate } from 'react-router-dom';
 import { User } from 'src/api/auth';
 import { setClientToken } from 'src/utils/axios';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 interface IProps {
   handleSetIsLoading: (newValue: boolean) => void;
 }
 const LoginForm = ({ handleSetIsLoading }: IProps) => {
+  const [showPassword, setShowPassword] = useState(false);
   const navigation = useNavigate();
   const {
     control,
@@ -24,6 +28,9 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
     defaultValues,
     resolver: yupResolver(loginSchema) as any
   });
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
   const routerPrefetch = (role) => {
     switch (role) {
       case 2:
@@ -98,9 +105,24 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
               <TextField
                 {...field}
                 fullWidth
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Nhập mật khẩu"
                 error={!!errors.password}
                 helperText={errors.password?.message || ''}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                     
+                      edge="end"
+                    >
+                      {showPassword ? < VisibilityOffOutlinedIcon  fontSize='small'/> : <VisibilityOutlinedIcon fontSize='small'/>}
+                    </IconButton>
+                  </InputAdornment>
+                  )
+                }}
               />
             )}
           />

@@ -8,11 +8,14 @@ import {
   defaultValues,
   registerSchema
 } from './registerSchema';
-import { Box, Divider, Stack, Typography } from '@mui/material';
+import { Box, Divider, IconButton, InputAdornment, Stack, Typography } from '@mui/material';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
 import { User } from 'src/api/auth';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 interface IProps {
   handleSetIsLoading: (newValue: boolean) => void;
@@ -20,6 +23,9 @@ interface IProps {
 }
 
 const RegisterForm = ({ handleSetIsLoading, handleChange }: IProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+
   const {
     control,
     handleSubmit,
@@ -29,6 +35,8 @@ const RegisterForm = ({ handleSetIsLoading, handleChange }: IProps) => {
     defaultValues,
     resolver: yupResolver(registerSchema) as any
   });
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const Register = async (params: IRegisterFormValue) => {
     handleSetIsLoading(true);
@@ -105,10 +113,26 @@ const RegisterForm = ({ handleSetIsLoading, handleChange }: IProps) => {
             render={({ field }) => (
               <TextField
                 {...field}
+                type={showPassword ? 'text' : 'password'}
                 fullWidth
                 placeholder="Nhập mật khẩu"
                 error={!!errors.password}
                 helperText={errors.password?.message || ''}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                     
+                      edge="end"
+                    >
+              {showPassword ? < VisibilityOffOutlinedIcon  fontSize='small'/> : <VisibilityOutlinedIcon fontSize='small'/>}
+                    </IconButton>
+                  </InputAdornment>
+                  )
+                }}
+               
               />
             )}
           />
@@ -127,9 +151,24 @@ const RegisterForm = ({ handleSetIsLoading, handleChange }: IProps) => {
               <TextField
                 {...field}
                 fullWidth
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Nhập lại mật khẩu"
                 error={!!errors.confirm_password}
                 helperText={errors.confirm_password?.message || ''}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                     
+                      edge="end"
+                    >
+                       {showPassword ? < VisibilityOffOutlinedIcon  fontSize='small'/> : <VisibilityOutlinedIcon fontSize='small'/>}
+                    </IconButton>
+                  </InputAdornment>
+                  )
+                }}
               />
             )}
           />
