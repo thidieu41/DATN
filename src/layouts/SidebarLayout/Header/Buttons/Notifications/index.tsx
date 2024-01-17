@@ -68,7 +68,7 @@ function HeaderNotifications() {
   };
 
   const handleReadNotitfication = async (data: INotitficationProps) => {
-    navigate(`/admin/lich-kham/cap-nhat/${data.booking}`);
+    window.location.href = `/admin/lich-kham/cap-nhat/${data.booking}`;
     handleClose();
     if (data.status === 'new') {
       await ClientAPI.update(`/app/notifications/${data.id}`, null);
