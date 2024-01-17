@@ -7,6 +7,7 @@ import { defaultValues, branchSchema } from './schema';
 import {
   Box,
   Checkbox,
+  Chip,
   FormControl,
   Grid,
   ListItemText,
@@ -82,6 +83,11 @@ const CreateNewBranch = ({ branchId }: IProps) => {
       };
       setListRoom([...listRoom, data]);
     }
+  };
+
+  const handleRemoveRoom = (id: number) => {
+    const deleteRoom = listRoom.filter((item) => item.id !== id);
+    setListRoom(deleteRoom);
   };
 
   const handleSubmission = async (data: IBranchsParamsProps) => {
@@ -247,7 +253,12 @@ const CreateNewBranch = ({ branchId }: IProps) => {
                     mx: 0.5
                   }}
                 >
-                  <Label color={'primary'}>{item.name}</Label>
+                  <Chip
+                    label={item.name}
+                    color="primary"
+                    variant="outlined"
+                    onDelete={() => handleRemoveRoom(item.id)}
+                  />
                 </Box>
               ))}
             </Stack>

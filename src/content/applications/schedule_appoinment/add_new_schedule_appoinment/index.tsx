@@ -165,7 +165,6 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
     const res = await ClientAPI.getAll('/dental/branches/?all=true');
     const data = handleObjectKeyData(res.data);
     setBranchList(data);
-    console.log(data);
     if (Object.values(data).length > 0) {
       setValue('branch', res.data[0]?.id);
       if ((res.data[0]?.branch_room || []).length > 0) {

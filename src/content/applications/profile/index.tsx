@@ -60,11 +60,10 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    if (profileInfor?.image){
-      console.log(profileInfor.image)
-      setPreviewImg(handleImage(profileInfor?.image))
+    if (profileInfor?.image) {
+      setPreviewImg(handleImage(profileInfor?.image));
     }
-  }, [profileInfor?.image])
+  }, [profileInfor?.image]);
 
   const handleSubmission = async (data: IFormValue) => {
     if (!previewImg) {
@@ -74,22 +73,21 @@ const EditProfile = () => {
       try {
         const { DoB, gender, ...rest } = data;
         const date = new Date(DoB).getTime().toString();
-        console.log(date,rest)
         const params = {
           ...rest,
           id: profileInfor.id,
           is_male: gender === 'male' ? true : false,
-          DoB:Number(date.slice(0, date.length - 3)),
+          DoB: Number(date.slice(0, date.length - 3)),
           ...(file && {
             image: file
           })
         };
-       const res = await ClientAPI.update(`users/me`, params,{
+        const res = await ClientAPI.update(`users/me`, params, {
           headers: {
             'content-type': 'multipart/form-data'
           }
         });
-        localStorage.setItem('profile',JSON.stringify(res.data))
+        localStorage.setItem('profile', JSON.stringify(res.data));
         toast.success('Lưu thông tin cá nhân thành công');
         // window.location.reload();
       } catch (error) {
@@ -112,7 +110,7 @@ const EditProfile = () => {
       phone,
       gender: is_male ? 'male' : 'female',
       addr,
-      DoB 
+      DoB
     });
     setPreviewImg(image);
   };

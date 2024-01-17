@@ -58,6 +58,8 @@ const DetailsCategoriesPage = Loader(
   lazy(() => import('src/content/pages/details_categories'))
 );
 
+const user = JSON.parse(localStorage.getItem('profile') || '{}');
+
 const routes: RouteObject[] = [
   {
     path: 'authen',
@@ -91,7 +93,12 @@ const routes: RouteObject[] = [
   },
   {
     path: 'admin',
-    element: <SidebarLayout />,
+    element:
+      Number(user?.role?.id) === 1 ? (
+        <SidebarLayout />
+      ) : (
+        <Navigate to="/" replace />
+      ),
     children: [
       {
         path: '',
