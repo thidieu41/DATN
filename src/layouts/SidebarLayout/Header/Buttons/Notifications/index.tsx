@@ -54,6 +54,7 @@ function HeaderNotifications() {
   const navigate = useNavigate();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [numberNew, setNumberNew] = useState(0)
   const [notificationList, setNotificationList] = useState<
     INotitficationProps[]
   >([]);
@@ -71,6 +72,7 @@ function HeaderNotifications() {
     handleClose();
     if (data.status === 'new') {
       await ClientAPI.update(`/app/notifications/${data.id}`, null);
+      await handleGetAllNotitfication()
     }
   };
 
@@ -82,12 +84,21 @@ function HeaderNotifications() {
     handleGetAllNotitfication();
   }, []);
 
+  useEffect(() => {
+    setNumberNew(0)
+    notificationList.map((item) => {
+      if (item.status === 'new'){
+        setNumberNew(numberNew + 1)
+      }
+    })
+  }, [notificationList])
+
   return (
     <>
       <Tooltip arrow title="Notifications">
         <IconButton color="primary" ref={ref} onClick={handleOpen}>
           <NotificationsBadge
-            badgeContent={notificationList?.length || 0}
+            badgeContent={numberNew || 0}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right'
