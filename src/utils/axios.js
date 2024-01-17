@@ -13,7 +13,7 @@ export const setClientToken = (token) => {
 };
 
 export const createClient = () => {
-  const baseURL = 'https://hip-corners-shave.loca.lt/api';
+  const baseURL = 'https://khaki-planes-matter.loca.lt/api';
   // const baseURL = 'http://localhost:8000/api/';
 
   const instance = axios.create({

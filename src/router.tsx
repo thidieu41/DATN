@@ -28,6 +28,9 @@ const ScheduleAppoimentPage = Loader(
 const AddNewScheduleAppoimentPage = Loader(
   lazy(() => import('src/content/pages/add_new_schedule_appoinment'))
 );
+const ListUserScheduleAppoimentPage = Loader(
+  lazy(() => import('src/content/pages/user_schedule_list'))
+);
 const CustomerPage = Loader(lazy(() => import('src/content/pages/customers')));
 const CategoryPage = Loader(lazy(() => import('src/content/pages/category')));
 const BranchPage = Loader(lazy(() => import('src/content/pages/branch')));
@@ -68,6 +71,10 @@ const routes: RouteObject[] = [
   {
     path: '',
     element: <LandingPage />
+  },
+  {
+    path: 'danh-sach-lich-kham',
+    element: <ListUserScheduleAppoimentPage />
   },
   {
     path: 'dat-lich-kham',

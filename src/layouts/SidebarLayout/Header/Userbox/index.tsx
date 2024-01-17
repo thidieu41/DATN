@@ -8,12 +8,16 @@ import {
   Hidden,
   List,
   ListItem,
+  ListItemButton,
+  ListItemIcon,
   ListItemText,
-  Popover
+  Popover,
+  Typography
 } from '@mui/material';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
+import ArticleIcon from '@mui/icons-material/Article';
 import { setClientToken } from 'src/utils/axios';
 import {
   MenuUserBox,
@@ -116,16 +120,26 @@ function HeaderUserbox({ profile }: IProps) {
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
-        <List sx={{ p: 1 }} component="nav">
-          <ListItem
+        <List
+          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItemButton
             onClick={() => handleNavigateProfile(profile?.role?.id)}
-            sx={{
-              cursor: 'pointer'
-            }}
           >
-            <AccountBoxTwoToneIcon fontSize="small" sx={{ mr: 1 }} />
+            <ListItemIcon>
+              <AccountBoxTwoToneIcon fontSize="small" />
+            </ListItemIcon>
             <ListItemText primary="Thông tin cá nhân" />
-          </ListItem>
+          </ListItemButton>
+
+          <ListItemButton onClick={() => navigation('/danh-sach-lich-kham')}>
+            <ListItemIcon>
+              <ArticleIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Danh sách lịch khám" />
+          </ListItemButton>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
