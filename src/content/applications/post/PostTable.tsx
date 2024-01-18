@@ -13,7 +13,9 @@ import {
   TableContainer,
   Select,
   MenuItem,
-  CardHeader
+  CardHeader,
+  Stack,
+  TextField
 } from '@mui/material';
 import PostTableRow from './PostTableRow';
 import { ICategoryProps } from 'src/utils/schema';
@@ -27,6 +29,8 @@ import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 const PostTable = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState<number>(0);
+  const [search, setSearch] = useState('');
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const [postList, setPostList] = useState<IPostProps[]>([]);
   const [categoryList, setCategory] = useState<{
     [key: number]: ICategoryProps;
@@ -50,6 +54,21 @@ const PostTable = () => {
       handleGetAllPosts(pagination.previous);
     }
     setPage(newPage);
+  };
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearch(value);
+    let typing = null;
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    typing = setTimeout(async () => {
+      handleGetAllPosts(`/post/posts/?search=${search}`);
+    }, 2000);
+
+    setTypingTimeout(typing);
   };
 
   const handleCategoryList = (data: ICategoryProps[]) => {
@@ -89,7 +108,17 @@ const PostTable = () => {
     <Card>
       <CardHeader
         action={
-          <Box width={250}>
+          <Stack direction={'row'} spacing={2}>
+            <TextField
+              name="search"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Nhập tiều đề bài viết"
+              fullWidth
+              sx={{
+                minWidth: 250
+              }}
+            />
             <FormControl fullWidth variant="outlined">
               <InputLabel>Danh mục</InputLabel>
               <Select
@@ -97,6 +126,9 @@ const PostTable = () => {
                 onChange={handleStatusChange}
                 label="Danh mục"
                 fullWidth
+                sx={{
+                  width: 250
+                }}
               >
                 {(Object.values(categoryList) || []).map((statusOption) => (
                   <MenuItem key={statusOption.id} value={statusOption.id}>
@@ -105,7 +137,7 @@ const PostTable = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
+          </Stack>
         }
         title="Danh sách bài viết"
       />

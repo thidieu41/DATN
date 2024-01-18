@@ -65,28 +65,39 @@ const user = JSON.parse(localStorage.getItem('profile') || '{}');
 
 const routes: RouteObject[] = [
   {
+    path: '',
+    element:
+      Number(user?.role?.id) === 2 ? (
+        <BaseLayout />
+      ) : (
+        <Navigate to="/status/404" replace />
+      ),
+    children: [
+      {
+        path: '',
+        element: <LandingPage />
+      },
+      {
+        path: 'danh-sach-lich-kham',
+        element: <ListUserScheduleAppoimentPage />
+      },
+      {
+        path: 'dat-lich-kham',
+        element: <NewUserScheduleAppoimentPage />
+      },
+      {
+        path: 'dich-vu/:id',
+        element: <ServiceDetailsPage />
+      },
+      {
+        path: 'thong-tin-ca-nhan',
+        element: <UserProfilePage />
+      }
+    ]
+  },
+  {
     path: 'authen',
     element: <AuthenticarionPage />
-  },
-  {
-    path: '',
-    element: <LandingPage />
-  },
-  {
-    path: 'danh-sach-lich-kham',
-    element: <ListUserScheduleAppoimentPage />
-  },
-  {
-    path: 'dat-lich-kham',
-    element: <NewUserScheduleAppoimentPage />
-  },
-  {
-    path: 'dich-vu/:id',
-    element: <ServiceDetailsPage />
-  },
-  {
-    path: 'thong-tin-ca-nhan',
-    element: <UserProfilePage />
   },
   {
     path: '',

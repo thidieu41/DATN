@@ -13,13 +13,13 @@ export const ClientAPI = {
     return response;
   },
 
-  add: async (url: string, params: any, headers?:any) => {
+  add: async (url: string, params: any, headers?: any) => {
     const response = await client.post(url, params, headers);
     return response;
   },
 
-  update: async (url: string, params,headers?:any) => {
-    const response = await client.put(url, params,headers);
+  update: async (url: string, params, headers?: any) => {
+    const response = await client.put(url, params, headers);
     return response;
   },
 
@@ -29,17 +29,12 @@ export const ClientAPI = {
   },
 
   updateFormdata: async (url: string, params) => {
-    const response = await client.put(
-      url, 
-      params,
-      {
-        headers: {
-          Authorization: getClientToken(),
-          'Content-Type': 'multipart/form-data',
-      },
+    const response = await client.put(url, params, {
+      headers: {
+        Authorization: getClientToken(),
+        'Content-Type': 'multipart/form-data'
       }
-      );
+    });
     return response;
-  },
-
+  }
 };

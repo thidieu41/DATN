@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import {
   Divider,
   Box,
@@ -9,7 +9,9 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  CardHeader
+  CardHeader,
+  Stack,
+  TextField
 } from '@mui/material';
 import CategoryTableRow from './BranchTableRow';
 import { IPanigationProps } from 'src/utils/interface';
@@ -21,6 +23,8 @@ import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 
 const BranchTable = () => {
   const [page, setPage] = useState<number>(0);
+  const [search, setSearch] = useState('');
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [branchList, setBranchlist] = useState<IBrachProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +36,21 @@ const BranchTable = () => {
       onGetAllBranchs(pagination.previous);
     }
     setPage(newPage);
+  };
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearch(value);
+    let typing = null;
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    typing = setTimeout(async () => {
+      onGetAllBranchs(`/dental/branches/?search=${search}`);
+    }, 2000);
+
+    setTypingTimeout(typing);
   };
 
   const handleRemoveBranch = async (id: string) => {
@@ -67,7 +86,23 @@ const BranchTable = () => {
 
   return (
     <Card>
-      <CardHeader title="Danh sách chi nhánh nha khoa" />
+      <CardHeader
+        title="Danh sách chi nhánh nha khoa"
+        action={
+          <Stack>
+            <TextField
+              name="search"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Nhập tên chi nhánh"
+              fullWidth
+              sx={{
+                minWidth: 250
+              }}
+            />
+          </Stack>
+        }
+      />
       <Divider />
       <TableContainer sx={{ height: 400 }}>
         <Table stickyHeader>

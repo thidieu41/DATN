@@ -15,7 +15,9 @@ import {
   MenuItem,
   CardHeader,
   Typography,
-  styled
+  styled,
+  Stack,
+  TextField
 } from '@mui/material';
 import ScheduleAppoinmentRow from './ScheduleAppoinmentRow';
 import { toast } from 'react-toastify';
@@ -44,6 +46,8 @@ const headerTableTitle = [
 const ScheduleAppoinmentTable = () => {
   const [page, setPage] = useState<number>(0);
   const [status, setStatus] = useState(null);
+  const [search, setSearch] = useState('');
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const [scheduleList, setScheduleList] = useState<IScheduleProps[]>([]);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +91,21 @@ const ScheduleAppoinmentTable = () => {
     setStatus(value);
   };
 
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearch(value);
+    let typing = null;
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    typing = setTimeout(async () => {
+      handleGetBookingList(`/app/bookings/?search=${search}`);
+    }, 2000);
+
+    setTypingTimeout(typing);
+  };
+
   const handleGetBookingList = async (url: string) => {
     setIsLoading(true);
     try {
@@ -122,7 +141,17 @@ const ScheduleAppoinmentTable = () => {
     <Card>
       <CardHeader
         action={
-          <Box width={250}>
+          <Stack spacing={2} direction={'row'}>
+            <TextField
+              name="search"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Nhập tên người dùng"
+              fullWidth
+              sx={{
+                minWidth: 250
+              }}
+            />
             <FormControl fullWidth variant="outlined">
               <InputLabel>Status</InputLabel>
               <Select
@@ -130,6 +159,9 @@ const ScheduleAppoinmentTable = () => {
                 onChange={handleStatusChange}
                 label="Status"
                 fullWidth
+                sx={{
+                  width: 250
+                }}
               >
                 {(statusTableOptions || []).map((statusOption) => (
                   <MenuItem key={statusOption.id} value={statusOption.id}>
@@ -138,7 +170,7 @@ const ScheduleAppoinmentTable = () => {
                 ))}
               </Select>
             </FormControl>
-          </Box>
+          </Stack>
         }
         title="Danh sách đặt lịch khám"
       />

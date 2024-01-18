@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   Divider,
   Box,
@@ -9,7 +9,9 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  CardHeader
+  CardHeader,
+  TextField,
+  Stack
 } from '@mui/material';
 import { ICustomerProps } from './constant';
 import CustomerTableRow from './CustomerTableRow';
@@ -22,6 +24,8 @@ import CustomEmptyOverlayTable from 'src/components/TableEmptyRow';
 const CustomerTable = () => {
   const [page, setPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const [pagination, setPagination] = useState<IPanigationProps>();
   const [customerList, setCustomerList] = useState<ICustomerProps[]>([]);
 
@@ -32,6 +36,21 @@ const CustomerTable = () => {
       handleGetAllCustomer(pagination.previous);
     }
     setPage(newPage);
+  };
+
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setSearch(value);
+    let typing = null;
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    typing = setTimeout(async () => {
+      handleGetAllCustomer(`/app/customers/?search=${search}`);
+    }, 2000);
+
+    setTypingTimeout(typing);
   };
 
   const handleGetAllCustomer = async (url: string) => {
@@ -53,7 +72,23 @@ const CustomerTable = () => {
 
   return (
     <Card>
-      <CardHeader title="Danh sách khách hàng" />
+      <CardHeader
+        title="Danh sách khách hàng"
+        action={
+          <Stack>
+            <TextField
+              name="search"
+              value={search}
+              onChange={handleSearch}
+              placeholder="Nhập tên hoặc email"
+              fullWidth
+              sx={{
+                minWidth: 250
+              }}
+            />
+          </Stack>
+        }
+      />
 
       <Divider />
       <TableContainer sx={{ height: 400 }}>
