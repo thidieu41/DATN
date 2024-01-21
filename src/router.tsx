@@ -67,11 +67,11 @@ const routes: RouteObject[] = [
   {
     path: '',
     element:
-      Number(user?.role?.id) === 2 ? (
-        <BaseLayout />
+    Number(user?.role?.name) === 2 ? (
+      <BaseLayout />
       ) : (
-        <Navigate to="/status/404" replace />
-      ),
+    <Navigate to="/status/404" replace />
+    ),
     children: [
       {
         path: '',
@@ -112,7 +112,7 @@ const routes: RouteObject[] = [
   {
     path: 'admin',
     element:
-      Number(user?.role?.id) === 1 ? (
+      Number(user?.role?.name) === 1 ? (
         <SidebarLayout />
       ) : (
         <Navigate to="/" replace />

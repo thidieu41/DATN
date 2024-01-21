@@ -33,6 +33,7 @@ interface IProps {
   profile: IProfileProps;
 }
 function HeaderUserbox({ profile }: IProps) {
+  console.log(profile)
   const avatar =
     profile?.role?.id === 1
       ? 'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg'
@@ -126,20 +127,21 @@ function HeaderUserbox({ profile }: IProps) {
           aria-labelledby="nested-list-subheader"
         >
           <ListItemButton
-            onClick={() => handleNavigateProfile(profile?.role?.id)}
+            onClick={() => handleNavigateProfile(Number(profile?.role?.name))}
           >
             <ListItemIcon>
               <AccountBoxTwoToneIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Thông tin cá nhân" />
           </ListItemButton>
-
-          <ListItemButton onClick={() => navigation('/danh-sach-lich-kham')}>
-            <ListItemIcon>
-              <ArticleIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Danh sách lịch khám" />
-          </ListItemButton>
+          {Number(profile?.role?.name)===2?
+            <ListItemButton onClick={() => navigation('/danh-sach-lich-kham')}>
+              <ListItemIcon>
+                <ArticleIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Danh sách lịch khám" />
+            </ListItemButton>:null
+          }
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

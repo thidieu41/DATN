@@ -49,7 +49,7 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
         navigation('/');
         break;
       case 1:
-        navigation('/admin');
+        navigation('/admin/bac-si');
         break;
     }
   };
