@@ -66,6 +66,10 @@ const user = JSON.parse(localStorage.getItem('profile') || '{}');
 const routes: RouteObject[] = [
   {
     path: '',
+    element: <LandingPage />
+  },
+  {
+    path: '',
     element:
     Number(user?.role?.name) === 2 ? (
       <BaseLayout />
@@ -73,10 +77,6 @@ const routes: RouteObject[] = [
     <Navigate to="/status/404" replace />
     ),
     children: [
-      {
-        path: '',
-        element: <LandingPage />
-      },
       {
         path: 'danh-sach-lich-kham',
         element: <ListUserScheduleAppoimentPage />

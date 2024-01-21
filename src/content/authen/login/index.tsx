@@ -43,13 +43,14 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const routerPrefetch = (role) => {
-    switch (role) {
-      case 2:
-        navigation('/');
-        break;
+  const routerPrefetch = (userRole) => {
+    console.log(userRole)
+    switch (userRole) {
       case 1:
-        navigation('/admin/bac-si');
+        window.location.href = '/admin';
+        break;
+      case 2:
+        window.location.href = '/';
         break;
     }
   };
