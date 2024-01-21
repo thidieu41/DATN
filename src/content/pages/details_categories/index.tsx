@@ -77,7 +77,7 @@ function DetailsCategoriesPage() {
   const handleRemove = async (id: string) => {
     handleSetIsLoading(true);
     try {
-      await ClientAPI.delete(`/app/menus/${id}/`);
+      await ClientAPI.delete(`/app/menu-items/${id}/`);
       const data = Object.values(detailsCategories).filter(
         (item) => item.id !== id
       );
