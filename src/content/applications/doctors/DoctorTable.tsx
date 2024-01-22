@@ -41,17 +41,12 @@ const DoctorTable = () => {
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearch(value);
-    let typing = null;
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    typing = setTimeout(async () => {
-      handleGetAllDoctor(`/core/doctors/?search=${search}`);
-    }, 2000);
-
-    setTypingTimeout(typing);
   };
+
+  useEffect(() => {
+
+    handleGetAllDoctor(`/core/doctors/?search=${search}`);
+  }, [search])
 
   const handleSetPagination = async (id: string) => {
     setIsLoading(true);

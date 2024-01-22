@@ -51,11 +51,11 @@ const ScheduleAppoinmentRow = ({
     event.stopPropagation();
     handleSetBackdropRemove();
     try {
-      await ClientAPI.delete(`/app/bookings/${id}/`);
-      handleSetPagination(id);
-      toast.success('Xoá lịch thành công');
+      await ClientAPI.update(`/app/customers/bookings/${id}`, {});
+      handleSetPagination('/app/bookings/');
+      toast.success('Huỷ lịch thành công');
     } catch (error) {
-      toast.error('Xoá lịch không thành công');
+      toast.error('Huỷ lịch không thành công');
     }
   };
 
@@ -90,6 +90,8 @@ const ScheduleAppoinmentRow = ({
                     ? 'warning'
                     : item.status === 'đang khám'
                     ? 'primary'
+                    : item.status === 'đã huỷ'
+                    ? 'error'
                     : 'success'
                 }
               >
@@ -157,7 +159,8 @@ const ScheduleAppoinmentRow = ({
                     <DescriptionIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title="Xoá" arrow>
+                {}
+                <Tooltip title="Huỷ" arrow>
                   <IconButton
                     onClick={(e) => onRemoveSchedule(e, item.id)}
                     sx={{

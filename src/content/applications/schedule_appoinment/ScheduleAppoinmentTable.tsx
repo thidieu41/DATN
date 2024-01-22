@@ -94,17 +94,11 @@ const ScheduleAppoinmentTable = () => {
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearch(value);
-    let typing = null;
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    typing = setTimeout(async () => {
-      handleGetBookingList(`/app/bookings/?search=${search}`);
-    }, 2000);
-
-    setTypingTimeout(typing);
   };
+
+  useEffect(() => {
+    handleGetBookingList(`/app/bookings/?search=${search}`);
+  }, [search])
 
   const handleGetBookingList = async (url: string) => {
     setIsLoading(true);
@@ -191,7 +185,7 @@ const ScheduleAppoinmentTable = () => {
           ) : (
             <ScheduleAppoinmentRow
               data={scheduleList || []}
-              handleSetPagination={handleSetPagination}
+              handleSetPagination={handleGetBookingList}
               handleSetBackdropRemove={handleSetBackdropRemove}
               handleOpen={handleOpen}
             />

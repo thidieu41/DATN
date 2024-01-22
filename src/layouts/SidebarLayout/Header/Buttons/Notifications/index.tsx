@@ -42,7 +42,9 @@ const NotificationsBadge = styled(Badge)(
 );
 
 interface INotitficationProps {
-  booking: string;
+  booking: {
+    status: string;
+  }
   created_at: string;
   id: string;
   status: string;
@@ -68,12 +70,12 @@ function HeaderNotifications() {
   };
 
   const handleReadNotitfication = async (data: INotitficationProps) => {
-    window.location.href = `/admin/lich-kham/cap-nhat/${data.booking}`;
     handleClose();
-    if (data.status === 'new') {
-      await ClientAPI.update(`/app/notifications/${data.id}`, null);
+    if (data.status !== 'read') {
+      await ClientAPI.update(`/app/notifications/${data.id}`, {});
       await handleGetAllNotitfication()
     }
+    window.location.href = `/admin/lich-kham/cap-nhat/${data.booking}`;
   };
 
   const handleGetAllNotitfication = async () => {
@@ -87,7 +89,7 @@ function HeaderNotifications() {
   useEffect(() => {
     setNumberNew(0)
     notificationList.map((item) => {
-      if (item.status === 'new'){
+      if (['new', 'cancel'].includes(item.status)){
         setNumberNew(numberNew + 1)
       }
     })
@@ -137,7 +139,7 @@ function HeaderNotifications() {
               sx={{
                 p: 1,
                 minWidth: 350,
-                opacity: item.status == 'new' ? 1 : 0.4,
+                opacity: ['new', 'cancel'].includes(item.status) ? 1 : 0.4,
                 display: { xs: 'block', sm: 'flex' },
                 cursor: 'pointer',
                 ':hover': {
@@ -156,7 +158,7 @@ function HeaderNotifications() {
                   </Typography>
                 </Box>
                 <Typography>
-                  <b>{item.name}</b> đã đặt lịch khám
+                  <b>{item.name}</b> đã {item.booking.status === 'đã huỷ'? 'huỷ' : 'đăt'} lịch khám
                 </Typography>
               </Box>
             </ListItem>
