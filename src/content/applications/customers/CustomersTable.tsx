@@ -41,17 +41,11 @@ const CustomerTable = () => {
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearch(value);
-    let typing = null;
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    typing = setTimeout(async () => {
-      handleGetAllCustomer(`/app/customers/?search=${search}`);
-    }, 2000);
-
-    setTypingTimeout(typing);
   };
+
+  useEffect(() => {
+    handleGetAllCustomer(`/app/customers?search=${search}`);
+  }, [search])
 
   const handleGetAllCustomer = async (url: string) => {
     setIsLoading(true);

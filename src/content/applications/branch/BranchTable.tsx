@@ -41,17 +41,10 @@ const BranchTable = () => {
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearch(value);
-    let typing = null;
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    typing = setTimeout(async () => {
-      onGetAllBranchs(`/dental/branches/?search=${search}`);
-    }, 2000);
-
-    setTypingTimeout(typing);
   };
+  useEffect(() => {
+    onGetAllBranchs(`/dental/branches/?search=${search}`);
+  }, [search])
 
   const handleRemoveBranch = async (id: string) => {
     setIsLoading(true);
