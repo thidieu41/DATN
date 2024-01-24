@@ -13,6 +13,8 @@ import { Helmet } from 'react-helmet-async';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
 import { styled } from '@mui/material/styles';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 const MainContent = styled(Box)(
   ({ theme }) => `
@@ -39,6 +41,11 @@ const ButtonSearch = styled(Button)(
 );
 
 function Status404() {
+  const [search, setSearch] = useState('');
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    navigate(`/admin${search}`);
+  };
   return (
     <>
       <Helmet>
@@ -49,7 +56,7 @@ function Status404() {
           <Box textAlign="center">
             <img alt="404" height={180} src="/static/images/status/404.svg" />
             <Typography variant="h2" sx={{ my: 2 }}>
-              The page you were looking for doesn't exist.
+              Trang bạn đang tìm kiếm hiện không tồn tại!
             </Typography>
             <Typography
               variant="h4"
@@ -57,8 +64,8 @@ function Status404() {
               fontWeight="normal"
               sx={{ mb: 4 }}
             >
-              It's on us, we moved the content to a different page. The search
-              below should help!
+              Đó là trách nhiệm của chúng tôi vì vậy vui lòng nhập địa chỉ trang
+              mà bạn muốn đến dưới đây.
             </Typography>
           </Box>
           <Container maxWidth="sm">
@@ -66,11 +73,17 @@ function Status404() {
               <FormControl variant="outlined" fullWidth>
                 <OutlinedInputWrapper
                   type="text"
-                  placeholder="Search terms here..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Nhập địa chỉ trang ví dụ /bac-si..."
                   endAdornment={
                     <InputAdornment position="end">
-                      <ButtonSearch variant="contained" size="small">
-                        Search
+                      <ButtonSearch
+                        variant="contained"
+                        size="small"
+                        onClick={handleSearch}
+                      >
+                        Tìm kiếm
                       </ButtonSearch>
                     </InputAdornment>
                   }
@@ -81,9 +94,9 @@ function Status404() {
                   }
                 />
               </FormControl>
-              <Divider sx={{ my: 4 }}>OR</Divider>
+              <Divider sx={{ my: 4 }}>Hoặc</Divider>
               <Button href="/admin/bac-si" variant="outlined">
-                Go to homepage
+                Về trang chủ
               </Button>
             </Card>
           </Container>

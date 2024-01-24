@@ -215,12 +215,7 @@ function ResponsiveAppBar() {
           </Box>
 
           {Object.keys(profile || {}).length > 0 ? (
-            <Stack sx={{ flexGrow: 0 }} direction={'row'} spacing={2}>
-              <HeaderUserbox profile={profile} />
-              {profile?.role?.id === 1 && (
-                <Button href="/admin"> Trang Admin</Button>
-              )}
-            </Stack>
+            <HeaderUserbox profile={profile} />
           ) : (
             <Button variant="outlined" href="/authen">
               Đăng Nhập
