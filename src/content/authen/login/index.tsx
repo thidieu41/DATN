@@ -44,7 +44,6 @@ const LoginForm = ({ handleSetIsLoading }: IProps) => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const routerPrefetch = (userRole) => {
-    console.log(userRole)
     switch (userRole) {
       case 1:
         window.location.href = '/admin';

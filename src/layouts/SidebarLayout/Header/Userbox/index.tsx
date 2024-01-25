@@ -33,7 +33,6 @@ interface IProps {
   profile: IProfileProps;
 }
 function HeaderUserbox({ profile }: IProps) {
-  console.log(profile)
   const avatar =
     profile?.role?.id === 1
       ? 'https://www.thewmch.com/wp-content/uploads/2023/02/female-doctor-using-her-digital-tablet-free-vector.jpg'

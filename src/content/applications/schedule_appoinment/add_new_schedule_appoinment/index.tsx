@@ -96,19 +96,25 @@ const CreateNewSchedule = ({ is_user }: IProps) => {
       if (isEdit) {
         res = await ClientAPI.update(`/app/bookings/${scheduleId}/`, params);
       } else {
-        res = await ClientAPI.add('/app/bookings/', {
-          ...params,
-          status: 'chưa khám'
-        });
+        let currentTime = new Date()
+        let unit = currentTime.getTime()
+        if (Number(params.date) <= Math.floor(unit/1000)){
+          toast.error("Ngày đặt không được bé hơn ngày hiện tại")
+        }else{
+          res = await ClientAPI.add('/app/bookings/', {
+            ...params,
+            status: 'chưa khám'
+          });
+          navigate(is_user ? '/' : '/admin/lich-kham');
+          toast.success(
+            isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
+          );
+        }
       }
-      navigate(is_user ? '/' : '/admin/lich-kham');
-      toast.success(
-        isEdit ? 'Cập nhật lịch khám thành công' : 'Tạo lịch khám thành công'
-      );
     } catch (error) {
       toast.error(isEdit ? 'Lỗi cập nhật lịch khám' : 'Lỗi đặt lịch khám');
     } finally {
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
